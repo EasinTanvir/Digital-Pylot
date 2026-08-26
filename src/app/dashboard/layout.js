@@ -3,7 +3,7 @@ import Header from "@/components/layout/Header/Header";
 
 export default function DashboardLayout({ children }) {
   return (
-    <div className="flex h-dvh overflow-hidden bg-page-bg">
+    <div className="flex h-dvh overflow-hidden bg-page-bg [--font-sans:var(--font-nunito-sans)]">
       <Sidebar />
       <div className="min-w-0 flex flex-1 flex-col overflow-hidden">
         <Header />

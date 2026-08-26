@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-nunito-sans), sans-serif;
+  --font-sans: var(--font-plus-jakarta), sans-serif;
 
   /* ---- White / Surface family ---- */
   --color-white: rgba(255, 255, 255, 1);

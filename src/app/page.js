@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import Navbar from "@/components/layout/Navbar";
 
 export default function HomePage() {
-  redirect("/dashboard");
+  return <Navbar />;
 }

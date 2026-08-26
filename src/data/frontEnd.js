@@ -1,5 +1,17 @@
 const photoBase = "https://images.unsplash.com";
 
+export function getHeroContent() {
+  return {
+    eyebrow: "100% Trusted Car rental platform in the UK",
+    title: "FAST AND EASY WAY TO RENT A CAR",
+    description: "Our Car Rental online booking system designed to meet the specific needs of car rental businesses owners. The easy-to-use car rental software will let you manage your business.",
+    bookingLabel: "Booking Now",
+    fleetLabel: "See all cars",
+    image: `${photoBase}/photo-1636881636420-e15142c0bf56?auto=format&fit=crop&w=1800&q=85`,
+    imageAlt: "Black rental SUV parked beside trees",
+  };
+}
+
 export function getFrontEndContent() {
   return {
     brand: "Drivo",

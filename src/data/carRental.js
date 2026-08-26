@@ -1,0 +1,17 @@
+const photoBase = "https://images.unsplash.com";
+
+export const rentalCars = [
+  { id: "rush", category: "Popular", name: "All New Rush", type: "Compact SUV", price: 72, rating: "4.8", image: `${photoBase}/photo-1636881636420-e15142c0bf56?auto=format&fit=crop&w=900&q=85`, alt: "Black SUV parked on a forest road" },
+  { id: "velar", category: "Large Car", name: "Range Rover Velar", type: "Premium SUV", price: 96, rating: "4.9", image: `${photoBase}/photo-1504215680853-026ed2a45def?auto=format&fit=crop&w=900&q=85`, alt: "White luxury SUV in the city" },
+  { id: "tesla", category: "Small Car", name: "Tesla Model 3", type: "Electric sedan", price: 84, rating: "4.9", image: `${photoBase}/photo-1619767886558-efdc259cde1a?auto=format&fit=crop&w=900&q=85`, alt: "Tesla parked outside a modern building" },
+  { id: "audi", category: "Exclusive Car", name: "Audi A5 Sportback", type: "Executive sedan", price: 112, rating: "4.8", image: `${photoBase}/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=900&q=85`, alt: "Audi sedan viewed from the side" },
+  { id: "volvo", category: "Popular", name: "Volvo XC60", type: "Family SUV", price: 88, rating: "4.7", image: `${photoBase}/photo-1645791608306-6db92b84d498?auto=format&fit=crop&w=900&q=85`, alt: "Volvo SUV parked on a city street" },
+  { id: "mini", category: "Small Car", name: "Mini Cooper S", type: "City hatchback", price: 65, rating: "4.8", image: `${photoBase}/photo-1493238792000-8113da705763?auto=format&fit=crop&w=900&q=85`, alt: "Classic compact car on an urban street" },
+  { id: "bmw", category: "Large Car", name: "BMW X5", type: "Luxury SUV", price: 118, rating: "4.9", image: `${photoBase}/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=900&q=85`, alt: "BMW SUV on a scenic road" },
+  { id: "porsche", category: "Exclusive Car", name: "Porsche Taycan", type: "Electric performance", price: 149, rating: "5.0", image: `${photoBase}/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=900&q=85`, alt: "Porsche sports car photographed outdoors" },
+];
+
+export const galleryImages = [
+  { src: `${photoBase}/photo-1504215680853-026ed2a45def?auto=format&fit=crop&w=1400&q=85`, alt: "White SUV driving through a city" },
+  { src: `${photoBase}/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1400&q=85`, alt: "Sports car on an open road" },
+];

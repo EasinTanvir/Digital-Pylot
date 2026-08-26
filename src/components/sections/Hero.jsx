@@ -5,7 +5,7 @@ export default function Hero({ content }) {
     <section
       id="home"
       aria-label="Car rental introduction"
-      className="bg-surface-100"
+      className="bg-gradient-to-br from-surface-100 via-white to-primary-50"
     >
       <div className="mx-auto grid max-w-7xl gap-10 px-6 py-14 md:grid-cols-2 md:items-center lg:px-8 lg:py-20">
         <div className="max-w-xl">
@@ -33,7 +33,7 @@ export default function Hero({ content }) {
             </a>
           </div>
         </div>
-        <div className="relative min-h-[280px] overflow-hidden rounded-2xl bg-surface-400 sm:min-h-[380px] lg:min-h-[440px]">
+        <div className="relative min-h-[280px] overflow-hidden rounded-3xl bg-surface-400 shadow-[0_22px_55px_rgba(9,44,76,0.18)] sm:min-h-[380px] lg:min-h-[440px]">
           <Image
             src={content.image}
             alt={content.imageAlt}

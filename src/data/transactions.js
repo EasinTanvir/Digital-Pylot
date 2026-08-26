@@ -3,7 +3,7 @@ export function getTransactions() {
     {
       id: 1,
       orderDetails: "Range Rover",
-      image: "/car-placeholder.svg",
+      image: CarPlaceholder,
       time: "15 Mins",
       payment: "#41664645377",
       paymentMethod: "Paypal",
@@ -13,7 +13,7 @@ export function getTransactions() {
     {
       id: 2,
       orderDetails: "Red Toyota",
-      image: "/car-placeholder.svg",
+      image: CarPlaceholder,
       time: "30 Mins",
       payment: "#41478445554",
       paymentMethod: "Apple Pay",
@@ -23,7 +23,7 @@ export function getTransactions() {
     {
       id: 3,
       orderDetails: "Blue Nissan",
-      image: "/car-placeholder.svg",
+      image: CarPlaceholder,
       time: "1 Hour",
       payment: "#41478445554",
       paymentMethod: "Stripe",
@@ -33,7 +33,7 @@ export function getTransactions() {
     {
       id: 4,
       orderDetails: "Toyota Corolla",
-      image: "/car-placeholder.svg",
+      image: CarPlaceholder,
       time: "10 Mins",
       payment: "#41478445554",
       paymentMethod: "PayU",
@@ -43,7 +43,7 @@ export function getTransactions() {
     {
       id: 5,
       orderDetails: "Range Rover",
-      image: "/car-placeholder.svg",
+      image: CarPlaceholder,
       time: "15 Mins",
       payment: "#41478445554",
       paymentMethod: "Paytem",
@@ -52,3 +52,4 @@ export function getTransactions() {
     },
   ];
 }
+import CarPlaceholder from "@/assets/icons/Product Image.png";

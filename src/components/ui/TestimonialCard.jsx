@@ -1,0 +1,3 @@
+export default function TestimonialCard({ testimonial }) {
+  return <figure className="rounded-lg bg-surface-400 p-5"><figcaption className="flex items-center gap-3"><span aria-hidden="true" className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-white">●</span><div><p className="text-xs font-bold text-secondary">{testimonial.name}</p><p className="text-[10px] text-text-body">{testimonial.location}</p></div><p className="ml-auto text-[10px] font-bold text-secondary">4.5</p></figcaption><p aria-label="4.5 out of 5 stars" className="mt-3 text-[10px] tracking-wide text-secondary">★★★★★</p><blockquote className="mt-3 text-xs leading-5 text-secondary">“{testimonial.quote}”</blockquote></figure>;
+}

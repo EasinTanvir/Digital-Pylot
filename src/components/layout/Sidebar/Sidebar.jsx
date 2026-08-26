@@ -20,7 +20,13 @@ export default function Sidebar() {
         onClick={() => setIsOpen(true)}
         className="fixed left-3 top-3 z-30 flex h-9 w-9 items-center justify-center rounded-md bg-primary shadow-card outline-none focus-visible:ring-2 focus-visible:ring-secondary md:hidden"
       >
-        <Image src={ICONS.sidebarToggle} alt="" width={16} height={16} className="rotate-180" />
+        <Image
+          src={ICONS.sidebarToggle}
+          alt=""
+          width={16}
+          height={16}
+          className="rotate-180"
+        />
       </button>
 
       {isOpen && (
@@ -39,7 +45,13 @@ export default function Sidebar() {
         }`}
       >
         <div className="relative flex h-16 shrink-0 items-center border-b border-border-100 px-5">
-          <Image src={ICONS.logo} alt="Best Car" width={115} height={36} priority />
+          <Image
+            src={ICONS.logo}
+            alt="Best Car"
+            width={115}
+            height={36}
+            priority
+          />
           <button
             type="button"
             aria-label="Close navigation"

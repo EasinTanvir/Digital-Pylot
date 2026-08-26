@@ -41,7 +41,9 @@ export default function SidebarItem({ item, onNavigate }) {
       <span className="truncate">{item.label}</span>
       {item.indicator && (
         <Image
-          src={item.indicator === "down" ? ICONS.chevronDown : ICONS.chevronRight}
+          src={
+            item.indicator === "down" ? ICONS.chevronDown : ICONS.chevronRight
+          }
           alt=""
           width={item.indicator === "down" ? 12 : 4}
           height={item.indicator === "down" ? 12 : 7}

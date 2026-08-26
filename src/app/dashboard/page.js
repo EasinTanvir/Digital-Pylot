@@ -3,7 +3,7 @@ import { ICONS } from "@/constants";
 import { getStats } from "@/data/stats";
 import { getBestSellers } from "@/data/bestSellers";
 import { getTransactions } from "@/data/transactions";
-import { getSalesAnalytics, getAvailableYears } from "@/data/salesAnalytics";
+import { getSalesAnalytics, getAvailableYears, getSalesAnalyticsScale } from "@/data/salesAnalytics";
 import { getSalesByCountry } from "@/data/salesByCountry";
 import { getDashboardShell } from "@/data/dashboardShell";
 import StatCard from "@/components/pages/dashboard/StatCard";
@@ -28,7 +28,7 @@ export default function DashboardPage() {
 
     <section className="grid gap-4 xl:grid-cols-[minmax(260px,.8fr)_minmax(500px,1.7fr)]"><BestSellerList products={getBestSellers()} title={content.bestSeller} viewAll={content.viewAll} /><RecentTransactions transactions={getTransactions()} title={content.recentTransactions} viewAll={content.viewAll} /></section>
 
-    <section className="grid gap-4 xl:grid-cols-[minmax(500px,2fr)_minmax(270px,.9fr)]"><SalesAnalyticsChart data={getSalesAnalytics()} title={content.salesAnalytics} year={years[0]} /><SalesByCountryMap countries={getSalesByCountry()} title={content.salesByCountries} thisWeek={content.thisWeek} increaseLabel={content.mapIncrease} /></section>
+    <section className="grid gap-4 xl:grid-cols-[minmax(500px,2fr)_minmax(270px,.9fr)]"><SalesAnalyticsChart data={getSalesAnalytics()} title={content.salesAnalytics} year={years[0]} scale={getSalesAnalyticsScale()} /><SalesByCountryMap countries={getSalesByCountry()} title={content.salesByCountries} thisWeek={content.thisWeek} increaseLabel={content.mapIncrease} /></section>
 
     <footer className="flex flex-col gap-1 border-t border-border-100 pt-3 text-[10px] text-text-body sm:flex-row sm:justify-between"><span>{content.footer}</span><span>{content.credit}</span></footer>
   </div>;

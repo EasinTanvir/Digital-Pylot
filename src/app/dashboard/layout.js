@@ -3,9 +3,9 @@ import Header from "@/components/layout/Header/Header";
 
 export default function DashboardLayout({ children }) {
   return (
-    <div className="flex min-h-screen bg-page-bg">
+    <div className="flex h-dvh overflow-hidden bg-page-bg">
       <Sidebar />
-      <div className="min-w-0 flex flex-1 flex-col"><Header /><main className="flex-1 p-4 lg:p-6">{children}</main></div>
+      <div className="min-w-0 flex flex-1 flex-col overflow-hidden"><Header /><main className="min-h-0 flex-1 overflow-y-auto p-4 lg:p-6">{children}</main></div>
     </div>
   );
 }

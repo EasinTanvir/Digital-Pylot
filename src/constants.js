@@ -45,8 +45,10 @@ import LogoIcon from "@/assets/icons/Logo.svg";
 import SidebarToggleIcon from "@/assets/icons/Sidebar Toggle Left.svg";
 import ChevronRightIcon from "@/assets/icons/Vector.svg";
 import ChevronDownIcon from "@/assets/icons/chevron-down.svg";
+import mapView from "@/assets/icons/mapicon.png";
 
 export const ICONS = {
+  mapView,
   logo: LogoIcon,
   sidebarToggle: SidebarToggleIcon,
   chevronRight: ChevronRightIcon,

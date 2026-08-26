@@ -1,28 +1,28 @@
 // Icon imports - from assets/icons folder
-import DashboardIcon from "@/assets/icons/Icon.svg";
-import SuperAdminIcon from "@/assets/icons/device-laptop.svg";
+import DashboardIcon from "@/assets/icons/layout-grid.svg";
+import SuperAdminIcon from "@/assets/icons/user-edit.svg";
 import ProductsIcon from "@/assets/icons/box.svg";
-import CreateProductIcon from "@/assets/icons/circle-plus.svg";
-import ExpiredIcon from "@/assets/icons/checklist.svg";
-import LowStocksIcon from "@/assets/icons/barcode.svg";
-import CategoryIcon from "@/assets/icons/layout-grid.svg";
+import CreateProductIcon from "@/assets/icons/table-plus.svg";
+import ExpiredIcon from "@/assets/icons/progress-alert.svg";
+import LowStocksIcon from "@/assets/icons/trending-up-2.svg";
+import CategoryIcon from "@/assets/icons/list-details.svg";
 import SubCategoryIcon from "@/assets/icons/carousel-vertical.svg";
-import BrandsIcon from "@/assets/icons/files.svg";
-import UnitsIcon from "@/assets/icons/file-invoice.svg";
+import BrandsIcon from "@/assets/icons/brand-unity.svg";
+import UnitsIcon from "@/assets/icons/stack-3.svg";
 import VariantIcon from "@/assets/icons/list-details.svg";
-import WarrantiesIcon from "@/assets/icons/Expand Icon.svg";
+import WarrantiesIcon from "@/assets/icons/certificate.svg";
 import BarcodeIcon from "@/assets/icons/barcode.svg";
-import QRCodeIcon from "@/assets/icons/barcode.svg";
+import QRCodeIcon from "@/assets/icons/qrcode.svg";
 
-import ManageStockIcon from "@/assets/icons/layout-grid.svg";
-import StockAdjustmentIcon from "@/assets/icons/carousel-vertical.svg";
-import StockTransferIcon from "@/assets/icons/files.svg";
+import ManageStockIcon from "@/assets/icons/stack-3.svg";
+import StockAdjustmentIcon from "@/assets/icons/stairs-up.svg";
+import StockTransferIcon from "@/assets/icons/triangles.svg";
 
-import SalesIcon from "@/assets/icons/box.svg";
+import SalesIcon from "@/assets/icons/shopping-cart.svg";
 import InvoicesIcon from "@/assets/icons/file-invoice.svg";
-import SalesReturnIcon from "@/assets/icons/checklist.svg";
+import SalesReturnIcon from "@/assets/icons/receipt-refund.svg";
 import QuotationIcon from "@/assets/icons/files.svg";
-import POSIcon from "@/assets/icons/device-laptop.svg";
+import POSIcon from "@/assets/icons/device-laptop (1).svg";
 
 import SearchIcon from "@/assets/icons/Icon.svg";
 import NotificationIcon from "@/assets/icons/Bell Icon.svg";
@@ -35,9 +35,15 @@ import PurchasedIcon from "@/assets/icons/checklist.svg";
 
 // Logo
 import LogoIcon from "@/assets/icons/Logo.svg";
+import SidebarToggleIcon from "@/assets/icons/Sidebar Toggle Left.svg";
+import ChevronRightIcon from "@/assets/icons/Vector.svg";
+import ChevronDownIcon from "@/assets/icons/chevron-down.svg";
 
 export const ICONS = {
   logo: LogoIcon,
+  sidebarToggle: SidebarToggleIcon,
+  chevronRight: ChevronRightIcon,
+  chevronDown: ChevronDownIcon,
   sidebar: {
     dashboard: DashboardIcon,
     superAdmin: SuperAdminIcon,
@@ -87,119 +93,3 @@ export const STATUS_COLORS = {
   processing: "info",
   cancelled: "danger",
 };
-
-// Sidebar navigation structure
-export const SIDEBAR_STRUCTURE = [
-  {
-    section: "Main",
-    items: [
-      { label: "Dashboard", icon: "sidebar.dashboard", href: "/dashboard" },
-      {
-        label: "Super Admin",
-        icon: "sidebar.superAdmin",
-        href: "/dashboard/super-admin",
-      },
-    ],
-  },
-  {
-    section: "Inventory",
-    items: [
-      {
-        label: "Products",
-        icon: "inventory.products",
-        href: "/dashboard/products",
-      },
-      {
-        label: "Create Product",
-        icon: "inventory.createProduct",
-        href: "/dashboard/products/create",
-      },
-      {
-        label: "Expired Products",
-        icon: "inventory.expired",
-        href: "/dashboard/expired",
-      },
-      {
-        label: "Low Stocks",
-        icon: "inventory.lowStocks",
-        href: "/dashboard/low-stocks",
-      },
-      {
-        label: "Category",
-        icon: "inventory.category",
-        href: "/dashboard/category",
-      },
-      {
-        label: "Sub Category",
-        icon: "inventory.subCategory",
-        href: "/dashboard/sub-category",
-      },
-      { label: "Brands", icon: "inventory.brands", href: "/dashboard/brands" },
-      { label: "Units", icon: "inventory.units", href: "/dashboard/units" },
-      {
-        label: "Variant Attributes",
-        icon: "inventory.variant",
-        href: "/dashboard/variants",
-      },
-      {
-        label: "Warranties",
-        icon: "inventory.warranties",
-        href: "/dashboard/warranties",
-      },
-      {
-        label: "Print Barcode",
-        icon: "inventory.barcode",
-        href: "/dashboard/barcode",
-      },
-      {
-        label: "Print QR Code",
-        icon: "inventory.qrCode",
-        href: "/dashboard/qrcode",
-      },
-    ],
-  },
-  {
-    section: "Stock",
-    items: [
-      { label: "Manage Stock", icon: "stock.manage", href: "/dashboard/stock" },
-      {
-        label: "Stock Adjustment",
-        icon: "stock.adjustment",
-        href: "/dashboard/stock/adjustment",
-      },
-      {
-        label: "Stock Transfer",
-        icon: "stock.transfer",
-        href: "/dashboard/stock/transfer",
-      },
-    ],
-  },
-  {
-    section: "Sales",
-    items: [
-      { label: "Sales", icon: "sales.sales", href: "/dashboard/sales" },
-      {
-        label: "Invoices",
-        icon: "sales.invoices",
-        href: "/dashboard/invoices",
-      },
-      {
-        label: "Sales Return",
-        icon: "sales.return",
-        href: "/dashboard/sales-return",
-      },
-      {
-        label: "Quotation",
-        icon: "sales.quotation",
-        href: "/dashboard/quotation",
-      },
-      { label: "POS", icon: "sales.pos", href: "/dashboard/pos" },
-    ],
-  },
-  {
-    section: "Promo",
-    items: [
-      { label: "Promo", icon: "sidebar.dashboard", href: "/dashboard/promo" },
-    ],
-  },
-];

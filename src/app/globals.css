@@ -100,18 +100,6 @@
   --color-black-transparent: rgba(0, 0, 0, 0);
 }
 
-/* Global styles */
 html {
   scroll-behavior: smooth;
-}
-
-body {
-  font-family: var(--font-sans);
-  background-color: rgb(var(--color-page-bg) / <alpha-value>);
-  color: rgb(var(--color-text-body) / <alpha-value>);
-}
-
-/* Utility for shadow */
-.shadow-card {
-  box-shadow: 0px 4px 12px rgba(231, 231, 231, 0.47);
 }

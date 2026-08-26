@@ -27,11 +27,18 @@ import POSIcon from "@/assets/icons/device-laptop (1).svg";
 import SearchIcon from "@/assets/icons/Icon.svg";
 import NotificationIcon from "@/assets/icons/Bell Icon.svg";
 import SettingsIcon from "@/assets/icons/device-laptop.svg";
+import CalendarIcon from "@/assets/icons/Calendar Icon.svg";
+import RefreshIcon from "@/assets/icons/Refresh Icon.svg";
+import ExpandIcon from "@/assets/icons/Expand Icon.svg";
+import MailIcon from "@/assets/icons/Mail Icon.svg";
+import MaximizeIcon from "@/assets/icons/Maximize Icon.svg";
+import UserAvatarIcon from "@/assets/icons/User Icon.svg";
+import AddNewIcon from "@/assets/icons/circle-plus.svg";
 
 // Stat card icons
-import EarningIcon from "@/assets/icons/box.svg";
-import SalesCountIcon from "@/assets/icons/layout-grid.svg";
-import PurchasedIcon from "@/assets/icons/checklist.svg";
+import EarningIcon from "@/assets/icons/image 4 (traced).svg";
+import SalesCountIcon from "@/assets/icons/image 3 (traced).svg";
+import PurchasedIcon from "@/assets/icons/image 3 (traced).svg";
 
 // Logo
 import LogoIcon from "@/assets/icons/Logo.svg";
@@ -78,6 +85,13 @@ export const ICONS = {
     search: SearchIcon,
     notification: NotificationIcon,
     settings: SettingsIcon,
+    calendar: CalendarIcon,
+    refresh: RefreshIcon,
+    expand: ExpandIcon,
+    mail: MailIcon,
+    maximize: MaximizeIcon,
+    avatar: UserAvatarIcon,
+    addNew: AddNewIcon,
   },
   stats: {
     earning: EarningIcon,

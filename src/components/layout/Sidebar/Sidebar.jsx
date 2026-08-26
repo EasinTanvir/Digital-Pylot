@@ -34,23 +34,23 @@ export default function Sidebar() {
 
       <aside
         aria-label="Dashboard navigation"
-        className={`fixed inset-y-0 left-0 z-40 flex w-[169px] flex-col border-r border-border-100 bg-white transition-transform duration-200 md:static md:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 flex w-60 flex-col border-r border-border-100 bg-white transition-transform duration-200 md:static md:translate-x-0 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="relative flex h-11 shrink-0 items-center border-b border-border-100 px-4">
-          <Image src={ICONS.logo} alt="Best Car" width={64} height={20} priority />
+        <div className="relative flex h-16 shrink-0 items-center border-b border-border-100 px-5">
+          <Image src={ICONS.logo} alt="Best Car" width={115} height={36} priority />
           <button
             type="button"
             aria-label="Close navigation"
             onClick={closeSidebar}
-            className="absolute -right-2 top-3 hidden h-4 w-4 items-center justify-center rounded-full bg-primary outline-none focus-visible:ring-2 focus-visible:ring-secondary md:flex"
+            className="absolute -right-2 top-6 hidden h-4 w-4 items-center justify-center rounded-full bg-primary outline-none focus-visible:ring-2 focus-visible:ring-secondary md:flex"
           >
             <Image src={ICONS.sidebarToggle} alt="" width={10} height={10} />
           </button>
         </div>
 
-        <nav className="min-h-0 flex-1 overflow-y-auto px-3 pb-4 pt-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <nav className="min-h-0 flex-1 overflow-y-auto px-4 pb-6 pt-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {navigation.map((group, index) => (
             <SidebarSection
               key={group.section}

@@ -63,7 +63,7 @@ export default function Navbar() {
 
             <Link
               href="#"
-              className="rounded-sm bg-primary px-5 py-2.5 font-medium text-white transition-colors duration-200 hover:bg-primary-alt"
+              className="rounded-sm bg-primary px-5 py-2.5 font-medium text-white shadow-xs transition-all duration-200 ease-in-out hover:scale-[1.03] hover:bg-primary-alt hover:shadow-md active:scale-95"
             >
               Log In
             </Link>

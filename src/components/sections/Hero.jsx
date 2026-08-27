@@ -23,11 +23,14 @@ export default function Hero() {
               {content.description}
             </p>
           </div>
-          <div className="mt-8 flex flex-wrap items-center gap-4 sm:mt-10 sm:gap-6 md:mt-12 md:gap-10">
-            <button className="whitespace-nowrap rounded-sm bg-primary px-5 py-2 text-xs font-semibold text-white sm:px-6 sm:py-2.5 hover:scale-104 transition-all duration-200">
+          <div className="mt-8 flex flex-wrap items-center gap-4 sm:mt-10 sm:gap-6 md:mt-12 ">
+            {/* Primary Action Button */}
+            <button className="whitespace-nowrap rounded-sm bg-primary px-5 py-2 text-xs font-semibold text-white transition-all duration-200 ease-in-out hover:scale-[1.03] hover:bg-primary-alt hover:shadow-md active:scale-95 sm:px-6 sm:py-2.5">
               {content.bookingLabel}
             </button>
-            <button className="whitespace-nowrap text-xs font-bold text-secondary">
+
+            {/* Secondary Action Button with Primary Outline Border on Hover */}
+            <button className="whitespace-nowrap rounded-sm border border-transparent px-5 py-2 text-xs font-bold text-secondary transition-all duration-200 ease-in-out hover:scale-[1.03] hover:border-primary active:scale-95 sm:px-6 sm:py-2.5">
               {content.fleetLabel}
             </button>
           </div>

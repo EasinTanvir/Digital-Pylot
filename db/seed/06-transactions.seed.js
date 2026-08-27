@@ -20,7 +20,12 @@ function currentWeekDate() {
   const now = new Date();
   const date = new Date(now);
   date.setDate(now.getDate() - ((now.getDay() + 6) % 7));
-  date.setHours(Math.floor(Math.random() * 24), Math.floor(Math.random() * 60), 0, 0);
+  date.setHours(
+    Math.floor(Math.random() * 24),
+    Math.floor(Math.random() * 60),
+    0,
+    0,
+  );
   return date;
 }
 
@@ -29,7 +34,10 @@ export async function seedTransactions(userRows, vehicleRows) {
   let number = 1;
   const addTransaction = (type, createdAt) => {
     const vehicle = pick(vehicleRows);
-    const multiplier = type === "sale" ? 1 + Math.floor(Math.random() * 8) : 20 + Math.floor(Math.random() * 20);
+    const multiplier =
+      type === "sale"
+        ? 1 + Math.floor(Math.random() * 8)
+        : 20 + Math.floor(Math.random() * 20);
     generated.push({
       transactionNumber: `TXN-${String(number++).padStart(6, "0")}`,
       type,
@@ -44,14 +52,19 @@ export async function seedTransactions(userRows, vehicleRows) {
   };
 
   for (const year of [2023, 2024, 2025]) {
-    for (let index = 0; index < 280; index += 1) addTransaction("sale", randomDate(year));
-    for (let index = 0; index < 40; index += 1) addTransaction("purchase", randomDate(year));
+    for (let index = 0; index < 280; index += 1)
+      addTransaction("sale", randomDate(year));
+    for (let index = 0; index < 40; index += 1)
+      addTransaction("purchase", randomDate(year));
   }
-  for (let index = 0; index < 60; index += 1) addTransaction("sale", currentWeekDate());
+  for (let index = 0; index < 60; index += 1)
+    addTransaction("sale", currentWeekDate());
 
   await db.insert(transactions).values(generated);
 
-  const totals = new Map(vehicleRows.map((vehicle) => [vehicle.id, { count: 0, revenue: 0 }]));
+  const totals = new Map(
+    vehicleRows.map((vehicle) => [vehicle.id, { count: 0, revenue: 0 }]),
+  );
   for (const transaction of generated) {
     if (transaction.type === "sale") {
       const total = totals.get(transaction.vehicleId);
@@ -59,9 +72,17 @@ export async function seedTransactions(userRows, vehicleRows) {
       total.revenue += Number(transaction.amount);
     }
   }
-  await Promise.all(vehicleRows.map((vehicle) => {
-    const total = totals.get(vehicle.id);
-    return db.update(vehicles).set({ totalSalesCount: total.count, totalRevenue: total.revenue.toFixed(2) }).where(eq(vehicles.id, vehicle.id));
-  }));
+  await Promise.all(
+    vehicleRows.map((vehicle) => {
+      const total = totals.get(vehicle.id);
+      return db
+        .update(vehicles)
+        .set({
+          totalSalesCount: total.count,
+          totalRevenue: total.revenue.toFixed(2),
+        })
+        .where(eq(vehicles.id, vehicle.id));
+    }),
+  );
   return generated;
 }

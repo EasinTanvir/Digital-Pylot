@@ -1,5 +1,12 @@
 import { db } from "../db.js";
-import { users, brands, categories, subCategories, vehicles, transactions } from "../schema.js";
+import {
+  users,
+  brands,
+  categories,
+  subCategories,
+  vehicles,
+  transactions,
+} from "../schema.js";
 import { seedUsers } from "./01-users.seed.js";
 import { seedBrands } from "./02-brands.seed.js";
 import { seedCategories } from "./03-categories.seed.js";
@@ -19,7 +26,11 @@ async function main() {
   const brandRows = await seedBrands();
   const categoryRows = await seedCategories();
   const subCategoryRows = await seedSubCategories(categoryRows);
-  const vehicleRows = await seedVehicles(brandRows, categoryRows, subCategoryRows);
+  const vehicleRows = await seedVehicles(
+    brandRows,
+    categoryRows,
+    subCategoryRows,
+  );
   await seedTransactions(userRows, vehicleRows);
   console.log("Seed completed.");
 }

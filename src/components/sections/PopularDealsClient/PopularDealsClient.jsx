@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import SectionHeader from "@/components/ui/SectionHeader";
 import CategoryTabs from "@/components/sections/PopularDealsClient/CategoryTabs";
 import CarDealCard from "@/components/sections/PopularDealsClient/CarDealCard";
+import Container from "@/components/shared/Container";
 
 export default function PopularDealsClient({
   categories = [],
@@ -34,7 +35,7 @@ export default function PopularDealsClient({
       aria-labelledby="popular-deals-title"
       className="bg-page-bg px-6 py-20 lg:px-8 lg:py-28"
     >
-      <div className="mx-auto max-w-7xl">
+      <Container>
         <SectionHeader
           id="popular-deals-title"
           title="Most popular car rental deals"
@@ -73,7 +74,7 @@ export default function PopularDealsClient({
             {visibleCars.length} of {visibleCars.length} cars
           </p>
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

@@ -5,7 +5,7 @@ export default function CategoryTabs({ tabs, activeTab, onSelectTab }) {
     <div
       role="tablist"
       aria-label="Car categories"
-      className="mt-12 flex flex-wrap border-b border-border-200"
+      className="mt-20 flex flex-wrap border-b border-border-200"
     >
       {tabs.map((tab) => {
         const isActive = tab === activeTab;
@@ -17,7 +17,7 @@ export default function CategoryTabs({ tabs, activeTab, onSelectTab }) {
             aria-selected={isActive}
             onClick={() => onSelectTab(tab)}
             style={{ letterSpacing: "-0.02em" }}
-            className={`relative flex-1 min-w-[140px] pb-4 text-center text-[16px] sm:text-[22px] font-medium leading-[150%] transition-colors duration-200 ${
+            className={`relative flex-1 min-w-35 pb-4 tracking-custom text-center text-[16px] sm:text-[22px] font-medium leading-normal transition-colors duration-200 ${
               isActive
                 ? "text-secondary font-semibold"
                 : "text-text-body hover:text-secondary"

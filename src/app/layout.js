@@ -1,5 +1,6 @@
 import { Nunito_Sans, Plus_Jakarta_Sans, Rubik } from "next/font/google";
 import "./globals.css";
+import ChatWidget from "@/components/chatWidget/ChatWidget";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta",
@@ -29,7 +30,10 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${plusJakartaSans.variable} ${nunitoSans.variable} ${rubik.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <ChatWidget />
+      </body>
     </html>
   );
 }

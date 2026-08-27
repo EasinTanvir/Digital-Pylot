@@ -34,7 +34,7 @@ export default function Navbar() {
             />
           </Link>
 
-          <div className="hidden items-center gap-9 lg:flex">
+          <div className="hidden items-center xl:gap-9 gap-8 lg:flex">
             {navigationItems.map((item) => {
               const isActive = activeSection === item.href.replace("#", "");
               return (

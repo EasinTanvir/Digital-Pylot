@@ -83,7 +83,7 @@ export default function Footer() {
           </div>
 
           {/* 3-Column Footer Links Grid */}
-          <div className="grid grid-cols-3 gap-4 text-center sm:gap-8 md:col-span-3 md:text-left lg:col-span-3">
+          <div className="grid grid-cols-3 gap-4 text-center sm:gap-8 md:col-span-3 lg:text-left lg:col-span-3">
             {footerLinks.map((section) => (
               <div key={section.title} className="flex flex-col gap-3 sm:gap-4">
                 <h3 className="text-xs sm:text-sm leading-normal font-semibold text-secondary tracking-custom">

@@ -1,6 +1,8 @@
+import { getHeroContent } from "@/data/frontEnd";
 import Image from "next/image";
 
-export default function Hero({ content }) {
+export default function Hero() {
+  const content = getHeroContent();
   return (
     <section
       id="home"

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { ICONS } from "@/constants";
 import { navigationItems } from "@/lib/navigationItems";
-import Container from "../shared/Container";
+import Container from "../../shared/Container";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

@@ -8,15 +8,15 @@ export default function Hero() {
     <section
       id="home"
       aria-label="Car rental introduction"
-      className="bg-primary-50 pt-16 pt-28 lg:pt-40 relative"
+      className="bg-primary-50 pt-16 sm:pt-20 md:pt-28 lg:pt-40 relative"
     >
-      <Container className="flex flex-col lg:flex-row gap-10 sm:gap-14 md:gap-10 lg:gap-24 xl:gap-32 items-center">
-        <div className="flex-1 w-full">
+      <Container className="flex flex-col lg:flex-row gap-10 sm:gap-14 md:gap-10 lg:gap-24 xl:gap-32 ">
+        <div className="flex-1 w-full lg:pt-10">
           <div className="space-y-4 sm:space-y-5 md:space-y-6">
             <p className="text-xs sm:text-sm font-medium text-text-body">
               {content.eyebrow}
             </p>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl  font-extrabold leading-tight sm:leading-tight md:leading-[1.1] text-secondary uppercase">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold leading-tight sm:leading-tight md:leading-[1.1] text-secondary uppercase">
               {content.title}
             </h1>
             <p className="text-sm sm:text-base leading-6 text-text-body max-w-md sm:max-w-lg">
@@ -32,7 +32,7 @@ export default function Hero() {
             </button>
           </div>
         </div>
-        <div className="flex-1 relative xl:-mr-24 lg:-mr-10 overflow-hidden rounded-tl-[40px] sm:rounded-tl-[56px] lg:rounded-tl-[64px]  aspect-square sm:max-h-[360px] md:max-h-[440px] lg:h-[500px] xl:h-[550px] w-full">
+        <div className="flex-1 relative 2xl:-mr-40 xl:-mr-24 lg:-mr-10 overflow-hidden rounded-tl-[64px] aspect-[3/2] lg:aspect-[7/6] w-full">
           <Image
             src={content.image}
             alt={content.imageAlt}

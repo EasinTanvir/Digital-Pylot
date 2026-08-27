@@ -5,7 +5,8 @@ export default function CategoryTabs({ tabs, activeTab, onSelectTab }) {
     <div
       role="tablist"
       aria-label="Car categories"
-      className="mt-20 flex flex-wrap border-b border-border-200"
+      /* Use matching grid columns and gap to match the cards grid below */
+      className="mt-20 grid grid-cols-2 gap-4 border-b border-border-200 lg:grid-cols-4 lg:gap-6"
     >
       {tabs.map((tab) => {
         const isActive = tab === activeTab;
@@ -17,14 +18,14 @@ export default function CategoryTabs({ tabs, activeTab, onSelectTab }) {
             aria-selected={isActive}
             onClick={() => onSelectTab(tab)}
             style={{ letterSpacing: "-0.02em" }}
-            className={`relative flex-1 min-w-35 pb-4 tracking-custom text-center text-[16px] sm:text-[22px] font-medium leading-normal transition-colors duration-200 ${
+            className={`relative w-full pb-4 text-center text-[16px] font-medium leading-normal transition-colors duration-200 sm:text-[22px] ${
               isActive
-                ? "text-secondary font-semibold"
+                ? "font-semibold text-secondary"
                 : "text-text-body hover:text-secondary"
             }`}
           >
             {tab}
-            {/* Primary Colored 4px Active Border */}
+            {/* Active 4px border spans the full width of the grid column */}
             <span
               className={`absolute bottom-0 left-0 right-0 h-[4px] rounded-t-sm transition-all duration-200 ${
                 isActive ? "bg-primary" : "bg-transparent"

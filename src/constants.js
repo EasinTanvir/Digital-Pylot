@@ -56,7 +56,12 @@ import pickupDateIcon from "@/assets/icons/pickupDate.svg";
 import borderShape from "@/assets/icons/shapeIcon.svg";
 import heartIcon from "@/assets/icons/heart.svg";
 
+import phoneCallIcon from "@/assets/icons/phoneCall.svg";
+import priceTagIcon from "@/assets/icons/pricetags.svg";
+
 export const ICONS = {
+  phoneCallIcon,
+  priceTagIcon,
   heartIcon,
   carIcon,
   borderShape,

@@ -34,3 +34,16 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Database-backed API routes
+
+Dynamic landing-page and dashboard content is served by these read-only routes:
+
+- `GET /api/categories` — `PopularDeals`
+- `GET /api/vehicles?category=<id>` and `GET /api/vehicles/popular` — `PopularDeals`
+- `GET /api/dashboard/stats` — dashboard stat cards
+- `GET /api/dashboard/best-sellers?limit=5` — `BestSellerList`
+- `GET /api/dashboard/transactions?limit=5` — `RecentTransactions`
+- `GET /api/dashboard/sales-analytics?year=2024` and `GET /api/dashboard/sales-analytics/years` — `SalesAnalyticsChart`
+- `GET /api/dashboard/sales-by-country?filter=this_week` — `SalesByCountryMap`
+
+Landing category tabs fetch all category data once in a Server Component and filter it client-side. Dashboard data is fetched fresh on each request with `cache: "no-store"`.

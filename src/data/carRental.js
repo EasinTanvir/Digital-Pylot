@@ -82,14 +82,3 @@ export const rentalCars = [
     alt: "Porsche sports car photographed outdoors",
   },
 ];
-
-export const galleryImages = [
-  {
-    src: `${photoBase}/photo-1504215680853-026ed2a45def?auto=format&fit=crop&w=1400&q=85`,
-    alt: "White SUV driving through a city",
-  },
-  {
-    src: `${photoBase}/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1400&q=85`,
-    alt: "Sports car on an open road",
-  },
-];

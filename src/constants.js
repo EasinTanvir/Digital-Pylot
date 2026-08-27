@@ -50,7 +50,16 @@ import mapView from "@/assets/icons/mapicon.png";
 import arrowDownIcon from "@/assets/icons/arrow-down.svg";
 import circleIcon from "@/assets/icons/circleIcon.svg";
 
+import carIcon from "@/assets/icons/carIcon.svg";
+import locationIcon from "@/assets/icons/location.svg";
+import pickupDateIcon from "@/assets/icons/pickupDate.svg";
+import borderShape from "@/assets/icons/shapeIcon.svg";
+
 export const ICONS = {
+  carIcon,
+  borderShape,
+  locationIcon,
+  pickupDateIcon,
   arrowDownIcon,
   circleIcon,
   mapView,

@@ -8,25 +8,68 @@ import {
   HiPaperAirplane,
 } from "react-icons/hi2";
 import { BsRobot } from "react-icons/bs";
+import axios from "axios";
 
-const INITIAL_MESSAGES = [
-  {
-    id: 1,
-    sender: "bot",
-    text: "Hello! 👋 Welcome to Best Auto. How can we help you today?",
-    time: "Just now",
-  },
-];
+const SESSION_KEY = "autoassistant_chat_v1";
+
+const GREETING = {
+  id: 1,
+  sender: "bot",
+  text: "Hi! 👋 I'm the Best Auto assistant. Tell me what kind of car you need, or ask about pricing, availability, or our rental policies.",
+  time: nowLabel(),
+};
+
+function nowLabel() {
+  return new Date().toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+// UI message {id, sender, text, time} -> API message {role, content}
+function toApiMessages(uiMessages) {
+  return uiMessages.map((m) => ({
+    role: m.sender === "user" ? "user" : "assistant",
+    content: m.text,
+  }));
+}
 
 export default function ChatWidget() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState(INITIAL_MESSAGES);
+  const [messages, setMessages] = useState([GREETING]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
 
   const widgetRef = useRef(null);
   const chatBottomRef = useRef(null);
+
+  // Load prior conversation from sessionStorage on mount
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem(SESSION_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setMessages(parsed);
+        }
+      }
+    } catch {
+      // corrupted storage, fall back to greeting
+    }
+    setHydrated(true);
+  }, []);
+
+  // Persist conversation on every change (after initial hydration to avoid overwriting with default)
+  useEffect(() => {
+    if (!hydrated) return;
+    try {
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify(messages));
+    } catch {
+      // storage full/unavailable, ignore
+    }
+  }, [messages, hydrated]);
 
   // Close when clicking outside the chat widget container
   useEffect(() => {
@@ -35,14 +78,10 @@ export default function ChatWidget() {
         setIsOpen(false);
       }
     };
-
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
   // Auto-scroll to bottom on new message
@@ -57,38 +96,51 @@ export default function ChatWidget() {
     return null;
   }
 
-  const handleSendMessage = (e) => {
+  const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (!input.trim()) return;
+    const text = input.trim();
+    if (!text || isTyping) return;
 
     const userMsg = {
       id: Date.now(),
       sender: "user",
-      text: input.trim(),
-      time: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
+      text,
+      time: nowLabel(),
     };
 
-    setMessages((prev) => [...prev, userMsg]);
+    const nextMessages = [...messages, userMsg];
+    setMessages(nextMessages);
     setInput("");
     setIsTyping(true);
 
-    // Simulated chatbot reply
-    setTimeout(() => {
+    try {
+      const { data } = await axios.post("/api/chat", {
+        messages: toApiMessages(nextMessages),
+      });
+
       const botMsg = {
         id: Date.now() + 1,
         sender: "bot",
-        text: "Thanks for reaching out! Our team is reviewing your query and will assist you shortly.",
-        time: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
+        text: data.reply,
+        time: nowLabel(),
       };
       setMessages((prev) => [...prev, botMsg]);
+    } catch (err) {
+      const errorMsg = {
+        id: Date.now() + 1,
+        sender: "bot",
+        text: "Sorry, something went wrong on my end — please try again in a moment.",
+        time: nowLabel(),
+      };
+      setMessages((prev) => [...prev, errorMsg]);
+    } finally {
       setIsTyping(false);
-    }, 1200);
+    }
+  };
+
+  const handleReset = () => {
+    setMessages([GREETING]);
+    sessionStorage.removeItem(SESSION_KEY);
   };
 
   return (
@@ -116,16 +168,26 @@ export default function ChatWidget() {
               </div>
             </div>
 
-            <button
-              onClick={() => setIsOpen(false)}
-              className="rounded-full p-1.5 text-white/80 transition-colors hover:bg-white/20 hover:text-white active:scale-95"
-              aria-label="Close Chat"
-            >
-              <HiXMark className="h-5 w-5" />
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={handleReset}
+                className="rounded-full px-2 py-1 text-[10px] font-semibold text-white/80 transition-colors hover:bg-white/20 hover:text-white active:scale-95"
+                aria-label="Reset conversation"
+                title="Start a new conversation"
+              >
+                New chat
+              </button>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="rounded-full p-1.5 text-white/80 transition-colors hover:bg-white/20 hover:text-white active:scale-95"
+                aria-label="Close Chat"
+              >
+                <HiXMark className="h-5 w-5" />
+              </button>
+            </div>
           </div>
 
-          {/* Messages Container with Custom Scrollbar */}
+          {/* Messages Container */}
           <div className="flex-1 overflow-y-auto bg-surface-50 p-4 space-y-3">
             {messages.map((msg) => {
               const isUser = msg.sender === "user";
@@ -135,7 +197,7 @@ export default function ChatWidget() {
                   className={`flex flex-col ${isUser ? "items-end" : "items-start"}`}
                 >
                   <div
-                    className={`max-w-[82%] rounded-2xl px-4 py-2.5 text-xs font-medium leading-relaxed shadow-xs ${
+                    className={`max-w-[82%] whitespace-pre-wrap rounded-2xl px-4 py-2.5 text-xs font-medium leading-relaxed shadow-xs ${
                       isUser
                         ? "rounded-br-xs bg-primary text-white"
                         : "rounded-bl-xs bg-white text-secondary border border-border-100"
@@ -172,11 +234,12 @@ export default function ChatWidget() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type your message..."
-              className="flex-1 rounded-full border border-border-100 bg-surface-50 px-4 py-2 text-xs text-secondary placeholder-text-body focus:border-primary focus:outline-none"
+              disabled={isTyping}
+              className="flex-1 rounded-full border border-border-100 bg-surface-50 px-4 py-2 text-xs text-secondary placeholder-text-body focus:border-primary focus:outline-none disabled:opacity-60"
             />
             <button
               type="submit"
-              disabled={!input.trim()}
+              disabled={!input.trim() || isTyping}
               className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-white transition-all duration-200 hover:scale-105 hover:bg-primary-alt active:scale-95 disabled:opacity-40 disabled:hover:scale-100"
               aria-label="Send Message"
             >

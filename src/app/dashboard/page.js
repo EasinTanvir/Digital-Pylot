@@ -18,28 +18,83 @@ export default async function DashboardPage() {
   const content = getDashboardShell();
   const requestHeaders = await headers();
   const host = requestHeaders.get("host");
-  const protocol = requestHeaders.get("x-forwarded-proto") || (host?.startsWith("localhost") ? "http" : "https");
+  const protocol =
+    requestHeaders.get("x-forwarded-proto") ||
+    (host?.startsWith("localhost") ? "http" : "https");
   const apiBaseUrl = process.env.NEXT_PUBLIC_APP_URL || `${protocol}://${host}`;
-  const years = await getData(apiBaseUrl, "/api/dashboard/sales-analytics/years", []);
+  const years = await getData(
+    apiBaseUrl,
+    "/api/dashboard/sales-analytics/years",
+    [],
+  );
   const selectedYear = years[0] || new Date().getFullYear();
-  const [statsData, bestSellersData, transactionData, analyticsData, countryData] = await Promise.all([
-    getData(apiBaseUrl, "/api/dashboard/stats", { weeklyEarning: 0, totalSales: 0, purchasedGoods: 0 }),
+  const [
+    statsData,
+    bestSellersData,
+    transactionData,
+    analyticsData,
+    countryData,
+  ] = await Promise.all([
+    getData(apiBaseUrl, "/api/dashboard/stats", {
+      weeklyEarning: 0,
+      totalSales: 0,
+      purchasedGoods: 0,
+    }),
     getData(apiBaseUrl, "/api/dashboard/best-sellers?limit=5", []),
     getData(apiBaseUrl, "/api/dashboard/transactions?limit=5", []),
-    getData(apiBaseUrl, `/api/dashboard/sales-analytics?year=${selectedYear}`, []),
+    getData(
+      apiBaseUrl,
+      `/api/dashboard/sales-analytics?year=${selectedYear}`,
+      [],
+    ),
     getData(apiBaseUrl, "/api/dashboard/sales-by-country?filter=this_week", []),
   ]);
   const stats = {
-    weeklyEarning: { amount: statsData.weeklyEarning, currency: "USD", changePercent: 0, label: "this week" },
+    weeklyEarning: {
+      amount: statsData.weeklyEarning,
+      currency: "USD",
+      changePercent: 0,
+      label: "this week",
+    },
     totalSales: { value: statsData.totalSales, label: "all sale transactions" },
-    purchasedGoods: { value: statsData.purchasedGoods, label: "inventory purchases" },
+    purchasedGoods: {
+      value: statsData.purchasedGoods,
+      label: "inventory purchases",
+    },
   };
-  const bestSellers = bestSellersData.map((vehicle) => ({ id: vehicle.id, name: vehicle.name, image: vehicle.imageUrl, price: `$${Number(vehicle.dailyPrice).toFixed(2)}/day`, sales: vehicle.totalSalesCount }));
-  const transactions = transactionData.map((transaction) => ({ id: transaction.transactionNumber, orderDetails: transaction.vehicle?.name || "Vehicle", image: transaction.vehicle?.imageUrl, time: new Date(transaction.createdAt).toLocaleDateString(), payment: transaction.transactionNumber, paymentMethod: transaction.paymentMethod, status: transaction.status === "success" ? "completed" : transaction.status, amount: `$${Number(transaction.amount).toFixed(2)}` }));
-  const analytics = analyticsData.map((item) => ({ month: item.month, value: Number(item.totalAmount) }));
+  const bestSellers = bestSellersData.map((vehicle) => ({
+    id: vehicle.id,
+    name: vehicle.name,
+    image: vehicle.imageUrl,
+    price: `$${Number(vehicle.dailyPrice).toFixed(2)}/day`,
+    sales: vehicle.totalSalesCount,
+  }));
+  const transactions = transactionData.map((transaction) => ({
+    id: transaction.transactionNumber,
+    orderDetails: transaction.vehicle?.name || "Vehicle",
+    image: transaction.vehicle?.imageUrl,
+    time: new Date(transaction.createdAt).toLocaleDateString(),
+    payment: transaction.transactionNumber,
+    paymentMethod: transaction.paymentMethod,
+    status: transaction.status === "success" ? "completed" : transaction.status,
+    amount: `$${Number(transaction.amount).toFixed(2)}`,
+  }));
+  const analytics = analyticsData.map((item) => ({
+    month: item.month,
+    value: Number(item.totalAmount),
+  }));
   const scaleMax = Math.max(1000, ...analytics.map((item) => item.value));
-  const scale = { domain: [0, Math.ceil(scaleMax / 1000) * 1000], ticks: Array.from({ length: 6 }, (_, index) => Math.round((Math.ceil(scaleMax / 1000) * 1000 * index) / 5)) };
-  const countries = countryData.map((country, index) => ({ country: country.country, sales: country.salesCount, isHighlighted: index === 0 }));
+  const scale = {
+    domain: [0, Math.ceil(scaleMax / 1000) * 1000],
+    ticks: Array.from({ length: 6 }, (_, index) =>
+      Math.round((Math.ceil(scaleMax / 1000) * 1000 * index) / 5),
+    ),
+  };
+  const countries = countryData.map((country, index) => ({
+    country: country.country,
+    sales: country.salesCount,
+    isHighlighted: index === 0,
+  }));
 
   return (
     <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-5">

@@ -59,7 +59,12 @@ import heartIcon from "@/assets/icons/heart.svg";
 import phoneCallIcon from "@/assets/icons/phoneCall.svg";
 import priceTagIcon from "@/assets/icons/pricetags.svg";
 
+import arrowBackIcon from "@/assets/icons/arrowBack.svg";
+import arrowForwardIcon from "@/assets/icons/arrowForward.svg";
+
 export const ICONS = {
+  arrowBackIcon,
+  arrowForwardIcon,
   phoneCallIcon,
   priceTagIcon,
   heartIcon,

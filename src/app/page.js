@@ -6,7 +6,7 @@ import HowItWorks from "@/components/sections/HowItWorks";
 import PopularDeals from "@/components/sections/PopularDeals";
 import WhyChooseUs from "@/components/sections/WhyChooseUs";
 import ImageBannerDuo from "@/components/sections/ImageBannerDuo";
-import Testimonials from "@/components/sections/Testimonials";
+import Testimonials from "@/components/sections/Testimonials/Testimonials";
 
 export default async function HomePage() {
   return (

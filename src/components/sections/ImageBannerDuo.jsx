@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Container from "../shared/Container";
 
 const galleryImages = [
   {
@@ -15,25 +16,27 @@ export default function ImageBannerDuo() {
   return (
     <section
       aria-label="Car rental offers"
-      className="bg-surface-250 px-6 py-10 lg:px-8 lg:py-16"
+      className="bg-surface-250 py-10 lg:py-16"
     >
-      <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-2">
-        {galleryImages.map((image) => (
-          <article
-            key={image.src}
-            className="group relative min-h-[260px] overflow-hidden rounded-2xl"
-          >
-            <Image
-              src={image.src}
-              alt={image.alt}
-              fill
-              sizes="(min-width: 768px) 50vw, 100vw"
-              className="object-cover transition duration-500 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-secondary/25" />
-          </article>
-        ))}
-      </div>
+      <Container>
+        <div className="grid gap-6 md:grid-cols-2">
+          {galleryImages.map((image) => (
+            <article
+              key={image.src}
+              className="group cursor-pointer relative aspect-16/9 sm:aspect-16/10 w-full overflow-hidden rounded-[20px] bg-surface-150 shadow-sm"
+            >
+              <Image
+                src={image.src}
+                alt={image.alt}
+                fill
+                sizes="(min-width: 768px) 50vw, 100vw"
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-secondary/10 transition-opacity duration-300 group-hover:opacity-0" />
+            </article>
+          ))}
+        </div>
+      </Container>
     </section>
   );
 }

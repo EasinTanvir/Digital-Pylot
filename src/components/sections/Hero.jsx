@@ -8,31 +8,31 @@ export default function Hero() {
     <section
       id="home"
       aria-label="Car rental introduction"
-      className="bg-primary-50 pt-16 sm:pt-20 md:pt-28 lg:pt-40 relative"
+      className="relative bg-primary-50 pt-16 sm:pt-20 md:pt-28 lg:pt-40 pb-20 sm:pb-24 lg:pb-16"
     >
-      <Container className="flex flex-col lg:flex-row gap-10 sm:gap-14 md:gap-10 lg:gap-24 xl:gap-32 ">
-        <div className="flex-1 w-full lg:pt-10">
+      <Container className="flex flex-col gap-10 sm:gap-14 md:gap-10 lg:flex-row lg:gap-24 xl:gap-32">
+        <div className="w-full flex-1 lg:pt-10">
           <div className="space-y-4 sm:space-y-5 md:space-y-6">
-            <p className="text-xs sm:text-sm font-medium text-text-body">
+            <p className="text-xs font-medium text-text-body sm:text-sm">
               {content.eyebrow}
             </p>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold leading-tight sm:leading-tight md:leading-[1.1] text-secondary uppercase">
+            <h1 className="text-3xl font-extrabold leading-tight text-secondary uppercase sm:text-4xl sm:leading-tight md:text-5xl md:leading-[1.1] lg:text-5xl">
               {content.title}
             </h1>
-            <p className="text-sm sm:text-base leading-6 text-text-body max-w-md sm:max-w-lg">
+            <p className="max-w-md text-sm leading-6 text-text-body sm:max-w-lg sm:text-base">
               {content.description}
             </p>
           </div>
-          <div className="mt-8 sm:mt-10 md:mt-12 flex flex-wrap items-center gap-4 sm:gap-6 md:gap-10">
-            <button className="rounded-sm bg-primary px-5 sm:px-6 py-2 sm:py-2.5 text-xs font-semibold text-white whitespace-nowrap">
+          <div className="mt-8 flex flex-wrap items-center gap-4 sm:mt-10 sm:gap-6 md:mt-12 md:gap-10">
+            <button className="whitespace-nowrap rounded-sm bg-primary px-5 py-2 text-xs font-semibold text-white sm:px-6 sm:py-2.5">
               {content.bookingLabel}
             </button>
-            <button className="text-xs font-bold text-secondary whitespace-nowrap">
+            <button className="whitespace-nowrap text-xs font-bold text-secondary">
               {content.fleetLabel}
             </button>
           </div>
         </div>
-        <div className="flex-1 relative 2xl:-mr-40 xl:-mr-24 lg:-mr-10 overflow-hidden rounded-tl-[64px] aspect-[3/2] lg:aspect-[7/6] w-full">
+        <div className="relative aspect-[3/2] w-full flex-1 overflow-hidden rounded-tl-[64px] lg:aspect-[7/6] lg:-mr-10 xl:-mr-24 2xl:-mr-40">
           <Image
             src={content.image}
             alt={content.imageAlt}

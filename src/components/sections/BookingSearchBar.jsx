@@ -12,7 +12,6 @@ const fields = [
 ];
 
 function SearchFields({ legend, prefix }) {
-  // Track open state per field index
   const [openField, setOpenField] = useState(null);
 
   return (
@@ -86,7 +85,7 @@ export default function BookingSearchBar() {
       aria-label="Car booking search"
       className="relative z-20 bg-surface-300"
     >
-      <Container className="relative -translate-y-1/2 rounded-[10px] bg-white p-6 shadow-booking-searchbar">
+      <Container className="relative -mt-12 sm:-mt-16 lg:mt-0 lg:-translate-y-1/2 rounded-[10px] bg-white p-6 shadow-booking-searchbar">
         <form
           noValidate
           onSubmit={(event) => {

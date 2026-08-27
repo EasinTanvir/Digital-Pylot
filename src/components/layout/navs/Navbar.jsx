@@ -17,7 +17,7 @@ export default function Navbar() {
   const activeSection = useActiveSection(sectionIds);
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50 w-full border-b border-border-150 bg-white backdrop-blur">
+    <header className="fixed top-0 inset-x-0 z-50 w-full border-b border-border-150 bg-primary-50 backdrop-blur">
       <Container>
         <nav
           aria-label="Main navigation"

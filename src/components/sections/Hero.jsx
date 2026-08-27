@@ -1,5 +1,6 @@
 import { getHeroContent } from "@/data/frontEnd";
 import Image from "next/image";
+import Container from "../shared/Container";
 
 export default function Hero() {
   const content = getHeroContent();
@@ -7,35 +8,31 @@ export default function Hero() {
     <section
       id="home"
       aria-label="Car rental introduction"
-      className="bg-gradient-to-br from-surface-100 via-white to-primary-50"
+      className="bg-primary-50 lg:pt-40 relative"
     >
-      <div className="mx-auto grid max-w-7xl gap-10 px-6 py-14 md:grid-cols-2 md:items-center lg:px-8 lg:py-20">
-        <div className="max-w-xl">
-          <p className="text-[11px] font-medium text-text-body">
-            {content.eyebrow}
-          </p>
-          <h1 className="mt-5 text-[38px] font-extrabold leading-[121%] tracking-normal text-secondary uppercase sm:text-[46px]">
-            {content.title}
-          </h1>
-          <p className="mt-5 max-w-md text-sm leading-6 text-text-body">
-            {content.description}
-          </p>
-          <div className="mt-7 flex items-center gap-6">
-            <a
-              href="#booking-search"
-              className="rounded bg-secondary px-5 py-3 text-xs font-bold text-white"
-            >
+      <Container className="flex gap-40 ">
+        <div className="flex-1">
+          <div className="space-y-6">
+            <p className="text-sm font-medium text-text-body">
+              {content.eyebrow}
+            </p>
+            <h1 className=" text-5xl font-extrabold  leading-15  text-secondary uppercase ">
+              {content.title}
+            </h1>
+            <p className="text-base leading-6 text-text-body">
+              {content.description}
+            </p>
+          </div>
+          <div className="mt-12 flex items-center gap-10">
+            <button className="rounded-sm bg-primary px-6 py-2.5 text-xs font-semibold text-white">
               {content.bookingLabel}
-            </a>
-            <a
-              href="#popular-deals"
-              className="text-xs font-bold text-secondary"
-            >
+            </button>
+            <button className="text-xs font-bold text-secondary">
               {content.fleetLabel}
-            </a>
+            </button>
           </div>
         </div>
-        <div className="relative min-h-[280px] overflow-hidden rounded-3xl bg-surface-400 shadow-[0_22px_55px_rgba(9,44,76,0.18)] sm:min-h-[380px] lg:min-h-[440px]">
+        <div className="flex-1 relative  overflow-hidden rounded-tl-[64px] h-[550px]">
           <Image
             src={content.image}
             alt={content.imageAlt}
@@ -45,7 +42,7 @@ export default function Hero() {
             className="object-cover"
           />
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

@@ -58,7 +58,7 @@ export default function BookingSearchBar() {
           );
           if (!form.checkValidity()) form.reportValidity();
         }}
-        className="mx-auto -mt-6 max-w-7xl rounded-2xl border border-white bg-white p-5 shadow-[0_16px_45px_rgba(17,19,35,0.12)] lg:-mt-10 lg:grid lg:grid-cols-[1fr_1fr_auto] lg:items-end lg:gap-8"
+        className="mx-auto  max-w-7xl rounded-2xl border border-white bg-white p-5 shadow-[0_16px_45px_rgba(17,19,35,0.12)]  lg:grid lg:grid-cols-[1fr_1fr_auto] lg:items-end lg:gap-8"
       >
         <SearchFields legend="Pick-Up" prefix="pickup" />
         <SearchFields legend="Drop-Off" prefix="dropoff" />

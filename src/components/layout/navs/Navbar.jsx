@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
 import { ICONS } from "@/constants";
 import { navigationItems } from "@/lib/navigationItems";
 import Container from "../../shared/Container";
@@ -41,7 +41,7 @@ export default function Navbar() {
                 <Link
                   key={item.label}
                   href={item.href}
-                  className={`transition-colors duration-200  hover:text-primary ${
+                  className={`transition-colors duration-200 hover:text-primary ${
                     isActive
                       ? "font-bold text-primary"
                       : "font-medium text-text-heading"
@@ -56,14 +56,14 @@ export default function Navbar() {
 
             <Link
               href="/register"
-              className="font-medium text-text-heading transition-colors duration-200  hover:text-primary"
+              className="font-medium text-text-heading transition-colors duration-200 hover:text-primary"
             >
               Register
             </Link>
 
             <Link
               href="/login"
-              className="rounded-sm bg-primary px-5 py-2.5 font-medium text-white transition-colors duration-200 hover:bg-primary-alt "
+              className="rounded-sm bg-primary px-5 py-2.5 font-medium text-white transition-colors duration-200 hover:bg-primary-alt"
             >
               Log In
             </Link>
@@ -76,7 +76,11 @@ export default function Navbar() {
             onClick={() => setIsMenuOpen((open) => !open)}
             className="flex items-center justify-center rounded-sm border border-border-100 p-2 text-secondary transition-colors duration-200 hover:border-primary hover:text-primary lg:hidden"
           >
-            {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
+            {isMenuOpen ? (
+              <HiOutlineX className="h-5 w-5" />
+            ) : (
+              <HiOutlineMenu className="h-5 w-5" />
+            )}
           </button>
         </nav>
       </Container>

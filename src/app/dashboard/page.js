@@ -1,14 +1,6 @@
 import Image from "next/image";
+import { headers } from "next/headers";
 import { ICONS } from "@/constants";
-import { getStats } from "@/data/stats";
-import { getBestSellers } from "@/data/bestSellers";
-import { getTransactions } from "@/data/transactions";
-import {
-  getSalesAnalytics,
-  getAvailableYears,
-  getSalesAnalyticsScale,
-} from "@/data/salesAnalytics";
-import { getSalesByCountry } from "@/data/salesByCountry";
 import { getDashboardShell } from "@/data/dashboardShell";
 import StatCard from "@/components/pages/dashboard/StatCard";
 import BestSellerList from "@/components/pages/dashboard/BestSellerList";
@@ -17,10 +9,37 @@ import SalesAnalyticsChart from "@/components/pages/dashboard/SalesAnalyticsChar
 import SalesByCountryMap from "@/components/pages/dashboard/SalesByCountryMap";
 import MissingIcon from "@/components/ui/MissingIcon";
 
-export default function DashboardPage() {
+async function getData(baseUrl, path, fallback) {
+  const response = await fetch(`${baseUrl}${path}`, { cache: "no-store" });
+  return response.ok ? response.json() : fallback;
+}
+
+export default async function DashboardPage() {
   const content = getDashboardShell();
-  const stats = getStats();
-  const years = getAvailableYears();
+  const requestHeaders = await headers();
+  const host = requestHeaders.get("host");
+  const protocol = requestHeaders.get("x-forwarded-proto") || (host?.startsWith("localhost") ? "http" : "https");
+  const apiBaseUrl = process.env.NEXT_PUBLIC_APP_URL || `${protocol}://${host}`;
+  const years = await getData(apiBaseUrl, "/api/dashboard/sales-analytics/years", []);
+  const selectedYear = years[0] || new Date().getFullYear();
+  const [statsData, bestSellersData, transactionData, analyticsData, countryData] = await Promise.all([
+    getData(apiBaseUrl, "/api/dashboard/stats", { weeklyEarning: 0, totalSales: 0, purchasedGoods: 0 }),
+    getData(apiBaseUrl, "/api/dashboard/best-sellers?limit=5", []),
+    getData(apiBaseUrl, "/api/dashboard/transactions?limit=5", []),
+    getData(apiBaseUrl, `/api/dashboard/sales-analytics?year=${selectedYear}`, []),
+    getData(apiBaseUrl, "/api/dashboard/sales-by-country?filter=this_week", []),
+  ]);
+  const stats = {
+    weeklyEarning: { amount: statsData.weeklyEarning, currency: "USD", changePercent: 0, label: "this week" },
+    totalSales: { value: statsData.totalSales, label: "all sale transactions" },
+    purchasedGoods: { value: statsData.purchasedGoods, label: "inventory purchases" },
+  };
+  const bestSellers = bestSellersData.map((vehicle) => ({ id: vehicle.id, name: vehicle.name, image: vehicle.imageUrl, price: `$${Number(vehicle.dailyPrice).toFixed(2)}/day`, sales: vehicle.totalSalesCount }));
+  const transactions = transactionData.map((transaction) => ({ id: transaction.transactionNumber, orderDetails: transaction.vehicle?.name || "Vehicle", image: transaction.vehicle?.imageUrl, time: new Date(transaction.createdAt).toLocaleDateString(), payment: transaction.transactionNumber, paymentMethod: transaction.paymentMethod, status: transaction.status === "success" ? "completed" : transaction.status, amount: `$${Number(transaction.amount).toFixed(2)}` }));
+  const analytics = analyticsData.map((item) => ({ month: item.month, value: Number(item.totalAmount) }));
+  const scaleMax = Math.max(1000, ...analytics.map((item) => item.value));
+  const scale = { domain: [0, Math.ceil(scaleMax / 1000) * 1000], ticks: Array.from({ length: 6 }, (_, index) => Math.round((Math.ceil(scaleMax / 1000) * 1000 * index) / 5)) };
+  const countries = countryData.map((country, index) => ({ country: country.country, sales: country.salesCount, isHighlighted: index === 0 }));
 
   return (
     <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-5">
@@ -77,12 +96,12 @@ export default function DashboardPage() {
 
       <section className="grid gap-4 xl:grid-cols-[minmax(260px,.8fr)_minmax(500px,1.7fr)]">
         <BestSellerList
-          products={getBestSellers()}
+          products={bestSellers}
           title={content.bestSeller}
           viewAll={content.viewAll}
         />
         <RecentTransactions
-          transactions={getTransactions()}
+          transactions={transactions}
           title={content.recentTransactions}
           viewAll={content.viewAll}
         />
@@ -90,13 +109,13 @@ export default function DashboardPage() {
 
       <section className="grid gap-4 xl:grid-cols-[minmax(500px,2fr)_minmax(270px,.9fr)]">
         <SalesAnalyticsChart
-          data={getSalesAnalytics()}
+          data={analytics}
           title={content.salesAnalytics}
-          year={years[0]}
-          scale={getSalesAnalyticsScale()}
+          year={selectedYear}
+          scale={scale}
         />
         <SalesByCountryMap
-          countries={getSalesByCountry()}
+          countries={countries}
           title={content.salesByCountries}
           thisWeek={content.thisWeek}
           increaseLabel={content.mapIncrease}

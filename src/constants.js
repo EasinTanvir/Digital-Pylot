@@ -54,8 +54,10 @@ import carIcon from "@/assets/icons/carIcon.svg";
 import locationIcon from "@/assets/icons/location.svg";
 import pickupDateIcon from "@/assets/icons/pickupDate.svg";
 import borderShape from "@/assets/icons/shapeIcon.svg";
+import heartIcon from "@/assets/icons/heart.svg";
 
 export const ICONS = {
+  heartIcon,
   carIcon,
   borderShape,
   locationIcon,

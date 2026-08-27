@@ -1,4 +1,4 @@
-import PopularDealsClient from "./PopularDealsClient";
+import PopularDealsClient from "./PopularDealsClient/PopularDealsClient";
 import { headers } from "next/headers";
 
 const toCard = (vehicle) => ({

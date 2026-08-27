@@ -20,7 +20,7 @@ export default function CarDealCard({ car, onRentClick }) {
   };
 
   return (
-    <article className="group relative flex  w-full aspect-3/4.5 flex-col justify-between overflow-hidden rounded-[10px] bg-surface-150 p-5 transition-all duration-300 hover:shadow-xl ">
+    <article className="group relative flex  w-full lg:aspect-3/4.5 sm:aspect-3/3.5 aspect-square flex-col justify-between overflow-hidden rounded-[10px] bg-surface-150 p-5 transition-all duration-300 hover:shadow-xl ">
       <div className="absolute inset-0 z-0 h-full w-full">
         <Image
           src={car.image}
@@ -68,7 +68,7 @@ export default function CarDealCard({ car, onRentClick }) {
         <button
           type="button"
           onClick={handleRentClick}
-          className="rounded-sm bg-primary px-5 py-2.5 text-sm font-semibold text-white  transition-all duration-200 hover:bg-primary-alt hover:shadow-lg active:scale-95"
+          className="rounded-sm bg-primary md:px-5 px-4 md:py-2.5 py-2 sm:text-sm text-xs font-semibold text-white  transition-all duration-200 hover:bg-primary-alt hover:shadow-lg active:scale-95"
         >
           Rent Now
         </button>

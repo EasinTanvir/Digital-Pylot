@@ -29,7 +29,7 @@ export default function HowItWorks() {
     <section
       id="how-it-work"
       aria-labelledby="how-it-works-title"
-      className="bg-surface-200  sm:px-6 lg:px-8 py-8 lg:py-28"
+      className="bg-surface-200  sm:px-6 lg:px-8 py-8 lg:py-12"
     >
       <Container>
         <SectionHeader

@@ -62,10 +62,10 @@ export default function PopularDealsClient({
         </ul>
 
         {/* Footer Info Row - Perfectly Centered Primary Action Button */}
-        <div className="relative mt-24 flex flex-col items-center justify-center gap-4">
+        <div className="relative lg:mt-24 mt-10 flex flex-col items-center justify-center gap-4">
           <button
             type="button"
-            className="rounded-sm leading-normal bg-primary px-8 py-3 text-sm tracking-custom  font-semibold text-white transition-all duration-200 hover:bg-primary-alt hover:shadow-lg active:scale-95"
+            className="rounded-sm leading-normal bg-primary sm:px-8 px-5 py-3 sm:text-sm text-xs tracking-custom  font-semibold text-white transition-all duration-200 hover:bg-primary-alt hover:shadow-lg active:scale-95"
           >
             Show more car
           </button>

@@ -68,7 +68,7 @@ export default function WhyChooseUs() {
 
         <div className="mt-16 grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
           {/* Wireframe Matched Image Container */}
-          <div className="relative aspect-4/3 w-full overflow-hidden rounded-[20px] bg-surface-150 shadow-md">
+          <div className="relative lg:aspect-4/3 sm:aspect-[7/3] aspect-square w-full overflow-hidden rounded-[20px] bg-surface-150 shadow-md">
             <Image
               src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=85"
               alt="Premium car ready for a road trip"

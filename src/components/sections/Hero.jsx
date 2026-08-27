@@ -12,7 +12,7 @@ export default function Hero() {
     >
       <Container className="flex flex-col gap-10 sm:gap-14 md:gap-10 lg:flex-row lg:gap-24 xl:gap-32">
         <div className="w-full xl:flex-1 xl:max-w-max lg:max-w-sm  lg:pt-10">
-          <div className=" md:space-y-6">
+          <div className=" space-y-6">
             <p className="text-xs font-medium text-text-body sm:text-sm leading-[1.21]">
               {content.eyebrow}
             </p>

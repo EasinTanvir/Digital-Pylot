@@ -8,11 +8,11 @@ export default function Hero() {
     <section
       id="home"
       aria-label="Car rental introduction"
-      className="relative bg-primary-50 pt-28 lg:pt-40 pb-20 sm:pb-24 lg:pb-16"
+      className="relative bg-primary-50 pt-28 lg:pt-40"
     >
       <Container className="flex flex-col gap-10 sm:gap-14 md:gap-10 lg:flex-row lg:gap-24 xl:gap-32">
-        <div className="w-full flex-1 lg:pt-10">
-          <div className="space-y-4 sm:space-y-5 md:space-y-6">
+        <div className="w-full xl:flex-1 xl:max-w-max lg:max-w-sm  lg:pt-10">
+          <div className=" md:space-y-6">
             <p className="text-xs font-medium text-text-body sm:text-sm leading-[1.21]">
               {content.eyebrow}
             </p>
@@ -35,7 +35,7 @@ export default function Hero() {
             </button>
           </div>
         </div>
-        <div className="relative  w-full flex-1 overflow-hidden rounded-tl-[64px] aspect-[3/2] md:aspect-[4/2] lg:aspect-[7/6] lg:-mr-10 xl:-mr-24 ">
+        <div className="relative   flex-1 overflow-hidden rounded-tl-[64px] aspect-[3/2] md:aspect-[4/2] lg:aspect-auto lg:min-h-[600px] -mr-6 lg:-mr-10 xl:-mr-24 ">
           <Image
             src={content.image}
             alt={content.imageAlt}

@@ -6,7 +6,7 @@ export default function CategoryTabs({ tabs, activeTab, onSelectTab }) {
       role="tablist"
       aria-label="Car categories"
       /* Use matching grid columns and gap to match the cards grid below */
-      className="mt-20 grid grid-cols-2 gap-4 border-b border-border-200 lg:grid-cols-4 lg:gap-6"
+      className="lg:mt-20 mt-14 grid grid-cols-2 gap-4 border-b border-border-200 lg:grid-cols-4 lg:gap-6"
     >
       {tabs.map((tab) => {
         const isActive = tab === activeTab;

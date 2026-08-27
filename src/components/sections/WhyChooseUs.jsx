@@ -57,7 +57,7 @@ export default function WhyChooseUs() {
       id="why-choose-us"
       aria-labelledby="why-choose-us-title"
       aria-label="Why choose us section"
-      className="bg-white pb-8 pt-20"
+      className="bg-white pb-8 pt-10 lg:pt-20"
     >
       <Container>
         <SectionHeader

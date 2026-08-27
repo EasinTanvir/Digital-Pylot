@@ -16,7 +16,7 @@ export default function ImageBannerDuo() {
   return (
     <section
       aria-label="Car rental offers"
-      className="bg-surface-250 py-10 lg:py-16"
+      className="bg-surface-250 py-14 lg:py-16"
     >
       <Container>
         <div className="grid gap-6 md:grid-cols-2">

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import SectionHeader from "@/components/ui/SectionHeader";
 import { ICONS } from "@/constants";
+import Container from "../shared/Container";
 
 const steps = [
   {
@@ -28,9 +29,9 @@ export default function HowItWorks() {
     <section
       id="how-it-work"
       aria-labelledby="how-it-works-title"
-      className="bg-white px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-28"
+      className="bg-surface-200  sm:px-6 lg:px-8 py-8 lg:py-28"
     >
-      <div className="mx-auto max-w-7xl">
+      <Container>
         <SectionHeader
           id="how-it-works-title"
           title="How it works"
@@ -85,7 +86,7 @@ export default function HowItWorks() {
             </li>
           ))}
         </ul>
-      </div>
+      </Container>
     </section>
   );
 }

@@ -33,7 +33,7 @@ export default function PopularDealsClient({
     <section
       id="rental-details"
       aria-labelledby="popular-deals-title"
-      className="bg-page-bg py-20 lg:py-20"
+      className="bg-page-bg  py-8 lg:py-20"
     >
       <Container>
         <SectionHeader

@@ -69,7 +69,7 @@ export default function Testimonials() {
       id="testimonial"
       aria-labelledby="testimonials-title"
       aria-label="Customer Testimonials"
-      className="bg-white py-20 lg:py-28 overflow-hidden "
+      className="bg-white py-10 lg:py-28 overflow-hidden "
     >
       <Container>
         <SectionHeader

@@ -2,6 +2,10 @@
 
 @theme {
   --font-sans: var(--font-plus-jakarta), sans-serif;
+  --font-rubik: var(--font-rubik), sans-serif;
+
+  /* dashboard fonts*/
+  --font-nunito: var(--font-nunito-sans), sans-serif;
   --shadow-booking-searchbar: 0px 4px 4px 0px rgba(0, 0, 0, 0.01);
 
   /* ---- White / Surface family ---- */

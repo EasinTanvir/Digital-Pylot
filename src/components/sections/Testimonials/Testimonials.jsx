@@ -69,7 +69,7 @@ export default function Testimonials() {
       id="testimonial"
       aria-labelledby="testimonials-title"
       aria-label="Customer Testimonials"
-      className="bg-white py-20 lg:py-28 overflow-hidden"
+      className="bg-white py-20 lg:py-28 overflow-hidden "
     >
       <Container>
         <SectionHeader
@@ -81,7 +81,7 @@ export default function Testimonials() {
         {/* Scroll Track */}
         <div
           ref={trackRef}
-          className="mt-14 flex gap-6 overflow-x-auto scroll-smooth py-2 scrollbar:none [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          className=" font-rubik mt-14 flex gap-6 overflow-x-auto scroll-smooth py-2 scrollbar:none [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         >
           {testimonials.map((testimonial) => (
             <div

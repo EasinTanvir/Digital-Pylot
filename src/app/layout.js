@@ -1,4 +1,4 @@
-import { Nunito_Sans, Plus_Jakarta_Sans } from "next/font/google";
+import { Nunito_Sans, Plus_Jakarta_Sans, Rubik } from "next/font/google";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -12,6 +12,11 @@ const nunitoSans = Nunito_Sans({
   subsets: ["latin"],
   display: "swap",
 });
+const rubik = Rubik({
+  variable: "--font-rubik",
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const metadata = {
   title: "Drivo | Premium car rental",
@@ -20,7 +25,10 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${plusJakartaSans.variable} ${nunitoSans.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      className={`${plusJakartaSans.variable} ${nunitoSans.variable} ${rubik.variable} h-full antialiased`}
+    >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

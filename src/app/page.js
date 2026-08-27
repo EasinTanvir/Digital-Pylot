@@ -9,7 +9,7 @@ import ImageBannerDuo from "@/components/sections/ImageBannerDuo";
 import Testimonials from "@/components/sections/Testimonials";
 import { getHeroContent } from "@/data/frontEnd";
 
-export default function HomePage() {
+export default async function HomePage() {
   return (
     <div className="overflow-x-hidden bg-page-bg">
       <Navbar />

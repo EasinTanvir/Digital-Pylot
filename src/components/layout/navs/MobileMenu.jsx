@@ -33,7 +33,7 @@ export default function MobileMenu({ isOpen, onClose, activeSection }) {
 
         <div className="mt-3 flex items-center gap-4 border-t border-border-100 pt-4">
           <Link
-            href="/register"
+            href="#"
             onClick={onClose}
             className="font-medium text-text-heading transition-colors duration-200  hover:text-primary"
           >
@@ -41,7 +41,7 @@ export default function MobileMenu({ isOpen, onClose, activeSection }) {
           </Link>
 
           <Link
-            href="/login"
+            href="#"
             onClick={onClose}
             className="rounded-[4px] bg-primary px-5 py-2.5 font-medium text-white transition-colors duration-200 hover:bg-primary-alt"
           >

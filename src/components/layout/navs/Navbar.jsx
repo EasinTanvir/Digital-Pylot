@@ -55,14 +55,14 @@ export default function Navbar() {
             <span className="h-5 w-px bg-border-150" aria-hidden="true" />
 
             <Link
-              href="/register"
+              href="#"
               className="font-medium text-text-heading transition-colors duration-200 hover:text-primary"
             >
               Register
             </Link>
 
             <Link
-              href="/login"
+              href="#"
               className="rounded-sm bg-primary px-5 py-2.5 font-medium text-white transition-colors duration-200 hover:bg-primary-alt"
             >
               Log In

@@ -48,9 +48,11 @@ import ChevronDownIcon from "@/assets/icons/chevron-down.svg";
 import mapView from "@/assets/icons/mapicon.png";
 
 import arrowDownIcon from "@/assets/icons/arrow-down.svg";
+import circleIcon from "@/assets/icons/circleIcon.svg";
 
 export const ICONS = {
   arrowDownIcon,
+  circleIcon,
   mapView,
   logo: LogoIcon,
   sidebarToggle: SidebarToggleIcon,

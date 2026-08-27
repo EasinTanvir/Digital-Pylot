@@ -77,8 +77,6 @@ function SearchFields({ legend, prefix }) {
 }
 
 export default function BookingSearchBar() {
-  const [message, setMessage] = useState("");
-
   return (
     <section
       id="booking-search"
@@ -86,42 +84,18 @@ export default function BookingSearchBar() {
       className="relative z-20 bg-surface-300"
     >
       <Container className="relative -mt-12 sm:-mt-16 lg:mt-0 lg:-translate-y-1/2 rounded-[10px] bg-white p-6 shadow-booking-searchbar">
-        <form
-          noValidate
-          onSubmit={(event) => {
-            event.preventDefault();
-            const form = event.currentTarget;
-            setMessage(
-              form.checkValidity()
-                ? "Available cars found for your journey."
-                : "Please complete all pick-up and drop-off fields.",
-            );
-            if (!form.checkValidity()) form.reportValidity();
-          }}
-          className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between"
-        >
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="grid flex-1 grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
             <SearchFields legend="Pick – Up" prefix="pickup" />
             <SearchFields legend="Drop – Off" prefix="dropoff" />
           </div>
 
           <div className="flex flex-col items-center justify-center pt-2 lg:pt-0">
-            <button
-              type="submit"
-              className="w-full rounded-lg bg-primary px-8 py-3 text-xs font-semibold text-white transition hover:bg-primary-alt lg:w-auto"
-            >
+            <button className="w-full rounded-lg bg-primary px-8 py-3 text-xs font-semibold text-white shadow-xs transition-all duration-200 ease-in-out hover:scale-[1.02] hover:bg-primary-alt hover:shadow-md active:scale-95 lg:w-auto">
               Search
             </button>
-            {message && (
-              <p
-                aria-live="polite"
-                className="mt-2 text-center text-xs font-medium text-success"
-              >
-                {message}
-              </p>
-            )}
           </div>
-        </form>
+        </div>
       </Container>
     </section>
   );

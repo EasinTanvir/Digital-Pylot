@@ -101,6 +101,16 @@
   --color-black-transparent: rgba(0, 0, 0, 0);
 }
 
+@layer utilities {
+  .tracking-custom {
+    letter-spacing: -0.02em;
+  }
+
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+}
+
 html {
   scroll-behavior: smooth;
 }

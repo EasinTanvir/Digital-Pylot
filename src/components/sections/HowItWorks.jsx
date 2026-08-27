@@ -28,7 +28,7 @@ export default function HowItWorks() {
     <section
       id="how-it-work"
       aria-labelledby="how-it-works-title"
-      className="bg-page-bg px-6 py-20 lg:px-8 lg:py-28"
+      className="bg-white px-6 py-20 lg:px-8 lg:py-28"
     >
       <div className="mx-auto max-w-7xl">
         <SectionHeader
@@ -43,32 +43,36 @@ export default function HowItWorks() {
               key={title}
               className="relative flex flex-col items-center text-center"
             >
-              {/* Icon Container with rounded corners matching wireframe */}
-              <div className="relative flex h-20 w-20 items-center justify-center rounded-[24px] bg-neutral-blue-100 shadow-xs">
+              {/* Brand Styled Icon Box */}
+              <div
+                className={`  ${index !== 0 ? "flex-center" : "relative"} h-25 w-25 rounded-[30px] bg-primary-50 border border-primary-100  cursor-pointer transition-transform duration-300 hover:scale-105`}
+              >
                 <Image
                   src={icon}
                   alt={title}
-                  width={36}
-                  height={36}
-                  className="object-contain"
+                  width={40}
+                  height={40}
+                  className={`object-contain  top-3 left-0 right-0 mx-auto ${index !== 0 ? "static" : "absolute"}`}
                 />
               </div>
 
-              {/* Connecting Curved Shape (Rendered between Step 1-2 and Step 2-3) */}
+              {/* Connected Curved Shape between steps */}
               {index < steps.length - 1 && (
-                <div className="absolute left-[60%] top-6 hidden w-[80%] md:block">
+                <div className="absolute left-[68%] top-5 hidden w-[72%] md:block">
                   <Image
                     src={ICONS.borderShape}
                     alt=""
                     width={220}
                     height={70}
-                    className="w-full object-contain pointer-events-none"
+                    className="w-full object-contain pointer-events-none opacity-60"
                   />
                 </div>
               )}
 
-              <h3 className="mt-8 text-lg font-bold text-secondary">{title}</h3>
-              <p className="mt-3 max-w-xs text-xs leading-5 text-text-body">
+              <h3 className="mt-8 font-semibold text-2xl  leading-normal  text-secondary tracking-custom">
+                {title}
+              </h3>
+              <p className="mt-3 max-w-xs text-sm leading-[1.75] text-text-body">
                 {description}
               </p>
             </li>

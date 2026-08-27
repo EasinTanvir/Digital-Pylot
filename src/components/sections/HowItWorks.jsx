@@ -28,7 +28,7 @@ export default function HowItWorks() {
     <section
       id="how-it-work"
       aria-labelledby="how-it-works-title"
-      className="bg-white px-6 py-20 lg:px-8 lg:py-28"
+      className="bg-white px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-28"
     >
       <div className="mx-auto max-w-7xl">
         <SectionHeader
@@ -37,42 +37,49 @@ export default function HowItWorks() {
           description="A high-performing web-based car rental system for any rent-a-car company and website"
         />
 
-        <ul className="relative mt-16 grid gap-12 md:grid-cols-3 md:gap-8">
+        <ul className="relative mt-8 grid gap-8 md:grid-cols-3 md:gap-4 lg:mt-16 lg:gap-8">
           {steps.map(({ title, description, icon }, index) => (
             <li
               key={title}
               className="relative flex flex-col items-center text-center"
             >
-              {/* Brand Styled Icon Box */}
+              {/* Box with top positioning for Step 1 & flex centering for Steps 2 & 3 */}
               <div
-                className={`  ${index !== 0 ? "flex-center" : "relative"} h-25 w-25 rounded-[30px] bg-primary-50 border border-primary-100  cursor-pointer transition-transform duration-300 hover:scale-105`}
+                className={`relative h-16 w-16 rounded-2xl bg-primary-50 border border-primary-100 cursor-pointer transition-transform duration-300 hover:scale-105 sm:h-20 sm:w-20 lg:h-25 lg:w-25 lg:rounded-[30px] ${
+                  index !== 0 ? "flex items-center justify-center" : ""
+                }`}
               >
                 <Image
                   src={icon}
                   alt={title}
                   width={40}
                   height={40}
-                  className={`object-contain  top-3 left-0 right-0 mx-auto ${index !== 0 ? "static" : "absolute"}`}
+                  className={`h-6 w-6 object-contain sm:h-7 sm:w-7 lg:h-10 lg:w-10 ${
+                    index === 0
+                      ? "absolute top-2.5 left-0 right-0 mx-auto sm:top-3 "
+                      : "static"
+                  }`}
                 />
               </div>
 
-              {/* Connected Curved Shape between steps */}
+              {/* Connected Curved Shape - Restricted to desktop to avoid small screen collapse */}
               {index < steps.length - 1 && (
-                <div className="absolute left-[68%] top-5 hidden w-[72%] md:block">
+                <div className="absolute left-[68%] top-5 hidden w-[65%] xl:w-[72%] lg:block pointer-events-none">
                   <Image
                     src={ICONS.borderShape}
                     alt=""
                     width={220}
                     height={70}
-                    className="w-full object-contain pointer-events-none opacity-60"
+                    className="w-full object-contain opacity-60"
                   />
                 </div>
               )}
 
-              <h3 className="mt-8 font-semibold text-2xl  leading-normal  text-secondary tracking-custom">
+              {/* Responsive Typography */}
+              <h3 className="mt-5 text-base font-semibold leading-tight text-secondary tracking-custom sm:text-lg lg:mt-8 lg:text-2xl lg:leading-normal">
                 {title}
               </h3>
-              <p className="mt-3 max-w-xs text-sm leading-[1.75] text-text-body">
+              <p className="mt-2 max-w-[260px] text-xs leading-relaxed text-text-body sm:text-sm lg:mt-3 lg:max-w-xs lg:leading-[1.75]">
                 {description}
               </p>
             </li>

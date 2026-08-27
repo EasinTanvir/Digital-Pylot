@@ -62,7 +62,14 @@ import priceTagIcon from "@/assets/icons/pricetags.svg";
 import arrowBackIcon from "@/assets/icons/arrowBack.svg";
 import arrowForwardIcon from "@/assets/icons/arrowForward.svg";
 
+import facebookIcon from "@/assets/icons/Facebook.svg";
+import twitterIcon from "@/assets/icons/Twitter.svg";
+import instagramIcon from "@/assets/icons/Instagram.svg";
+
 export const ICONS = {
+  facebookIcon,
+  twitterIcon,
+  instagramIcon,
   arrowBackIcon,
   arrowForwardIcon,
   phoneCallIcon,

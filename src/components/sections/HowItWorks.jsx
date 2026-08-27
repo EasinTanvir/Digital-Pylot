@@ -64,7 +64,7 @@ export default function HowItWorks() {
 
               {/* Connected Curved Shape - Restricted to desktop to avoid small screen collapse */}
               {index < steps.length - 1 && (
-                <div className="absolute left-[68%] top-5 hidden w-[65%] xl:w-[72%] lg:block pointer-events-none">
+                <div className="absolute xl:left-[68%] left-[70%] top-5 hidden w-[68%] xl:w-[72%] lg:block pointer-events-none">
                   <Image
                     src={ICONS.borderShape}
                     alt=""

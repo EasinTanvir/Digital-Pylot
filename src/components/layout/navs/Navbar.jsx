@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react";
 import { ICONS } from "@/constants";
 import { navigationItems } from "@/lib/navigationItems";
 import Container from "../../shared/Container";
+import MobileMenu from "./MobileMenu";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,7 +17,7 @@ export default function Navbar() {
       <Container>
         <nav
           aria-label="Main navigation"
-          className="flex h-20 items-center justify-between text-sm "
+          className="flex h-20 items-center justify-between text-sm"
         >
           <Link href="/#home" className="flex shrink-0 items-center">
             <Image
@@ -34,7 +35,7 @@ export default function Navbar() {
               <Link
                 key={item.label}
                 href={`/${item.href}`}
-                className="font-medium text-text-heading "
+                className="font-medium text-text-heading transition-colors duration-200  hover:text-primary"
               >
                 {item.label}
               </Link>
@@ -42,11 +43,19 @@ export default function Navbar() {
 
             <span className="h-5 w-px bg-border-150" aria-hidden="true" />
 
-            <button className="font-medium text-text-heading">Register</button>
+            <Link
+              href="/register"
+              className="font-medium text-text-heading transition-colors duration-200 hover:text-primary"
+            >
+              Register
+            </Link>
 
-            <button className="rounded-[4px] bg-primary px-5 py-2.5 font-medium text-white transition hover:bg-primary-alt">
+            <Link
+              href="/login"
+              className="rounded-[4px] bg-primary px-5 py-2.5 font-medium text-white transition-colors duration-200 hover:bg-primary-alt "
+            >
               Log In
-            </button>
+            </Link>
           </div>
 
           <button
@@ -54,43 +63,14 @@ export default function Navbar() {
             aria-label="Toggle navigation menu"
             aria-expanded={isMenuOpen}
             onClick={() => setIsMenuOpen((open) => !open)}
-            className="flex items-center justify-center rounded-[4px] border border-border-100 p-2 text-secondary lg:hidden"
+            className="flex cursor-pointer items-center justify-center rounded-sm border border-border-100 p-2 text-secondary transition-colors duration-200 hover:border-primary hover:text-primary lg:hidden"
           >
             {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </nav>
       </Container>
 
-      {isMenuOpen && (
-        <div className="absolute inset-x-0 top-full border-t border-border-100 bg-white px-6 py-5 shadow-lg lg:hidden text-sm">
-          {navigationItems.map((item) => (
-            <Link
-              key={item.label}
-              href={`/${item.href}`}
-              onClick={() => setIsMenuOpen(false)}
-              className="block py-3 font-medium  text-text-heading"
-            >
-              {item.label}
-            </Link>
-          ))}
-
-          <div className="mt-3 flex items-center gap-4 border-t border-border-100 pt-4">
-            <button
-              onClick={() => setIsMenuOpen(false)}
-              className="font-medium text-text-heading"
-            >
-              Register
-            </button>
-
-            <button
-              onClick={() => setIsMenuOpen(false)}
-              className="rounded-[4px] bg-primary px-5 py-2.5 font-medium text-white"
-            >
-              Log In
-            </button>
-          </div>
-        </div>
-      )}
+      <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </header>
   );
 }

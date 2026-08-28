@@ -9,6 +9,8 @@ import {
 } from "react-icons/hi2";
 import { BsRobot } from "react-icons/bs";
 import axios from "axios";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const SESSION_KEY = "autoassistant_chat_v1";
 
@@ -187,13 +189,21 @@ export default function ChatWidget() {
                   className={`flex flex-col ${isUser ? "items-end" : "items-start"}`}
                 >
                   <div
-                    className={`max-w-[82%] whitespace-pre-wrap rounded-2xl px-4 py-2.5 text-xs font-medium leading-relaxed shadow-xs ${
+                    className={`max-w-[82%] rounded-2xl px-4 py-2.5 text-xs font-medium leading-relaxed shadow-xs ${
                       isUser
-                        ? "rounded-br-xs bg-primary text-white"
+                        ? "rounded-br-xs bg-primary text-white whitespace-pre-wrap"
                         : "rounded-bl-xs bg-white text-secondary border border-border-100"
                     }`}
                   >
-                    {msg.text}
+                    {isUser ? (
+                      msg.text
+                    ) : (
+                      <div className="prose-chat">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {msg.text}
+                        </ReactMarkdown>
+                      </div>
+                    )}
                   </div>
                   <span className="mt-1 text-[10px] text-gray-400">
                     {msg.time}

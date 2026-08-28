@@ -155,3 +155,37 @@ html {
 button {
   cursor: pointer;
 }
+
+.prose-chat p {
+  margin: 0 0 0.4em 0;
+}
+.prose-chat p:last-child {
+  margin-bottom: 0;
+}
+.prose-chat ul,
+.prose-chat ol {
+  margin: 0.3em 0;
+  padding-left: 1.1em;
+}
+.prose-chat li {
+  margin-bottom: 0.15em;
+}
+.prose-chat strong {
+  font-weight: 700;
+}
+.prose-chat table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.4em 0;
+  font-size: 0.95em;
+}
+.prose-chat th,
+.prose-chat td {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 4px 6px;
+  text-align: left;
+}
+.prose-chat th {
+  background: rgba(0, 0, 0, 0.03);
+  font-weight: 600;
+}

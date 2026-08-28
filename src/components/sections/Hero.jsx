@@ -8,7 +8,7 @@ export default function Hero() {
     <section
       id="home"
       aria-label="Car rental introduction"
-      className="relative bg-primary-50 pt-28 lg:pt-40"
+      className="relative bg-primary-50 pt-24 sm:pt-28 lg:pt-40"
     >
       <Container className="flex flex-col gap-10 sm:gap-14 md:gap-10 lg:flex-row lg:gap-24 xl:gap-32">
         <div className="w-full xl:flex-1 xl:max-w-max lg:max-w-sm  lg:pt-10">

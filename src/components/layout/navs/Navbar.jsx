@@ -21,7 +21,7 @@ export default function Navbar() {
       <Container>
         <nav
           aria-label="Main navigation"
-          className="flex h-20 items-center justify-between text-sm"
+          className="flex sm:h-20 h-16 items-center justify-between text-sm"
         >
           <Link href="/#home" className="flex shrink-0 items-center">
             <Image

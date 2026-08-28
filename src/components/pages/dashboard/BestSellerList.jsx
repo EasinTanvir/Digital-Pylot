@@ -24,23 +24,19 @@ export default function BestSellerList({ products = [], title, viewAll }) {
             <div key={product.id} className="flex items-center justify-between">
               {/* Left: Thumbnail & Name/Price */}
               <div className="flex items-center gap-3.5">
-                <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-surface-150 p-1">
-                  {product.image ? (
-                    <Image
-                      src={product.image}
-                      alt={product.name || "Product image"}
-                      fill
-                      className="object-contain"
-                    />
-                  ) : (
-                    <div className="h-full w-full rounded-lg bg-surface-250" />
-                  )}
+                <div className="relative h-12 w-12 p-4  flex-center  rounded-md bg-surface-300 ">
+                  <Image
+                    src={product.image}
+                    alt={product.name || "Product image"}
+                    fill
+                    className="object-contain"
+                  />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-text-heading">
+                  <p className="text-sm font-bold text-table-header">
                     {product.name}
                   </p>
-                  <p className="mt-0.5 text-xs text-text-subtitle">
+                  <p className="mt-0.5 text-[15px] text-gray-700">
                     {typeof product.price === "number"
                       ? `$${product.price}`
                       : product.price}
@@ -49,11 +45,9 @@ export default function BestSellerList({ products = [], title, viewAll }) {
               </div>
 
               {/* Right: Sales Label & Count */}
-              <div className="text-right">
-                <p className="text-xs font-normal text-text-body">Sales</p>
-                <p className="mt-0.5 text-sm font-bold text-text-heading">
-                  {product.sales}
-                </p>
+              <div className="text-right text-table-header text-xs">
+                <p className=" font-normal ">Sales</p>
+                <p className="mt-0.5 m font-medium ">{product.sales}</p>
               </div>
             </div>
           ))

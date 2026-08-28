@@ -7,26 +7,48 @@ import {
   bookings,
 } from "../../../../db/schema";
 import { and, eq, gte, lte, notInArray, sql } from "drizzle-orm";
-import { tool } from "@langchain/core/tools";
 import { z } from "zod";
 
 const overlappingBookingVehicleIds = async (startDate, endDate) => {
   if (!startDate || !endDate) return [];
+  const start = new Date(startDate);
+  const end = new Date(endDate);
   const rows = await db
     .select({ vehicleId: bookings.vehicleId })
     .from(bookings)
     .where(
       and(
         sql`${bookings.status} IN ('reserved','confirmed')`,
-        lte(bookings.startDate, endDate),
-        gte(bookings.endDate, startDate),
+        lte(bookings.startDate, end),
+        gte(bookings.endDate, start),
       ),
     );
   return rows.map((r) => r.vehicleId);
 };
 
-export const searchVehicles = tool(
-  async ({
+export const searchVehiclesConfig = {
+  name: "search_vehicles",
+  description:
+    "Search real inventory by category, transmission, fuel type, min seats, max daily price, optional dates. Call ONCE per new set of criteria — do not repeat with the same or similar args.",
+  schema: z.object({
+    category: z
+      .enum(["Small Car", "Large Car", "Exclusive Car"])
+      .optional()
+      .describe("must be one of these exact values"),
+    transmission: z.enum(["Automatic", "Manual"]).optional(),
+    fuelType: z.enum(["Petrol", "Diesel", "Electric", "Hybrid"]).optional(),
+    seats: z.number().optional().describe("minimum seats required"),
+    maxPrice: z.number().optional().describe("max daily price in USD"),
+    startDate: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, "must be YYYY-MM-DD")
+      .optional(),
+    endDate: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, "must be YYYY-MM-DD")
+      .optional(),
+  }),
+  handler: async ({
     category,
     transmission,
     fuelType,
@@ -38,7 +60,7 @@ export const searchVehicles = tool(
     const conflicting = await overlappingBookingVehicleIds(startDate, endDate);
 
     const conditions = [eq(vehicles.status, "available")];
-    if (category) conditions.push(eq(categories.slug, category));
+    if (category) conditions.push(eq(categories.name, category)); // fixed: was categories.slug, never matched
     if (transmission) conditions.push(eq(vehicles.transmission, transmission));
     if (fuelType) conditions.push(eq(vehicles.fuelType, fuelType));
     if (seats) conditions.push(gte(vehicles.seats, seats));
@@ -71,21 +93,4 @@ export const searchVehicles = tool(
 
     return JSON.stringify(rows);
   },
-  {
-    name: "search_vehicles",
-    description:
-      "Search the real vehicle inventory by category, transmission, fuel type, minimum seats, max daily price, and optional date range. Returns up to 6 real matching vehicles with prices and features. Always use this instead of guessing vehicle availability or pricing.",
-    schema: z.object({
-      category: z
-        .string()
-        .optional()
-        .describe("e.g. 'Small Car', 'Large Car', 'Exclusive Car'"),
-      transmission: z.enum(["Automatic", "Manual"]).optional(),
-      fuelType: z.enum(["Petrol", "Diesel", "Electric", "Hybrid"]).optional(),
-      seats: z.number().optional().describe("minimum seats required"),
-      maxPrice: z.number().optional().describe("max daily price in USD"),
-      startDate: z.string().optional().describe("ISO date"),
-      endDate: z.string().optional().describe("ISO date"),
-    }),
-  },
-);
+};

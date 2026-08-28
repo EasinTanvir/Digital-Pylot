@@ -1,11 +1,26 @@
 import { db } from "../../../../db/db";
 import { leads } from "../../../../db/schema";
-import { tool } from "@langchain/core/tools";
 import { z } from "zod";
 import { notifyLeadCreated } from "../../automation/notify.js";
 
-export const qualifyLead = tool(
-  async ({
+export const qualifyLeadConfig = {
+  name: "qualify_lead",
+  description:
+    "Save a qualified lead once you have the user's name and at least one contact method (phone or email), plus whatever vehicle/date/budget context is known. Call once, don't wait for a form.",
+  schema: z.object({
+    name: z.string(),
+    phone: z.string().optional(),
+    email: z.string().optional(),
+    vehicleId: z.string().uuid().optional(),
+    desiredStartDate: z.string().optional(),
+    desiredEndDate: z.string().optional(),
+    budget: z.number().optional(),
+    notes: z
+      .string()
+      .optional()
+      .describe("brief summary of what the user wants"),
+  }),
+  handler: async ({
     name,
     phone,
     email,
@@ -44,22 +59,4 @@ export const qualifyLead = tool(
 
     return JSON.stringify({ saved: true, leadId: lead.id });
   },
-  {
-    name: "qualify_lead",
-    description:
-      "Save a qualified lead once you have collected the user's name and at least one contact method (phone or email), plus whatever vehicle/date/budget context is known. Call this as soon as you have enough info — don't wait for a separate form.",
-    schema: z.object({
-      name: z.string(),
-      phone: z.string().optional(),
-      email: z.string().optional(),
-      vehicleId: z.string().uuid().optional(),
-      desiredStartDate: z.string().optional(),
-      desiredEndDate: z.string().optional(),
-      budget: z.number().optional(),
-      notes: z
-        .string()
-        .optional()
-        .describe("brief summary of what the user wants"),
-    }),
-  },
-);
+};

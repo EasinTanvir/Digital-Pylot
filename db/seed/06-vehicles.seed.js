@@ -45,24 +45,9 @@ const baseCatalog = rentalCars.map((car) => ({
         : car.name.split(" ")[0],
 }));
 
-// Generate variants (different color/trim label + randomized attributes) so we end up
-// with a realistic fleet size (e.g. ~5 units per model) instead of just 8 total vehicles.
-const trims = ["Standard", "Comfort", "Premium", "Sport", "Limited"];
-
-function buildFleet() {
-  const fleet = [];
-  for (const car of baseCatalog) {
-    trims.forEach((trim, i) => {
-      fleet.push({
-        ...car,
-        variantName: i === 0 ? car.name : `${car.name} ${trim}`,
-        priceAdjustment: i * 8, // later trims cost a bit more
-      });
-    });
-  }
-  return fleet;
-}
-
+// One row per model — no trim variants. Each name is unique in the DB, which is
+// what lets the AI chatbot resolve "the car the user just named" unambiguously
+// via an exact-match lookup instead of guessing between near-identical rows.
 export async function seedVehicles(
   brandRows,
   categoryRows,
@@ -73,18 +58,16 @@ export async function seedVehicles(
   const categoryIds = new Map(categoryRows.map((c) => [c.name, c.id]));
   const subCategoryIds = new Map(subCategoryRows.map((s) => [s.name, s.id]));
 
-  const fleet = buildFleet();
-
   return db
     .insert(vehicles)
     .values(
-      fleet.map((car) => {
-        const dailyPrice = Number(car.price) + car.priceAdjustment;
+      baseCatalog.map((car) => {
+        const dailyPrice = Number(car.price);
         const seats = car.type?.includes("SUV")
           ? 5 + (Math.random() > 0.6 ? 2 : 0)
           : 4;
         return {
-          name: car.variantName,
+          name: car.name,
           brandId: brandIds.get(car.brand),
           categoryId: categoryIds.get(categoryForCar[car.name]),
           subCategoryId: subCategoryIds.get(car.type),
@@ -102,7 +85,7 @@ export async function seedVehicles(
           doors: seats > 5 ? 5 : 4,
           minRentalDays: Math.random() > 0.8 ? 2 : 1,
           features: randomFeatures(),
-          description: `${car.variantName} — a ${car.type?.toLowerCase() || "reliable"} choice with ${seats} seats, ideal for ${
+          description: `${car.name} — a ${car.type?.toLowerCase() || "reliable"} choice with ${seats} seats, ideal for ${
             seats >= 6 ? "family trips" : "city driving and getaways"
           }.`,
           status: Math.random() > 0.05 ? "available" : "maintenance",

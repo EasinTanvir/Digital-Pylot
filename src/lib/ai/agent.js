@@ -1,43 +1,95 @@
-import { createAgent } from "langchain";
-import { checkAvailability } from "./tools/checkAvailability.js";
-import { qualifyLead } from "./tools/qualifyLead.js";
-import { searchVehicles } from "./tools/searchVehicles.js";
+import { createAgent, tool } from "langchain";
+import { checkAvailabilityConfig } from "./tools/checkAvailability.js";
+import { qualifyLeadConfig } from "./tools/qualifyLead.js";
+import { searchVehiclesConfig } from "./tools/searchVehicles.js";
 import { model } from "./llm.js";
 
-export const SYSTEM_PROMPT = `You are the AI rental assistant for Best Car, a car rental company. You help visitors find a vehicle, check availability, answer real policy questions, and hand qualified leads to the sales team.
+const MAX_HISTORY_MESSAGES = 8;
+const MAX_STEPS = 6;
 
-GROUNDING — this is the most important rule:
-- Never invent vehicles, prices, features, or policies. Only state facts returned by your tools.
-- If search_vehicles or check_availability returns no results, say so plainly and offer to adjust criteria (budget, dates, seats). Do not suggest a vehicle you haven't confirmed exists.
-- If you don't know a policy answer and get_faq_answer has nothing relevant, say you're not sure and offer to have the team follow up — don't guess.
+export const SYSTEM_PROMPT = `You are Best Car's rental assistant. Help users find vehicles, check availability, and capture qualified leads.
 
-CONVERSATION FLOW:
-1. Understand what the user needs (trip type, seats, budget, dates, transmission/fuel preference if mentioned).
-2. Call search_vehicles to recommend real options. Mention 2-3 vehicles max with name, daily price, and one relevant feature — not a full spec dump.
-3. If the user picks one and gives dates, call check_availability before promising anything.
-4. Once you have a name and at least a phone or email, and enough context (vehicle interest, dates if known), call qualify_lead. Don't make the user fill out a separate form — extract this naturally from the conversation. Do this as soon as you have the minimum info; don't hold out for every field.
-5. After qualify_lead succeeds, confirm warmly and tell them the team will follow up. Don't ask for the same info twice.
+RULES:
+- Only state facts your tools return. Never invent vehicles, prices, or policies.
+- No results? Say so, suggest adjusting budget/seats/dates. Never suggest an unconfirmed vehicle.
+- User names a vehicle, no dates yet: ask for dates in plain text. Call NO tool.
+- Call check_availability only once you have a vehicle name/id AND both dates.
+- NEVER call search_vehicles to look up a named vehicle — it only filters by category/seats/price, not name. Use check_availability for named vehicles, always.
+- Reuse vehicle IDs and dates already established. Don't re-search or re-ask for known info.
+- Never repeat an identical or near-identical tool call. If a result surprises you, ask the user instead of retrying.
+- One tool call per user message, unless clearly chaining two (e.g. check availability then save lead).
+- Unavailable? Call search_vehicles ONCE for alternatives, then stop and present them.
+- Name + phone/email + enough context → call qualify_lead once, then confirm warmly.
 
-STYLE:
-- Short, conversational, 2-4 sentences per reply. This is a chat widget, not an essay.
-- Always end with a clear next step when relevant ("Want me to check availability for your dates?", "Can I grab your name and phone to hold this?").
-- Be warm but efficient — don't pad with filler.
+STYLE: 2-3 sentences, conversational, end with a clear next step. Off-topic requests: brief redirect back to car rental.`;
 
-SCOPE:
-- You only help with vehicle search, availability, pricing, rental policies, and booking leads for this site.
-- If asked something unrelated (general chit-chat, coding help, unrelated topics), politely redirect: acknowledge briefly, then steer back to car rental. Don't lecture or over-explain the refusal.`;
-
-const agent = createAgent({
-  model,
-  tools: [searchVehicles, checkAvailability, qualifyLead],
-  systemPrompt: SYSTEM_PROMPT,
-});
+function guarded(config, tracker) {
+  return tool(
+    async (args) => {
+      const key = `${config.name}:${JSON.stringify(args)}`;
+      tracker[key] = (tracker[key] || 0) + 1;
+      if (tracker[key] > 1) {
+        return JSON.stringify({
+          error: true,
+          message: `You already called ${config.name} with these exact arguments. Use the result you already have, or ask the user a direct clarifying question instead.`,
+        });
+      }
+      return config.handler(args);
+    },
+    {
+      name: config.name,
+      description: config.description,
+      schema: config.schema,
+    },
+  );
+}
 
 export async function runAgent(messages) {
-  const result = await agent.invoke({ messages });
-  const last = result.messages[result.messages.length - 1];
-  return {
-    reply: last.content,
-    messages: result.messages, // full updated history, client persists this to localStorage
-  };
+  const trimmed = messages.slice(-MAX_HISTORY_MESSAGES);
+  const tracker = {};
+
+  const agent = createAgent({
+    model,
+    tools: [
+      guarded(searchVehiclesConfig, tracker),
+      guarded(checkAvailabilityConfig, tracker),
+      guarded(qualifyLeadConfig, tracker),
+    ],
+    systemPrompt: SYSTEM_PROMPT,
+  });
+
+  try {
+    const result = await agent.invoke(
+      { messages: trimmed },
+      { recursionLimit: MAX_STEPS },
+    );
+    const last =
+      [...result.messages]
+        .reverse()
+        .find((m) => m.getType?.() === "ai" && m.content) ??
+      result.messages[result.messages.length - 1];
+    return {
+      reply:
+        last?.content ||
+        "Sorry, I couldn't quite process that — could you rephrase?",
+      messages: result.messages,
+    };
+  } catch (err) {
+    if (err?.name === "GraphRecursionError") {
+      console.warn("[runAgent] hit recursion limit:", err.message);
+      return {
+        reply:
+          "I'm having trouble narrowing that down — could you tell me the exact vehicle name and your dates one more time?",
+        messages: trimmed,
+      };
+    }
+    if (err?.status === 429) {
+      return {
+        reply:
+          "I'm getting a lot of requests right now — please wait about 15 seconds and try again.",
+        messages: trimmed,
+      };
+    }
+    throw err;
+  }
 }

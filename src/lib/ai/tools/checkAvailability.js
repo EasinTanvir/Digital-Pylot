@@ -1,11 +1,22 @@
 import { db } from "../../../../db/db";
 import { vehicles, bookings } from "../../../../db/schema";
 import { and, eq, gte, lte, sql, ilike } from "drizzle-orm";
-import { tool } from "@langchain/core/tools";
 import { z } from "zod";
 
-export const checkAvailability = tool(
-  async ({ vehicleId, vehicleName, startDate, endDate }) => {
+export const checkAvailabilityConfig = {
+  name: "check_availability",
+  description:
+    "Check whether a specific vehicle is free for a given date range, and estimate the total price. Identify by vehicleId if known, otherwise vehicleName. Requires both startDate and endDate — if you don't have both yet, ask the user for them instead of calling this tool.",
+  schema: z.object({
+    vehicleId: z.string().uuid().optional(),
+    vehicleName: z
+      .string()
+      .optional()
+      .describe("the vehicle's name as the user refers to it"),
+    startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "must be YYYY-MM-DD"),
+    endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "must be YYYY-MM-DD"),
+  }),
+  handler: async ({ vehicleId, vehicleName, startDate, endDate }) => {
     let vehicle;
 
     if (vehicleId) {
@@ -14,30 +25,42 @@ export const checkAvailability = tool(
         .from(vehicles)
         .where(eq(vehicles.id, vehicleId));
     } else if (vehicleName) {
-      const matches = await db
+      // exact match first — avoids false "ambiguous" results
+      const [exactMatch] = await db
         .select()
         .from(vehicles)
-        .where(ilike(vehicles.name, `%${vehicleName}%`))
-        .limit(5);
+        .where(sql`lower(${vehicles.name}) = lower(${vehicleName})`)
+        .limit(1);
 
-      if (matches.length === 0) {
-        return JSON.stringify({
-          available: false,
-          reason: "no vehicle found with that name",
-        });
+      if (exactMatch) {
+        vehicle = exactMatch;
+      } else {
+        const matches = await db
+          .select()
+          .from(vehicles)
+          .where(ilike(vehicles.name, `%${vehicleName}%`))
+          .limit(5);
+
+        if (matches.length === 0) {
+          return JSON.stringify({
+            available: false,
+            reason: "no vehicle found with that name",
+          });
+        }
+        if (matches.length > 1) {
+          return JSON.stringify({
+            available: false,
+            reason:
+              "multiple vehicles match that name — present these options and wait for the user to pick one",
+            options: matches.map((m) => ({
+              id: m.id,
+              name: m.name,
+              dailyPrice: m.dailyPrice,
+            })),
+          });
+        }
+        vehicle = matches[0];
       }
-      if (matches.length > 1) {
-        return JSON.stringify({
-          available: false,
-          reason: "multiple vehicles match that name, ask the user to pick one",
-          options: matches.map((m) => ({
-            id: m.id,
-            name: m.name,
-            dailyPrice: m.dailyPrice,
-          })),
-        });
-      }
-      vehicle = matches[0];
     } else {
       return JSON.stringify({
         available: false,
@@ -53,6 +76,9 @@ export const checkAvailability = tool(
         reason: `vehicle is ${vehicle.status}`,
       });
 
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
     const conflicts = await db
       .select({ id: bookings.id })
       .from(bookings)
@@ -60,15 +86,12 @@ export const checkAvailability = tool(
         and(
           eq(bookings.vehicleId, vehicle.id),
           sql`${bookings.status} IN ('reserved','confirmed')`,
-          lte(bookings.startDate, endDate),
-          gte(bookings.endDate, startDate),
+          lte(bookings.startDate, end),
+          gte(bookings.endDate, start),
         ),
       );
 
-    const days = Math.max(
-      1,
-      Math.ceil((new Date(endDate) - new Date(startDate)) / 86400000),
-    );
+    const days = Math.max(1, Math.ceil((end - start) / 86400000));
 
     return JSON.stringify({
       vehicleId: vehicle.id,
@@ -81,20 +104,4 @@ export const checkAvailability = tool(
       days,
     });
   },
-  {
-    name: "check_availability",
-    description:
-      "Check whether a specific vehicle is free for a given date range, and estimate the total price. Identify the vehicle by vehicleId if you already have it from a previous search_vehicles result, otherwise use vehicleName (the name the user is talking about). Call this after the user has picked a specific vehicle and given dates.",
-    schema: z.object({
-      vehicleId: z.string().uuid().optional(),
-      vehicleName: z
-        .string()
-        .optional()
-        .describe(
-          "the vehicle's name as the user refers to it, e.g. 'Tesla Model 3'",
-        ),
-      startDate: z.string().describe("ISO date"),
-      endDate: z.string().describe("ISO date"),
-    }),
-  },
-);
+};

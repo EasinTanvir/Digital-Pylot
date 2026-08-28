@@ -38,18 +38,26 @@ export default function SidebarItem({ item, onNavigate }) {
           ?
         </div>
       )}
-      <span className="truncate">{item.label}</span>
-      {item.indicator && (
-        <Image
-          src={
-            item.indicator === "down" ? ICONS.chevronDown : ICONS.chevronRight
-          }
-          alt=""
-          width={item.indicator === "down" ? 12 : 4}
-          height={item.indicator === "down" ? 12 : 7}
-          className="ml-auto shrink-0"
-        />
-      )}
+      <div className="flex justify-between items-center w-full">
+        <span className="truncate">{item.label}</span>
+        {item.indicator && (
+          <div
+            className={` flex justify-center items-center w-5 h-5 rounded-full   ${item.indicator === "down" ? "bg-primary-100" : " bg-surface-300"}`}
+          >
+            <Image
+              src={
+                item.indicator === "down"
+                  ? ICONS.chevronDown
+                  : ICONS.chevronRight
+              }
+              alt=""
+              width={item.indicator === "down" ? 12 : 4}
+              height={item.indicator === "down" ? 12 : 7}
+              className="o shrink-0"
+            />
+          </div>
+        )}
+      </div>
     </Link>
   );
 }

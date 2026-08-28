@@ -15,22 +15,6 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* <button
-        type="button"
-        aria-label="Open navigation"
-        aria-expanded={isOpen}
-        onClick={() => setIsOpen(true)}
-        className="fixed left-3 top-3 z-30 flex h-9 w-9 items-center justify-center rounded-md bg-primary shadow-card outline-none focus-visible:ring-2 focus-visible:ring-secondary md:hidden"
-      >
-        <Image
-          src={ICONS.sidebarToggle}
-          alt=""
-          width={16}
-          height={16}
-          className="rotate-180"
-        />
-      </button> */}
-
       {isOpen && (
         <button
           type="button"

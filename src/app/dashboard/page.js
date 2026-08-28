@@ -104,25 +104,27 @@ export default async function DashboardPage() {
         welcomeText={content.welcomeText}
         defaultDateRange={content.dateRange}
       />
-
-      <section className="grid gap-4 md:grid-cols-3">
+      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           type="earning"
           stat={stats.weeklyEarning}
           title={content.weeklyEarning}
           icon={ICONS.stats.earning}
+          arrowGreenIcon={ICONS.arrowUpGreenIcon}
         />
         <StatCard
           type="sales"
           stat={stats.totalSales}
           title={content.totalSales}
           icon={ICONS.stats.sales}
+          resetIcon={ICONS.resetIconIcon}
         />
         <StatCard
           type="purchased"
           stat={stats.purchasedGoods}
           title={content.purchasedGoods}
           icon={ICONS.stats.purchased}
+          resetIcon={ICONS.resetIconIcon}
         />
       </section>
 

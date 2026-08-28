@@ -36,7 +36,7 @@ import UserAvatarIcon from "@/assets/icons/User Icon.svg";
 import AddNewIcon from "@/assets/icons/circle-plus.svg";
 
 // Stat card icons
-import EarningIcon from "@/assets/icons/image 4 (traced).svg";
+import EarningIcon from "@/assets/icons/Image (2).svg";
 import SalesCountIcon from "@/assets/icons/image 3 (traced).svg";
 import PurchasedIcon from "@/assets/icons/image 3 (traced).svg";
 
@@ -66,7 +66,12 @@ import facebookIcon from "@/assets/icons/Facebook.svg";
 import twitterIcon from "@/assets/icons/Twitter.svg";
 import instagramIcon from "@/assets/icons/Instagram.svg";
 
+import resetIconIcon from "@/assets/icons/resetIcon.svg";
+import arrowUpGreenIcon from "@/assets/icons/arrowUpGreen.svg";
+
 export const ICONS = {
+  arrowUpGreenIcon,
+  resetIconIcon,
   facebookIcon,
   twitterIcon,
   instagramIcon,

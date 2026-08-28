@@ -1,19 +1,20 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import { ICONS } from "@/constants";
 import { getSidebarNavigation } from "@/data/sidebarNavigation";
 import SidebarSection from "./SidebarSection";
+import { useGlobalContext } from "@/providers/GlobalContext";
 
 export default function Sidebar() {
-  const [isOpen, setIsOpen] = useState(false);
+  const { isOpen, setIsOpen } = useGlobalContext();
+
   const closeSidebar = () => setIsOpen(false);
   const navigation = getSidebarNavigation();
 
   return (
     <>
-      <button
+      {/* <button
         type="button"
         aria-label="Open navigation"
         aria-expanded={isOpen}
@@ -27,7 +28,7 @@ export default function Sidebar() {
           height={16}
           className="rotate-180"
         />
-      </button>
+      </button> */}
 
       {isOpen && (
         <button
@@ -56,7 +57,7 @@ export default function Sidebar() {
             type="button"
             aria-label="Close navigation"
             onClick={closeSidebar}
-            className="absolute -right-2 top-6 hidden h-4 w-4 items-center justify-center rounded-full bg-primary outline-none focus-visible:ring-2 focus-visible:ring-secondary md:flex"
+            className={`absolute -right-2 top-6  h-4 w-4 items-center justify-center rounded-full bg-primary outline-none focus-visible:ring-2 focus-visible:ring-secondary  ${isOpen ? "flex " : "md:flex hidden"}`}
           >
             <Image src={ICONS.sidebarToggle} alt="" width={10} height={10} />
           </button>

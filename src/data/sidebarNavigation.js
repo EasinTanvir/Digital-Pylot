@@ -114,6 +114,11 @@ const sidebarNavigationMock = [
         href: "/dashboard/quotation",
       },
       {
+        label: "Leads",
+        icon: "sidebar.dashboard",
+        href: "/dashboard/leads",
+      },
+      {
         label: "POS",
         icon: "sales.pos",
         href: "/dashboard/pos",

@@ -17,9 +17,7 @@ const EMPTY_DASHBOARD = formatDashboardData({});
 
 export default function DashboardPage() {
   const [dateRange, setDateRange] = useState(INITIAL_DATE_RANGE);
-  const [selectedYear, setSelectedYear] = useState(
-    String(new Date().getFullYear()),
-  );
+  const [selectedYear, setSelectedYear] = useState("2025");
   const [countryFilter, setCountryFilter] = useState("this_week");
   const [dashboard, setDashboard] = useState(EMPTY_DASHBOARD);
   const [years, setYears] = useState([]);
@@ -43,22 +41,6 @@ export default function DashboardPage() {
     [selectedYear],
   );
 
-  const loadDashboard = useCallback(
-    async (signal) => {
-      setIsLoading(true);
-      const { data, errors } = await getDashboardData({
-        ...dateRange,
-        year: selectedYear,
-        countryFilter,
-        signal,
-      });
-
-      if (signal.aborted) return;
-      applyDashboardResponse({ data, errors });
-    },
-    [applyDashboardResponse, countryFilter, dateRange, selectedYear],
-  );
-
   useEffect(() => {
     const controller = new AbortController();
     getDashboardData({
@@ -79,11 +61,19 @@ export default function DashboardPage() {
     return () => controller.abort();
   }, [applyDashboardResponse, countryFilter, dateRange, selectedYear]);
 
-  const refreshDashboard = () => {
-    loadDashboard(new AbortController().signal).catch((requestError) => {
-      setError(requestError.message || "Unable to refresh dashboard data.");
-      setIsLoading(false);
-    });
+  const handleDateRangeChange = (range) => {
+    setIsLoading(true);
+    setDateRange(range);
+  };
+  const resetDateFilter = () =>
+    handleDateRangeChange({ startDate: null, endDate: null });
+  const handleYearChange = (year) => {
+    setIsLoading(true);
+    setSelectedYear(year);
+  };
+  const handleCountryFilterChange = (filter) => {
+    setIsLoading(true);
+    setCountryFilter(filter);
   };
 
   return (
@@ -93,8 +83,8 @@ export default function DashboardPage() {
         welcomeText={content.welcomeText}
         initialStartDate={INITIAL_DATE_RANGE.startDate}
         initialEndDate={INITIAL_DATE_RANGE.endDate}
-        onRangeChange={setDateRange}
-        onRefresh={refreshDashboard}
+        onRangeChange={handleDateRangeChange}
+        onRefresh={resetDateFilter}
       />
 
       {error && (
@@ -105,6 +95,7 @@ export default function DashboardPage() {
           Some dashboard data could not be loaded: {error}
         </p>
       )}
+      {isLoading && <DashboardSkeleton />}
       {isLoading && (
         <p className="text-sm text-text-body">Loading dashboard data…</p>
       )}
@@ -123,7 +114,7 @@ export default function DashboardPage() {
           title={content.totalSales}
           icon={ICONS.stats.sales}
           resetIcon={ICONS.resetIconIcon}
-          onReset={refreshDashboard}
+          onReset={resetDateFilter}
         />
         <StatCard
           type="purchased"
@@ -131,7 +122,7 @@ export default function DashboardPage() {
           title={content.purchasedGoods}
           icon={ICONS.stats.purchased}
           resetIcon={ICONS.resetIconIcon}
-          onReset={refreshDashboard}
+          onReset={resetDateFilter}
         />
       </section>
 
@@ -155,7 +146,7 @@ export default function DashboardPage() {
           year={selectedYear}
           yearsList={years}
           scale={dashboard.scale}
-          onYearChange={setSelectedYear}
+          onYearChange={handleYearChange}
         />
         <SalesByCountryMap
           countries={dashboard.countries}
@@ -163,8 +154,31 @@ export default function DashboardPage() {
           thisWeek={content.thisWeek}
           increaseLabel={content.mapIncrease}
           filter={countryFilter}
-          onFilterChange={setCountryFilter}
+          onFilterChange={handleCountryFilterChange}
         />
+      </section>
+    </div>
+  );
+}
+
+function DashboardSkeleton() {
+  return (
+    <div
+      className="animate-pulse space-y-5"
+      aria-label="Loading dashboard data"
+    >
+      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="h-36 rounded-xl bg-slate-200 lg:col-span-2" />
+        <div className="h-36 rounded-xl bg-slate-200" />
+        <div className="h-36 rounded-xl bg-slate-200" />
+      </section>
+      <section className="grid gap-4 xl:grid-cols-2">
+        <div className="h-72 rounded-2xl bg-slate-200" />
+        <div className="h-72 rounded-2xl bg-slate-200" />
+      </section>
+      <section className="grid gap-4 xl:grid-cols-[minmax(500px,2fr)_minmax(270px,.9fr)]">
+        <div className="h-96 rounded-2xl bg-slate-200" />
+        <div className="h-96 rounded-2xl bg-slate-200" />
       </section>
     </div>
   );

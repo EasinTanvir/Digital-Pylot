@@ -18,9 +18,11 @@ export default function DashboardWelcomeHeader({
 }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [pickerKey, setPickerKey] = useState(0);
 
   const handleRefresh = () => {
     setIsRefreshing(true);
+    setPickerKey((key) => key + 1);
     if (onRefresh) onRefresh();
     setTimeout(() => setIsRefreshing(false), 800);
   };
@@ -46,8 +48,9 @@ export default function DashboardWelcomeHeader({
         {/* Right Actions */}
         <div className="flex items-center gap-2 self-end lg:self-auto">
           <DateRangePicker
-            initialStartDate={initialStartDate}
-            initialEndDate={initialEndDate}
+            key={pickerKey}
+            initialStartDate={pickerKey ? undefined : initialStartDate}
+            initialEndDate={pickerKey ? undefined : initialEndDate}
             onRangeSelect={onRangeChange}
           />
 

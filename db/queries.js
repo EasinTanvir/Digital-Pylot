@@ -1,5 +1,5 @@
 import { db } from "./db.js";
-import { vehicles, transactions, categories } from "./schema.js";
+import { vehicles, transactions, categories, leads } from "./schema.js";
 import { count, sum, eq, gte, lt, and, sql, desc } from "drizzle-orm";
 
 export async function getPopularCars() {
@@ -130,4 +130,11 @@ export async function getSalesByCountries(filter = "all") {
     .where(and(...conditions))
     .groupBy(transactions.country)
     .orderBy(desc(count()));
+}
+
+export async function getLeads() {
+  return await db.query.leads.findMany({
+    orderBy: (leads, { desc }) => [desc(leads.createdAt)],
+    with: { vehicle: true },
+  });
 }

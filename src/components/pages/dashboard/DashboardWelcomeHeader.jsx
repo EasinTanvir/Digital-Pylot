@@ -10,6 +10,7 @@ import DateRangePicker from "./DateRangePicker";
 import { ICONS } from "@/constants";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 export default function DashboardWelcomeHeader({
   userName = "Mike Witzel",
   welcomeText = "here's what's happening with your store today.",
@@ -21,12 +22,15 @@ export default function DashboardWelcomeHeader({
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [pickerKey, setPickerKey] = useState(0);
+  const pathName = usePathname();
+  const router = useRouter();
 
   const handleRefresh = () => {
     setIsRefreshing(true);
     setPickerKey((key) => key + 1);
     if (onRefresh) onRefresh();
     setTimeout(() => setIsRefreshing(false), 800);
+    router.push(pathName);
   };
 
   return (
@@ -59,7 +63,7 @@ export default function DashboardWelcomeHeader({
           </Link>
 
           <DateRangePicker
-            key={pickerKey}
+            key={`${pickerKey}-${initialStartDate || "empty"}-${initialEndDate || "empty"}`}
             initialStartDate={pickerKey ? undefined : initialStartDate}
             initialEndDate={pickerKey ? undefined : initialEndDate}
             onRangeSelect={onRangeChange}

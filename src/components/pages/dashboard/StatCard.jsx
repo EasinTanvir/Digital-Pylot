@@ -11,7 +11,6 @@ export default function StatCard({
   icon,
   arrowGreenIcon,
   resetIcon,
-  onReset,
 }) {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -21,7 +20,7 @@ export default function StatCard({
   const handleReset = (e) => {
     e.stopPropagation();
     setIsRefreshing(true);
-    if (onReset) onReset(type);
+
     setTimeout(() => setIsRefreshing(false), 750);
   };
 

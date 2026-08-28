@@ -13,7 +13,6 @@ import {
 import Card from "@/components/ui/Card";
 import { HiOutlineCalendar, HiChevronDown } from "react-icons/hi2";
 
-// Custom Tooltip matching design specs
 function CustomTooltip({ active, payload, label }) {
   if (active && payload && payload.length) {
     const value = payload[0].value;
@@ -29,19 +28,17 @@ function CustomTooltip({ active, payload, label }) {
   return null;
 }
 
-// Custom Dot Component to match exact design specs
 function CustomDot(props) {
   const { cx, cy, payload } = props;
-  // Make active point (e.g., highest value or hovered point like Jun) stand out
+
   const isHighlight = payload.isHighlight || payload.month === "Jun";
 
   return (
     <circle
       cx={cx}
       cy={cy}
-      r={isHighlight ? 7 : 4}
+      r={isHighlight ? 8 : 4}
       fill="rgba(255, 159, 67, 1)"
-      stroke="#ffffff"
       strokeWidth={isHighlight ? 2.5 : 0}
       className="transition-all duration-200"
     />

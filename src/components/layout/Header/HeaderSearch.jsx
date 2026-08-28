@@ -10,14 +10,14 @@ export default function HeaderSearch({ placeholder }) {
   return (
     <div
       onClick={() => inputRef.current?.focus()}
-      className="flex h-10 w-[240px] cursor-text items-center justify-between rounded-xl border border-border-150 bg-white px-3 transition-all focus-within:border-primary"
+      className="flex h-10 w-[240px] cursor-text items-center justify-between rounded-md border border-border-150 bg-white px-3 transition-all focus-within:border-primary"
     >
       <div className="flex items-center gap-2 overflow-hidden">
         <Image
           src={ICONS?.navSearchIcon || ICONS?.header?.search}
           alt="Search"
-          width={15}
-          height={15}
+          width={17}
+          height={17}
           className="shrink-0 opacity-50"
         />
         <input
@@ -25,7 +25,7 @@ export default function HeaderSearch({ placeholder }) {
           type="text"
           aria-label={placeholder}
           placeholder={placeholder}
-          className="w-full bg-transparent text-xs text-text-heading outline-none placeholder:text-text-subtitle"
+          className="w-full bg-transparent text-xs text-gray-300 outline-none placeholder:text-gray-300"
         />
       </div>
 

@@ -4,7 +4,11 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Card from "@/components/ui/Card";
 import { ICONS } from "@/constants";
-import { HiChevronDown, HiOutlineArrowUp, HiOutlineMagnifyingGlass } from "react-icons/hi2";
+import {
+  HiChevronDown,
+  HiOutlineArrowUp,
+  HiOutlineMagnifyingGlass,
+} from "react-icons/hi2";
 
 // Default coordinate hit-boxes for SVG overlay matching world map bounds
 const COUNTRY_REGIONS = [
@@ -42,9 +46,12 @@ export default function SalesByCountryMap({
     { label: "This Month", value: "this_month" },
     { label: "This Year", value: "this_year" },
   ];
-  const timeframe = filterOptions.find((option) => option.value === filter)?.label || thisWeek;
+  const timeframe =
+    filterOptions.find((option) => option.value === filter)?.label || thisWeek;
   const matchingCountries = countries.filter((country) =>
-    (country.country || country.name).toLowerCase().includes(countrySearch.toLowerCase()),
+    (country.country || country.name)
+      .toLowerCase()
+      .includes(countrySearch.toLowerCase()),
   );
 
   // Close timeframe menu on click outside
@@ -60,7 +67,9 @@ export default function SalesByCountryMap({
 
   const selectedCountry =
     countries.find((country) => country.country === selectedCountryName) ||
-    countries.find((country) => country.isHighlighted || country.defaultHighlighted) ||
+    countries.find(
+      (country) => country.isHighlighted || country.defaultHighlighted,
+    ) ||
     countries[0];
 
   return (
@@ -70,65 +79,93 @@ export default function SalesByCountryMap({
         <h2 className="text-base font-bold text-text-heading">{title}</h2>
 
         <div className="flex items-center gap-2" ref={dropdownRef}>
-        <div className="relative">
-          <button
-            type="button"
-            onClick={() => setIsCountryDropdownOpen((open) => !open)}
-            className="flex max-w-28 items-center gap-1.5 truncate rounded-lg border border-border-150 bg-white px-3 py-1 text-xs font-medium text-text-body transition-colors hover:bg-neutral-blue-50"
-          >
-            <span className="truncate">{selectedCountryName || "Countries"}</span>
-            <HiChevronDown className="h-3.5 w-3.5 shrink-0 text-text-body" />
-          </button>
-          {isCountryDropdownOpen && (
-            <div className="absolute right-0 top-full z-30 mt-1 w-48 rounded-xl border border-border-150 bg-white p-2 shadow-lg">
-              <label className="flex items-center gap-1.5 rounded-lg border border-border-150 px-2 py-1.5">
-                <HiOutlineMagnifyingGlass className="h-3.5 w-3.5 text-text-body" />
-                <input value={countrySearch} onChange={(event) => setCountrySearch(event.target.value)} placeholder="Search country" className="w-full bg-transparent text-xs outline-none" />
-              </label>
-              <button type="button" onClick={() => { setSelectedCountryName(null); setIsCountryDropdownOpen(false); }} className="mt-1 w-full rounded-lg px-2 py-1.5 text-left text-xs text-text-body hover:bg-neutral-blue-50">All countries</button>
-              <div className="max-h-36 overflow-y-auto">
-                {matchingCountries.map((country) => {
-                  const name = country.country || country.name;
-                  return <button key={name} type="button" onClick={() => { setSelectedCountryName(name); setIsCountryDropdownOpen(false); }} className={`w-full rounded-lg px-2 py-1.5 text-left text-xs hover:bg-neutral-blue-50 ${name === selectedCountryName ? "font-bold text-primary" : "text-text-body"}`}>{name}</button>;
-                })}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Timeframe Selector Dropdown */}
-        <div className="relative">
-          <button
-            type="button"
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-1.5 rounded-lg border border-border-150 bg-white px-3 py-1 text-xs font-medium text-text-body transition-colors hover:bg-neutral-blue-50"
-          >
-            <span>{timeframe}</span>
-            <HiChevronDown className="h-3.5 w-3.5 text-text-body" />
-          </button>
-
-          {isDropdownOpen && (
-            <div className="absolute right-0 top-full z-20 mt-1 w-28 rounded-xl border border-border-150 bg-white py-1 shadow-lg">
-              {filterOptions.map((item) => (
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setIsCountryDropdownOpen((open) => !open)}
+              className="flex  items-center gap-1.5 truncate rounded-[5px] border border-stroke-alt bg-white px-3 py-1.5 text-xs text-text-body transition-colors hover:bg-neutral-blue-50"
+            >
+              <span className="truncate">
+                {selectedCountryName || "Countries"}
+              </span>
+              <HiChevronDown className="h-3.5 w-3.5 shrink-0 text-text-body" />
+            </button>
+            {isCountryDropdownOpen && (
+              <div className="absolute right-0 top-full z-30 mt-1 w-48 rounded-xl border border-border-150 bg-white p-2 shadow-lg">
+                <label className="flex items-center gap-1.5 rounded-lg border border-border-150 px-2 py-1.5">
+                  <HiOutlineMagnifyingGlass className="h-3.5 w-3.5 text-text-body" />
+                  <input
+                    value={countrySearch}
+                    onChange={(event) => setCountrySearch(event.target.value)}
+                    placeholder="Search country"
+                    className="w-full bg-transparent text-xs outline-none"
+                  />
+                </label>
                 <button
-                  key={item.value}
                   type="button"
                   onClick={() => {
-                    onFilterChange?.(item.value);
-                    setIsDropdownOpen(false);
+                    setSelectedCountryName(null);
+                    setIsCountryDropdownOpen(false);
                   }}
-                  className={`w-full px-3 py-1.5 text-left text-xs transition-colors hover:bg-neutral-blue-50 ${
-                    item.value === filter
-                      ? "font-bold text-text-heading"
-                      : "text-text-body"
-                  }`}
+                  className="mt-1 w-full rounded-lg px-2 py-1.5 text-left text-xs text-text-body hover:bg-neutral-blue-50"
                 >
-                  {item.label}
+                  All countries
                 </button>
-              ))}
-            </div>
-          )}
-        </div>
+                <div className="max-h-36 overflow-y-auto">
+                  {matchingCountries.map((country) => {
+                    const name = country.country || country.name;
+                    return (
+                      <button
+                        key={name}
+                        type="button"
+                        onClick={() => {
+                          setSelectedCountryName(name);
+                          setIsCountryDropdownOpen(false);
+                        }}
+                        className={`w-full rounded-lg px-2 py-1.5 text-left text-xs hover:bg-neutral-blue-50 ${name === selectedCountryName ? "font-bold text-primary" : "text-text-body"}`}
+                      >
+                        {name}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Timeframe Selector Dropdown */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="flex  items-center gap-1.5 truncate rounded-[5px] border border-stroke-alt bg-white px-3 py-1.5 text-xs text-text-body transition-colors hover:bg-neutral-blue-50"
+            >
+              <span>{timeframe}</span>
+              <HiChevronDown className="h-3.5 w-3.5 text-text-body" />
+            </button>
+
+            {isDropdownOpen && (
+              <div className="absolute right-0 top-full z-20 mt-1 w-28 rounded-xl border border-border-150 bg-white py-1 shadow-lg">
+                {filterOptions.map((item) => (
+                  <button
+                    key={item.value}
+                    type="button"
+                    onClick={() => {
+                      onFilterChange?.(item.value);
+                      setIsDropdownOpen(false);
+                    }}
+                    className={`w-full px-3 py-1.5 text-left text-xs transition-colors hover:bg-neutral-blue-50 ${
+                      item.value === filter
+                        ? "font-bold text-text-heading"
+                        : "text-text-body"
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

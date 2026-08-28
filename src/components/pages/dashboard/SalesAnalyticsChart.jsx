@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useRef, useEffect } from "react";
 import {
   Area,
   AreaChart,
@@ -10,58 +11,177 @@ import {
   YAxis,
 } from "recharts";
 import Card from "@/components/ui/Card";
+import { HiOutlineCalendar, HiChevronDown } from "react-icons/hi2";
 
-export default function SalesAnalyticsChart({ data, title, year, scale }) {
-  return (
-    <Card className="min-h-[300px] p-5">
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-sm font-bold text-text-heading">{title}</h2>
-        <button className="rounded border border-border-100 px-2 py-1 text-[10px] text-text-body">
-          ▣ {year}
-        </button>
+// Custom Tooltip matching design specs
+function CustomTooltip({ active, payload, label }) {
+  if (active && payload && payload.length) {
+    const value = payload[0].value;
+    return (
+      <div className="rounded-lg border border-border-100 bg-white px-3 py-1.5 shadow-md">
+        <p className="text-[11px] font-semibold text-text-body">{label}</p>
+        <p className="text-xs font-bold text-primary">
+          ${Number(value).toLocaleString("en-US")}
+        </p>
       </div>
-      <div className="h-56">
+    );
+  }
+  return null;
+}
+
+// Custom Dot Component to match exact design specs
+function CustomDot(props) {
+  const { cx, cy, payload } = props;
+  // Make active point (e.g., highest value or hovered point like Jun) stand out
+  const isHighlight = payload.isHighlight || payload.month === "Jun";
+
+  return (
+    <circle
+      cx={cx}
+      cy={cy}
+      r={isHighlight ? 7 : 4}
+      fill="rgba(255, 159, 67, 1)"
+      stroke="#ffffff"
+      strokeWidth={isHighlight ? 2.5 : 0}
+      className="transition-all duration-200"
+    />
+  );
+}
+
+export default function SalesAnalyticsChart({
+  data = [],
+  title = "Sales Analytics",
+  year,
+  onYearChange,
+  yearsList = ["2026", "2025", "2024", "2023"],
+  scale = {
+    domain: [0, 60000],
+    ticks: [10000, 20000, 30000, 40000, 50000, 60000],
+  },
+}) {
+  const [selectedYear, setSelectedYear] = useState(year || "2023");
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSelectYear = (y) => {
+    setSelectedYear(y);
+    setIsOpen(false);
+    if (onYearChange) onYearChange(y);
+  };
+
+  return (
+    <Card className="flex flex-col justify-between overflow-hidden rounded-2xl border border-border-150 bg-white p-6 shadow-[0px_4px_60px_0px_rgba(231,231,231,0.47)]">
+      {/* Header with Year Selector Dropdown */}
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="text-base font-bold text-text-heading">{title}</h2>
+
+        <div className="relative" ref={dropdownRef}>
+          <button
+            type="button"
+            onClick={() => setIsOpen(!isOpen)}
+            className="flex items-center gap-2 rounded-lg border border-border-100 bg-white px-3 py-1.5 text-xs font-medium text-text-body transition-colors hover:bg-neutral-blue-50"
+          >
+            <HiOutlineCalendar className="h-4 w-4 text-text-body" />
+            <span>{selectedYear}</span>
+            <HiChevronDown className="h-3.5 w-3.5 text-text-body" />
+          </button>
+
+          {/* Year Options Dropdown */}
+          {isOpen && (
+            <div className="absolute right-0 top-full z-20 mt-1 w-28 rounded-xl border border-border-150 bg-white py-1 shadow-lg">
+              {yearsList.map((y) => (
+                <button
+                  key={y}
+                  type="button"
+                  onClick={() => handleSelectYear(y)}
+                  className={`w-full px-3 py-1.5 text-left text-xs transition-colors hover:bg-neutral-blue-50 ${
+                    y === selectedYear
+                      ? "font-bold text-primary"
+                      : "text-text-body"
+                  }`}
+                >
+                  {y}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Area Chart Container */}
+      <div className="h-64 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={data}
-            margin={{ top: 10, right: 10, left: -18, bottom: 0 }}
+            margin={{ top: 15, right: 10, left: -15, bottom: 0 }}
           >
             <defs>
-              <linearGradient id="sales-fill" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="0%"
-                  stopColor="var(--color-primary)"
-                  stopOpacity={1}
-                />
+              <linearGradient
+                id="sales-fill-gradient"
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1"
+              >
+                <stop offset="0%" stopColor="#FF9F43" stopOpacity={0.8} />
                 <stop
                   offset="100%"
-                  stopColor="var(--color-primary)"
+                  stopColor="rgba(255, 159, 67, 0)"
                   stopOpacity={0}
                 />
               </linearGradient>
             </defs>
-            <CartesianGrid vertical={false} stroke="var(--color-border-100)" />
+
+            <CartesianGrid
+              vertical={false}
+              stroke="var(--color-border-100, #E9ECEF)"
+              strokeDasharray="0"
+            />
+
             <XAxis
               dataKey="month"
               axisLine={false}
               tickLine={false}
-              tick={{ fill: "var(--color-text-body)", fontSize: 10 }}
+              tick={{ fill: "var(--color-text-body)", fontSize: 11 }}
+              dy={8}
             />
+
             <YAxis
               domain={scale.domain}
               ticks={scale.ticks}
               axisLine={false}
               tickLine={false}
-              tick={{ fill: "var(--color-text-body)", fontSize: 10 }}
-              tickFormatter={(value) => `${value / 1000}k`}
+              tick={{ fill: "var(--color-text-body)", fontSize: 11 }}
+              tickFormatter={(val) => `${val / 1000}k`}
+              dx={-5}
             />
-            <Tooltip />
+
+            <Tooltip content={<CustomTooltip />} />
+
             <Area
               type="monotone"
               dataKey="value"
-              stroke="var(--color-primary)"
-              strokeWidth={2}
-              fill="url(#sales-fill)"
+              stroke="rgba(255, 159, 67, 1)"
+              strokeWidth={2.5}
+              fill="url(#sales-fill-gradient)"
+              dot={<CustomDot />}
+              activeDot={{
+                r: 8,
+                fill: "rgba(255, 159, 67, 1)",
+                stroke: "#ffffff",
+                strokeWidth: 3,
+              }}
             />
           </AreaChart>
         </ResponsiveContainer>

@@ -103,9 +103,16 @@
 
   /* ---- Transparent ---- */
   --color-black-transparent: rgba(0, 0, 0, 0);
+
+  --color-analytics-shadow: rgba(231, 231, 231, 0.47);
+  --color-analytics-border: rgba(145, 158, 171, 0.3);
 }
 
 @layer utilities {
+  .bg-analytics-gradient {
+    background: linear-gradient(180deg, #ff9f43 0%, rgba(255, 159, 67, 0) 100%);
+  }
+
   .tracking-custom {
     letter-spacing: -0.02em;
   }

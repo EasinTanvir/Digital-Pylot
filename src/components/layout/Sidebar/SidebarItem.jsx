@@ -17,7 +17,6 @@ export default function SidebarItem({ item, onNavigate }) {
   return (
     <Link
       href={item.href}
-      onClick={onNavigate}
       aria-current={isActive ? "page" : undefined}
       className={`group flex py-2.5 items-center rounded-lg px-4 text-sm font-medium leading-[21px] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-primary ${
         isActive

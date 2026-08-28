@@ -31,7 +31,7 @@ export default function StatCard({
     const label = stat?.label || "increase compare to last week";
 
     return (
-      <div className="relative flex  flex-col justify-between overflow-hidden rounded-lg border border-stroke bg-white p-7 transition-all duration-200 hover:shadow-md lg:col-span-2">
+      <div className="relative flex  flex-col justify-between overflow-hidden rounded-lg border border-stroke bg-white p-7 transition-all duration-200 hover:shadow-md col-span-2">
         <div className="flex items-center justify-between">
           <div className="space-y-1.5">
             <p className="text-base font-semibold text-primary">

@@ -35,9 +35,9 @@ export default function DashboardWelcomeHeader({
 
   return (
     <section className="rounded-xl border border-slate-200/80 bg-white p-4 shadow-2xs transition-all duration-300">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         {/* Left Greeting */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5 xl:w-auto xl:max-w-max md:max-w-96 ">
           <Image
             className="object-cover"
             src={ICONS.handIcon}
@@ -53,22 +53,8 @@ export default function DashboardWelcomeHeader({
           </p>
         </div>
 
-        <Link
-          href="/dashboard/leads"
-          className="rounded-[5px] sm:hidden  block  bg-primary px-5 py-2.5 text-xs font-semibold text-white "
-        >
-          View Leads
-        </Link>
-
         {/* Right Actions */}
         <div className="flex items-center gap-2 self-end lg:self-auto">
-          <Link
-            href="/dashboard/leads"
-            className="sm:block hidden rounded-[5px]  bg-primary px-5 py-2.5 text-xs font-semibold text-white "
-          >
-            View Leads
-          </Link>
-
           <DateRangePicker
             key={`${pickerKey}-${initialStartDate || "empty"}-${initialEndDate || "empty"}`}
             initialStartDate={pickerKey ? undefined : initialStartDate}

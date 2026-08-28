@@ -5,7 +5,7 @@ import { createContext, useContext, useState } from "react";
 const GlobalContext = createContext(null);
 
 export const GlobalProvider = ({ children }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   return (
     <GlobalContext.Provider

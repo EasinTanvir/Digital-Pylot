@@ -1,21 +1,21 @@
-import Sidebar from "@/components/layout/Sidebar/Sidebar";
 import Header from "@/components/layout/Header/Header";
 import Footer from "@/components/pages/dashboard/Footer";
-import SidebarWrapper from "@/components/layout/Sidebar/SidebarWrapper";
 import { GlobalProvider } from "@/providers/GlobalContext";
+import DashboardLayoutWrapper from "@/components/pages/dashboard/DashboardLayoutWrapper";
 
 export default function DashboardLayout({ children }) {
   return (
     <GlobalProvider>
-      <div className="flex h-dvh overflow-hidden bg-page-bg  font-nunito">
-        <SidebarWrapper />
-        <div className="min-w-0 flex flex-1 flex-col overflow-hidden">
+      <div className="flex h-dvh overflow-hidden bg-page-bg font-nunito">
+        <DashboardLayoutWrapper>
           <Header />
-          <main className="min-h-0 flex-1 overflow-y-auto p-4 lg:p-6">
+
+          <main className="min-h-0 flex-1 w-full overflow-y-auto p-4 lg:p-6">
             {children}
           </main>
+
           <Footer />
-        </div>
+        </DashboardLayoutWrapper>
       </div>
     </GlobalProvider>
   );

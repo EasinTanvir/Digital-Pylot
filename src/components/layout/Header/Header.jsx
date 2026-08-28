@@ -18,7 +18,7 @@ export default function Header() {
           onClick={() => setIsOpen(true)}
           type="button"
           aria-label="Open navigation"
-          className={`${isOpen ? "md:hidden flex" : "flex"} h-9 w-9 items-center justify-center rounded-md bg-primary shadow-card outline-none focus-visible:ring-2 focus-visible:ring-secondary md:hidden`}
+          className={`${isOpen ? "md:hidden flex" : "flex"} p-2 items-center justify-center rounded-md bg-primary shadow-card outline-none focus-visible:ring-2 focus-visible:ring-secondary `}
         >
           <Image
             src={ICONS.sidebarToggle}

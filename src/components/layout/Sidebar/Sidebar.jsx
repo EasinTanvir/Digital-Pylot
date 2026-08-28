@@ -8,9 +8,8 @@ import { useGlobalContext } from "@/providers/GlobalContext";
 
 export default function Sidebar() {
   const { isOpen, setIsOpen } = useGlobalContext();
-  console.log({ isOpen });
 
-  const closeSidebar = () => setIsOpen(!open);
+  const closeSidebar = () => setIsOpen(!isOpen);
   const navigation = getSidebarNavigation();
 
   return (
@@ -26,7 +25,7 @@ export default function Sidebar() {
 
       <aside
         aria-label="Dashboard navigation"
-        className={`fixed inset-y-0 left-0 z-40 flex w-60 flex-col border-r border-border-100 bg-white transition-transform duration-200 md:static md:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 flex w-60 flex-col border-r border-border-100 bg-white transition-transform duration-200 md:static  ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >

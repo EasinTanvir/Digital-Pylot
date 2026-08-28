@@ -19,7 +19,7 @@ export default function SidebarItem({ item, onNavigate }) {
       href={item.href}
       onClick={onNavigate}
       aria-current={isActive ? "page" : undefined}
-      className={`group flex min-h-9 items-center rounded-md px-2 text-sm font-medium leading-[21px] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-primary ${
+      className={`group flex py-2.5 items-center rounded-lg px-4 text-sm font-medium leading-[21px] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-primary ${
         isActive
           ? "bg-primary-50 text-primary"
           : "text-text-body hover:bg-neutral-blue-50"

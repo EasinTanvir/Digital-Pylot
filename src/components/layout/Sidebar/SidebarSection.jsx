@@ -15,7 +15,7 @@ export default function SidebarSection({ section, items, onNavigate, isLast }) {
       <div className="space-y-1.5">
         {items.map((item) => (
           <SidebarItem key={item.href} item={item} onNavigate={onNavigate} />
-        ))}
+        ))}{" "}
       </div>
     </section>
   );

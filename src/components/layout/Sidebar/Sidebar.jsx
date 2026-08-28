@@ -56,6 +56,9 @@ export default function Sidebar() {
               onNavigate={closeSidebar}
             />
           ))}
+          <div className="text-secondary w-full font-bold border-t pb-2 border-border-150  mt-4 pt-4">
+            Promo
+          </div>
         </nav>
       </aside>
     </>

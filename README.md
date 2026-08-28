@@ -166,6 +166,8 @@ At the moment `qualify_lead` runs:
 2. That lead **immediately appears in the Admin Dashboard's Leads page** — no separate sync step, since the dashboard reads from the same database.
 3. A formatted message is posted to the `#new-leads` Slack channel via webhook (see below).
 
+![Slack lead notification Screenshot](./docs/slack-lead-notification.png)
+
 ---
 
 ## Automation Workflow

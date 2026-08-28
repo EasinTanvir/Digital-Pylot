@@ -211,10 +211,8 @@ npm run db:seed
 
 This project follows the scope of the technical assessment and therefore uses seeded/mock data.
 
-- No production user authentication.
-- No real payment processing.
 - The customer-side booking action does not create a real reservation.
 - The AI assistant uses the **Groq free API tier**, which is subject to rate limits. If the free-tier usage limit is reached, the AI chatbot may temporarily stop responding or return an API rate-limit error. This is an external API limitation rather than an application error.
-- FAQ/policy responses use a small keyword-based dataset rather than a full RAG pipeline.
+- No production user authentication.
 
 The AI lead qualification flow is a genuinely live write operation: qualified leads are saved to PostgreSQL and can trigger the Slack automation.

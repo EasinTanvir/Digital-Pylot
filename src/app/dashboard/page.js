@@ -8,6 +8,7 @@ import RecentTransactions from "@/components/pages/dashboard/RecentTransactions"
 import SalesAnalyticsChart from "@/components/pages/dashboard/SalesAnalyticsChart";
 import SalesByCountryMap from "@/components/pages/dashboard/SalesByCountryMap";
 import MissingIcon from "@/components/ui/MissingIcon";
+import DashboardWelcomeHeader from "@/components/pages/dashboard/DashboardWelcomeHeader";
 
 async function getData(baseUrl, path, fallback) {
   const response = await fetch(`${baseUrl}${path}`, { cache: "no-store" });
@@ -98,35 +99,11 @@ export default async function DashboardPage() {
 
   return (
     <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-5">
-      <section className="flex flex-col gap-4 rounded-lg border border-border-100 bg-white p-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex items-center gap-2">
-          <MissingIcon label="Hi" />
-          <p className="text-sm text-text-body">
-            <strong className="text-base text-text-heading">
-              Hi {content.userName},
-            </strong>{" "}
-            {content.welcomeText}
-          </p>
-        </div>
-        <div className="flex items-center gap-2 self-end lg:self-auto">
-          <button className="flex h-9 items-center gap-2 rounded-md border border-border-100 px-3 text-xs text-secondary">
-            <Image src={ICONS.header.calendar} alt="" width={16} height={16} />
-            {content.dateRange}
-          </button>
-          <button
-            aria-label="Refresh"
-            className="flex h-9 w-9 items-center justify-center rounded-md border border-border-100"
-          >
-            <Image src={ICONS.header.refresh} alt="" width={16} height={16} />
-          </button>
-          <button
-            aria-label="Collapse"
-            className="flex h-9 w-9 items-center justify-center rounded-md border border-border-100"
-          >
-            <Image src={ICONS.header.expand} alt="" width={16} height={16} />
-          </button>
-        </div>
-      </section>
+      <DashboardWelcomeHeader
+        userName={content.userName}
+        welcomeText={content.welcomeText}
+        defaultDateRange={content.dateRange}
+      />
 
       <section className="grid gap-4 md:grid-cols-3">
         <StatCard

@@ -8,8 +8,9 @@ import { useGlobalContext } from "@/providers/GlobalContext";
 
 export default function Sidebar() {
   const { isOpen, setIsOpen } = useGlobalContext();
+  console.log({ isOpen });
 
-  const closeSidebar = () => setIsOpen(false);
+  const closeSidebar = () => setIsOpen(!open);
   const navigation = getSidebarNavigation();
 
   return (

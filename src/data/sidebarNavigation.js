@@ -17,6 +17,16 @@ const sidebarNavigationMock = [
     ],
   },
   {
+    section: "Sales",
+    items: [
+      {
+        label: "Leads",
+        icon: "sales.sales",
+        href: "/dashboard/leads",
+      },
+    ],
+  },
+  {
     section: "Inventory",
     items: [
       {

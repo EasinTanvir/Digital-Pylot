@@ -104,7 +104,7 @@ export async function getAvailableYears() {
   return result.map((r) => Number(r.year));
 }
 
-export async function getSalesByCountries(filter = "all") {
+export async function getSalesByCountries(filter = "all", selectedCountry) {
   const now = new Date();
   let startDate = null;
   if (filter === "this_week") {
@@ -120,6 +120,7 @@ export async function getSalesByCountries(filter = "all") {
   }
   const conditions = [eq(transactions.type, "sale")];
   if (startDate) conditions.push(gte(transactions.createdAt, startDate));
+  if (selectedCountry) conditions.push(eq(transactions.country, selectedCountry));
   return await db
     .select({
       country: transactions.country,

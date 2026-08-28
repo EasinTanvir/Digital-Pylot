@@ -28,15 +28,16 @@ const COUNTRY_REGIONS = [
 
 export default function SalesByCountryMap({
   countries = COUNTRY_REGIONS,
+  countryOptions = countries,
   title = "Sales by Countries",
   thisWeek = "This Week",
   increaseLabel = "increase compare to last week",
   percentage = "48%",
   filter = "this_week",
   onFilterChange,
+  selectedCountry: selectedCountryName,
+  onCountryChange,
 }) {
-  const [selectedCountryName, setSelectedCountryName] = useState(null);
-
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
   const [countrySearch, setCountrySearch] = useState("");
@@ -48,7 +49,7 @@ export default function SalesByCountryMap({
   ];
   const timeframe =
     filterOptions.find((option) => option.value === filter)?.label || thisWeek;
-  const matchingCountries = countries.filter((country) =>
+  const matchingCountries = countryOptions.filter((country) =>
     (country.country || country.name)
       .toLowerCase()
       .includes(countrySearch.toLowerCase()),
@@ -104,7 +105,7 @@ export default function SalesByCountryMap({
                 <button
                   type="button"
                   onClick={() => {
-                    setSelectedCountryName(null);
+                    onCountryChange?.(null);
                     setIsCountryDropdownOpen(false);
                   }}
                   className="mt-1 w-full rounded-lg px-2 py-1.5 text-left text-xs text-text-body hover:bg-neutral-blue-50"
@@ -119,7 +120,7 @@ export default function SalesByCountryMap({
                         key={name}
                         type="button"
                         onClick={() => {
-                          setSelectedCountryName(name);
+                          onCountryChange?.(name);
                           setIsCountryDropdownOpen(false);
                         }}
                         className={`w-full rounded-lg px-2 py-1.5 text-left text-xs hover:bg-neutral-blue-50 ${name === selectedCountryName ? "font-bold text-primary" : "text-text-body"}`}
@@ -209,7 +210,7 @@ export default function SalesByCountryMap({
               cy={`${c.cy}%`}
               r="7"
               fill="transparent"
-              onClick={() => setSelectedCountryName(c.country || c.name)}
+              onClick={() => onCountryChange?.(c.country || c.name)}
               className="hover:opacity-20 hover:fill-amber-400 transition-opacity"
             />
           ))}

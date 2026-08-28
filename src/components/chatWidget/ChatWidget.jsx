@@ -26,7 +26,6 @@ function nowLabel() {
   });
 }
 
-// UI message {id, sender, text, time} -> API message {role, content}
 function toApiMessages(uiMessages) {
   return uiMessages.map((m) => ({
     role: m.sender === "user" ? "user" : "assistant",
@@ -45,7 +44,6 @@ export default function ChatWidget() {
   const widgetRef = useRef(null);
   const chatBottomRef = useRef(null);
 
-  // Load prior conversation from sessionStorage on mount
   useEffect(() => {
     try {
       const saved = sessionStorage.getItem(SESSION_KEY);
@@ -55,23 +53,17 @@ export default function ChatWidget() {
           setMessages(parsed);
         }
       }
-    } catch {
-      // corrupted storage, fall back to greeting
-    }
+    } catch {}
     setHydrated(true);
   }, []);
 
-  // Persist conversation on every change (after initial hydration to avoid overwriting with default)
   useEffect(() => {
     if (!hydrated) return;
     try {
       sessionStorage.setItem(SESSION_KEY, JSON.stringify(messages));
-    } catch {
-      // storage full/unavailable, ignore
-    }
+    } catch {}
   }, [messages, hydrated]);
 
-  // Close when clicking outside the chat widget container
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (widgetRef.current && !widgetRef.current.contains(event.target)) {
@@ -84,14 +76,12 @@ export default function ChatWidget() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
-  // Auto-scroll to bottom on new message
   useEffect(() => {
     if (isOpen) {
       chatBottomRef.current?.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages, isTyping, isOpen]);
 
-  // Hide completely on /dashboard routes
   if (pathname?.startsWith("/dashboard")) {
     return null;
   }
@@ -146,7 +136,7 @@ export default function ChatWidget() {
   return (
     <div
       ref={widgetRef}
-      className="fixed bottom-6 right-6 z-50 flex flex-col items-end"
+      className="fixed sm:bottom-6 sm:right-6 bottom-1 right-1 z-50 flex flex-col items-end"
     >
       {/* Floating Chat Modal */}
       {isOpen && (

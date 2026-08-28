@@ -1,185 +1,110 @@
-"use client";
-
-import { useCallback, useEffect, useState } from "react";
-import { ICONS } from "@/constants";
+import { Suspense } from "react";
 import { getDashboardShell } from "@/data/dashboardShell";
-import { formatDashboardData, getDashboardData } from "@/utils/dashboardApi";
-import StatCard from "@/components/pages/dashboard/StatCard";
-import BestSellerList from "@/components/pages/dashboard/BestSellerList";
-import RecentTransactions from "@/components/pages/dashboard/RecentTransactions";
-import SalesAnalyticsChart from "@/components/pages/dashboard/SalesAnalyticsChart";
-import SalesByCountryMap from "@/components/pages/dashboard/SalesByCountryMap";
-import DashboardWelcomeHeader from "@/components/pages/dashboard/DashboardWelcomeHeader";
+import {
+  getAvailableYears,
+  getBestSellers,
+  getPurchasedGoodsCount,
+  getRecentTransactions,
+  getSalesAnalytics,
+  getSalesByCountries,
+  getTotalSalesCount,
+} from "../../../db/queries.js";
+import DashboardClientView from "@/components/pages/dashboard/DashboardClientView";
 
-const content = getDashboardShell();
-const INITIAL_DATE_RANGE = { startDate: "2024-01-01", endDate: "2024-01-07" };
-const EMPTY_DASHBOARD = formatDashboardData({});
+const COUNTRY_FILTERS = new Set(["this_week", "this_month", "this_year", "all"]);
 
-export default function DashboardPage() {
-  const [dateRange, setDateRange] = useState(INITIAL_DATE_RANGE);
-  const [selectedYear, setSelectedYear] = useState("2025");
-  const [countryFilter, setCountryFilter] = useState("this_week");
-  const [dashboard, setDashboard] = useState(EMPTY_DASHBOARD);
-  const [years, setYears] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
+function getValue(searchParams, key) {
+  const value = searchParams[key];
+  return Array.isArray(value) ? value[0] : value;
+}
 
-  const applyDashboardResponse = useCallback(
-    ({ data, errors }) => {
-      setDashboard(formatDashboardData(data));
-      setError(errors.join(" • "));
+function getDateRange(searchParams) {
+  const startDate = getValue(searchParams, "startDate");
+  const endDate = getValue(searchParams, "endDate");
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate || "") || !/^\d{4}-\d{2}-\d{2}$/.test(endDate || "")) {
+    return { startDate: null, endDate: null };
+  }
 
-      if (Array.isArray(data.years)) {
-        const availableYears = data.years.map(String);
-        setYears(availableYears);
-        if (availableYears.length && !availableYears.includes(selectedYear)) {
-          setSelectedYear(availableYears[0]);
-        }
-      }
-      setIsLoading(false);
-    },
-    [selectedYear],
-  );
+  const start = new Date(`${startDate}T00:00:00.000Z`);
+  const end = new Date(`${endDate}T00:00:00.000Z`);
+  if (Number.isNaN(start.valueOf()) || Number.isNaN(end.valueOf()) || end < start) {
+    return { startDate: null, endDate: null };
+  }
+  end.setUTCDate(end.getUTCDate() + 1);
+  return { startDate: start, endDate: end };
+}
 
-  useEffect(() => {
-    const controller = new AbortController();
-    getDashboardData({
-      ...dateRange,
-      year: selectedYear,
-      countryFilter,
-      signal: controller.signal,
-    })
-      .then((result) => {
-        if (!controller.signal.aborted) applyDashboardResponse(result);
-      })
-      .catch((requestError) => {
-        if (!controller.signal.aborted) {
-          setError(requestError.message || "Unable to load dashboard data.");
-          setIsLoading(false);
-        }
-      });
-    return () => controller.abort();
-  }, [applyDashboardResponse, countryFilter, dateRange, selectedYear]);
-
-  const handleDateRangeChange = (range) => {
-    setIsLoading(true);
-    setDateRange(range);
+function getFilters(searchParams) {
+  const countryFilter = getValue(searchParams, "countryFilter");
+  return {
+    startDate: getValue(searchParams, "startDate"),
+    endDate: getValue(searchParams, "endDate"),
+    dateMode: getValue(searchParams, "dateMode"),
+    year: /^\d{4}$/.test(getValue(searchParams, "year") || "") ? getValue(searchParams, "year") : "2025",
+    countryFilter: COUNTRY_FILTERS.has(countryFilter) ? countryFilter : "this_week",
+    country: getValue(searchParams, "country") || null,
   };
-  const resetDateFilter = () =>
-    handleDateRangeChange({ startDate: null, endDate: null });
-  const handleYearChange = (year) => {
-    setIsLoading(true);
-    setSelectedYear(year);
-  };
-  const handleCountryFilterChange = (filter) => {
-    setIsLoading(true);
-    setCountryFilter(filter);
-  };
+}
+
+export default async function DashboardPage({ searchParams }) {
+  const queryParams = await searchParams;
+  const filters = getFilters(queryParams);
 
   return (
     <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-5">
-      <DashboardWelcomeHeader
-        userName={content.userName}
-        welcomeText={content.welcomeText}
-        initialStartDate={INITIAL_DATE_RANGE.startDate}
-        initialEndDate={INITIAL_DATE_RANGE.endDate}
-        onRangeChange={handleDateRangeChange}
-        onRefresh={resetDateFilter}
-      />
-
-      {error && (
-        <p
-          role="alert"
-          className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
-        >
-          Some dashboard data could not be loaded: {error}
-        </p>
-      )}
-      {isLoading && <DashboardSkeleton />}
-      {isLoading && (
-        <p className="text-sm text-text-body">Loading dashboard data…</p>
-      )}
-
-      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard
-          type="earning"
-          stat={dashboard.stats.weeklyEarning}
-          title={content.weeklyEarning}
-          icon={ICONS.stats.earning}
-          arrowGreenIcon={ICONS.arrowUpGreenIcon}
-        />
-        <StatCard
-          type="sales"
-          stat={dashboard.stats.totalSales}
-          title={content.totalSales}
-          icon={ICONS.stats.sales}
-          resetIcon={ICONS.resetIconIcon}
-          onReset={resetDateFilter}
-        />
-        <StatCard
-          type="purchased"
-          stat={dashboard.stats.purchasedGoods}
-          title={content.purchasedGoods}
-          icon={ICONS.stats.purchased}
-          resetIcon={ICONS.resetIconIcon}
-          onReset={resetDateFilter}
-        />
-      </section>
-
-      <section className="grid gap-4 xl:grid-cols-[minmax(260px,.8fr)_minmax(500px,1.7fr)]">
-        <BestSellerList
-          products={dashboard.bestSellers}
-          title={content.bestSeller}
-          viewAll={content.viewAll}
-        />
-        <RecentTransactions
-          transactions={dashboard.transactions}
-          title={content.recentTransactions}
-          viewAll={content.viewAll}
-        />
-      </section>
-
-      <section className="grid gap-4 xl:grid-cols-[minmax(500px,2fr)_minmax(270px,.9fr)]">
-        <SalesAnalyticsChart
-          data={dashboard.analytics}
-          title={content.salesAnalytics}
-          year={selectedYear}
-          yearsList={years}
-          scale={dashboard.scale}
-          onYearChange={handleYearChange}
-        />
-        <SalesByCountryMap
-          countries={dashboard.countries}
-          title={content.salesByCountries}
-          thisWeek={content.thisWeek}
-          increaseLabel={content.mapIncrease}
-          filter={countryFilter}
-          onFilterChange={handleCountryFilterChange}
-        />
-      </section>
+      <Suspense fallback={<DashboardSkeleton />}>
+        <DashboardData searchParams={queryParams} filters={filters} />
+      </Suspense>
     </div>
   );
 }
 
+async function DashboardData({ searchParams, filters }) {
+  try {
+    const dateRange = getDateRange(searchParams);
+    const [statsSales, purchasedGoods, weeklyCountries, bestSellersData, transactionData, analyticsData, countryData, countryOptionsData, availableYears] = await Promise.all([
+      getTotalSalesCount(dateRange.startDate, dateRange.endDate),
+      getPurchasedGoodsCount(dateRange.startDate, dateRange.endDate),
+      getSalesByCountries("this_week"),
+      getBestSellers(5),
+      getRecentTransactions(5),
+      getSalesAnalytics(Number(filters.year)),
+      getSalesByCountries(filters.countryFilter, filters.country),
+      getSalesByCountries(filters.countryFilter),
+      getAvailableYears(),
+    ]);
+
+    const analytics = analyticsData.map((item) => ({ month: item.month, value: Number(item.totalAmount) }));
+    const scaleMax = Math.max(1000, ...analytics.map((item) => item.value));
+    const roundedScaleMax = Math.ceil(scaleMax / 1000) * 1000;
+    const weeklyEarning = weeklyCountries.reduce((total, country) => total + Number(country.totalRevenue || 0), 0);
+    const countryCoordinates = { Africa: { cx: 50, cy: 55 }, Asia: { cx: 72, cy: 32 }, Europe: { cx: 52, cy: 26 }, Americas: { cx: 25, cy: 40 } };
+
+    const data = {
+      stats: {
+        weeklyEarning: { amount: weeklyEarning, currency: "USD", changePercent: 0, label: "this week" },
+        totalSales: { value: statsSales },
+        purchasedGoods: { value: purchasedGoods },
+      },
+      bestSellers: bestSellersData.map((vehicle) => ({ id: vehicle.id, name: vehicle.name, image: vehicle.imageUrl, price: `$${Number(vehicle.dailyPrice).toFixed(2)}/day`, sales: vehicle.totalSalesCount })),
+      transactions: transactionData.map((transaction) => ({ id: transaction.transactionNumber, orderDetails: transaction.vehicle?.name || "Vehicle", image: transaction.vehicle?.imageUrl, time: new Date(transaction.createdAt).toLocaleDateString(), payment: transaction.transactionNumber, paymentMethod: transaction.paymentMethod, status: transaction.status === "success" ? "completed" : transaction.status, amount: `$${Number(transaction.amount).toFixed(2)}` })),
+      analytics,
+      scale: { domain: [0, roundedScaleMax], ticks: Array.from({ length: 6 }, (_, index) => Math.round((roundedScaleMax * index) / 5)) },
+      countries: countryData.map((country, index) => ({ country: country.country, sales: country.salesCount, isHighlighted: index === 0, ...countryCoordinates[country.country] })),
+      countryOptions: countryOptionsData.map((country, index) => ({ country: country.country, sales: country.salesCount, isHighlighted: index === 0, ...countryCoordinates[country.country] })),
+      years: availableYears.map(String),
+    };
+
+    return <DashboardClientView content={getDashboardShell()} data={data} filters={filters} />;
+  } catch {
+    return <DashboardError />;
+  }
+}
+
 function DashboardSkeleton() {
-  return (
-    <div
-      className="animate-pulse space-y-5"
-      aria-label="Loading dashboard data"
-    >
-      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="h-36 rounded-xl bg-slate-200 lg:col-span-2" />
-        <div className="h-36 rounded-xl bg-slate-200" />
-        <div className="h-36 rounded-xl bg-slate-200" />
-      </section>
-      <section className="grid gap-4 xl:grid-cols-2">
-        <div className="h-72 rounded-2xl bg-slate-200" />
-        <div className="h-72 rounded-2xl bg-slate-200" />
-      </section>
-      <section className="grid gap-4 xl:grid-cols-[minmax(500px,2fr)_minmax(270px,.9fr)]">
-        <div className="h-96 rounded-2xl bg-slate-200" />
-        <div className="h-96 rounded-2xl bg-slate-200" />
-      </section>
-    </div>
-  );
+  return <div className="animate-pulse space-y-5" aria-label="Loading dashboard data"><div className="h-20 rounded-xl bg-slate-200" /><section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"><div className="h-36 rounded-xl bg-slate-200 lg:col-span-2" /><div className="h-36 rounded-xl bg-slate-200" /><div className="h-36 rounded-xl bg-slate-200" /></section><section className="grid gap-4 xl:grid-cols-2"><div className="h-72 rounded-2xl bg-slate-200" /><div className="h-72 rounded-2xl bg-slate-200" /></section><section className="grid gap-4 xl:grid-cols-2"><div className="h-96 rounded-2xl bg-slate-200" /><div className="h-96 rounded-2xl bg-slate-200" /></section></div>;
+}
+
+function DashboardError() {
+  return <div role="alert" className="rounded-2xl border border-red-200 bg-red-50 p-6 text-red-800"><h2 className="font-bold">Dashboard data is unavailable</h2><p className="mt-1 text-sm">Please refresh the page and try again.</p></div>;
 }

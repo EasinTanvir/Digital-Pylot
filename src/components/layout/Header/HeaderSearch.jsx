@@ -1,18 +1,44 @@
+"use client";
+
+import { useRef } from "react";
 import Image from "next/image";
 import { ICONS } from "@/constants";
 
 export default function HeaderSearch({ placeholder }) {
+  const inputRef = useRef(null);
+
   return (
-    <label className="hidden h-9 w-60 items-center rounded-md border border-border-100 bg-white px-3 md:flex">
-      <Image src={ICONS.header.search} alt="" width={14} height={14} />
-      <input
-        aria-label={placeholder}
-        placeholder={placeholder}
-        className="min-w-0 flex-1 bg-transparent px-2 text-xs text-text-heading outline-none placeholder:text-text-subtitle"
-      />
-      <kbd className="rounded bg-neutral-blue-50 px-1 text-[9px] text-text-body">
-        ⌘ K
-      </kbd>
-    </label>
+    <div
+      onClick={() => inputRef.current?.focus()}
+      className="flex h-10 w-[240px] cursor-text items-center justify-between rounded-xl border border-border-150 bg-white px-3 transition-all focus-within:border-primary"
+    >
+      <div className="flex items-center gap-2 overflow-hidden">
+        <Image
+          src={ICONS?.navSearchIcon || ICONS?.header?.search}
+          alt="Search"
+          width={15}
+          height={15}
+          className="shrink-0 opacity-50"
+        />
+        <input
+          ref={inputRef}
+          type="text"
+          aria-label={placeholder}
+          placeholder={placeholder}
+          className="w-full bg-transparent text-xs text-text-heading outline-none placeholder:text-text-subtitle"
+        />
+      </div>
+
+      {/* Right Icon replacing kbd element */}
+      <div className="flex shrink-0 items-center justify-center">
+        <Image
+          src={ICONS?.BadgeGhostWithLeftIcons || ICONS?.header?.shortcutBadge}
+          alt="Shortcut Badge"
+          width={32}
+          height={20}
+          className="object-contain"
+        />
+      </div>
+    </div>
   );
 }

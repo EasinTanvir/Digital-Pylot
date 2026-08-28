@@ -69,7 +69,33 @@ import instagramIcon from "@/assets/icons/Instagram.svg";
 import resetIconIcon from "@/assets/icons/resetIcon.svg";
 import arrowUpGreenIcon from "@/assets/icons/arrowUpGreen.svg";
 
+import BadgeGhostWithLeftIcons from "@/assets/icons/dashboardNav/Badge Ghost With Left Icons.svg";
+import BellIcon from "@/assets/icons/dashboardNav/Bell Icon.svg";
+import CirclePlus from "@/assets/icons/dashboardNav/circle-plus.svg";
+import DeviceLaptop from "@/assets/icons/dashboardNav/device-laptop.svg";
+import flagImage from "@/assets/icons/dashboardNav/Image (1).svg";
+import avatarImage from "@/assets/icons/dashboardNav/image 1.svg";
+import catImageIcon from "@/assets/icons/dashboardNav/Image.svg";
+import navMailIcon from "@/assets/icons/dashboardNav/Mail Icon.svg";
+import navMaximizeIcon from "@/assets/icons/dashboardNav/Maximize Icon.svg";
+import navSearchIcon from "@/assets/icons/dashboardNav/Search Icon.svg";
+import navSettingIcon from "@/assets/icons/dashboardNav/Settings Icon.svg";
+import arrowDropdownIcon from "@/assets/icons/dashboardNav/Vector.svg";
+
 export const ICONS = {
+  BadgeGhostWithLeftIcons,
+  BellIcon,
+  CirclePlus,
+  DeviceLaptop,
+  flagImage,
+  avatarImage,
+  catImageIcon,
+  navMailIcon,
+  navMaximizeIcon,
+  navSearchIcon,
+  navSettingIcon,
+  arrowDropdownIcon,
+
   arrowUpGreenIcon,
   resetIconIcon,
   facebookIcon,

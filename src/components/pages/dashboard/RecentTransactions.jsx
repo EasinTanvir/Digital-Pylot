@@ -1,60 +1,108 @@
 import Image from "next/image";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
+import { HiOutlineClock } from "react-icons/hi2";
 
-export default function RecentTransactions({ transactions, title, viewAll }) {
+export default function RecentTransactions({
+  transactions = [],
+  title,
+  viewAll,
+}) {
+  console.log({ transactions });
   return (
-    <Card className="min-w-0 overflow-hidden">
-      <div className="flex items-center justify-between p-4">
-        <h2 className="text-sm font-bold text-text-heading">{title}</h2>
-        <button className="rounded border border-border-100 px-2 py-1 text-[10px] text-text-heading">
-          {viewAll}
+    <Card className="min-w-0 overflow-hidden rounded-2xl border border-border-150 bg-white shadow-2xs">
+      {/* Header section with bottom divider border */}
+      <div className="flex items-center justify-between border-b border-border-150 px-6 py-4">
+        <h2 className="text-base font-bold text-text-heading">
+          {title || "Recent Transactions"}
+        </h2>
+        <button className="rounded-lg border border-border-150 px-3 py-1 text-xs font-medium text-text-body transition-colors hover:bg-neutral-blue-50">
+          {viewAll || "View All"}
         </button>
       </div>
+
+      {/* Table Section */}
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[560px] text-left">
-          <thead className="bg-neutral-blue-50 text-[10px] font-bold text-table-header">
-            <tr>
-              <th className="px-4 py-2">#</th>
-              <th className="px-3 py-2">Order Details</th>
-              <th className="px-3 py-2">Payment</th>
-              <th className="px-3 py-2">Status</th>
-              <th className="px-4 py-2">Amount</th>
+        <table className="w-full min-w-[620px] text-left border-collapse">
+          <thead>
+            {/* Header row with light blue-tint background */}
+            <tr className="bg-neutral-blue-50 text-xs font-semibold text-text-heading">
+              <th className="w-[8%] py-3.5 pl-6 pr-2">#</th>
+              <th className="w-[32%] px-4 py-3.5">Order Details</th>
+              <th className="w-[24%] px-4 py-3.5">Payment</th>
+              <th className="w-[18%] px-4 py-3.5">Status</th>
+              <th className="w-[18%] py-3.5 pl-4 pr-6 text-right">Amount</th>
             </tr>
           </thead>
-          <tbody>
-            {transactions.map((transaction) => (
-              <tr key={transaction.id} className="text-[10px] text-text-body">
-                <td className="px-4 py-2">{transaction.id}</td>
-                <td className="px-3 py-2">
-                  <div className="flex items-center gap-2">
-                    <Image
-                      src={transaction.image}
-                      alt={transaction.orderDetails}
-                      width={28}
-                      height={28}
-                      className="rounded bg-surface-150 object-cover"
-                    />
-                    <div>
-                      <p className="font-bold text-text-heading">
-                        {transaction.orderDetails}
-                      </p>
-                      <p>◷ {transaction.time}</p>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-3 py-2">
-                  <p>{transaction.paymentMethod}</p>
-                  <p className="text-info">{transaction.payment}</p>
-                </td>
-                <td className="px-3 py-2">
-                  <Badge status={transaction.status} />
-                </td>
-                <td className="px-4 py-2 font-bold text-text-heading">
-                  {transaction.amount}
+          <tbody className="divide-y divide-border-150/40 text-xs">
+            {transactions.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={5}
+                  className="py-8 text-center text-xs text-text-body"
+                >
+                  No transactions available
                 </td>
               </tr>
-            ))}
+            ) : (
+              transactions.map((item, idx) => (
+                <tr key={item.id || idx} className="transition-colors">
+                  {/* # ID */}
+                  <td className="py-4 pl-6 pr-2 font-normal text-text-body">
+                    {idx + 1}
+                  </td>
+
+                  {/* Order Details */}
+                  <td className="px-4 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-xl bg-surface-150 p-1">
+                        {item.image ? (
+                          <Image
+                            src={item.image}
+                            alt={item.orderDetails || "Product"}
+                            fill
+                            className="object-contain"
+                          />
+                        ) : (
+                          <div className="h-full w-full rounded-lg bg-surface-250" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="font-bold text-text-heading">
+                          {item.orderDetails}
+                        </p>
+                        <p className="mt-1 flex items-center gap-1 text-[11px] text-text-body">
+                          <HiOutlineClock className="h-3.5 w-3.5 text-text-body" />
+                          <span>{item.time}</span>
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+
+                  {/* Payment */}
+                  <td className="px-4 py-4">
+                    <p className="font-medium text-text-heading">
+                      {item.paymentMethod}
+                    </p>
+                    <p className="mt-0.5 text-[11px] font-normal text-info">
+                      {item.payment}
+                    </p>
+                  </td>
+
+                  {/* Status Badge */}
+                  <td className="px-4 py-4">
+                    <Badge status={item.status} />
+                  </td>
+
+                  {/* Amount */}
+                  <td className="py-4 pl-4 pr-6 text-right font-bold text-text-heading sm:text-sm">
+                    {typeof item.amount === "number"
+                      ? `$${item.amount.toFixed(2)}`
+                      : item.amount}
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

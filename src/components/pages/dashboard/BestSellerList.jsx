@@ -1,37 +1,64 @@
 import Image from "next/image";
 import Card from "@/components/ui/Card";
 
-export default function BestSellerList({ products, title, viewAll }) {
+export default function BestSellerList({ products = [], title, viewAll }) {
   return (
-    <Card className="p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-sm font-bold text-text-heading">{title}</h2>
-        <button className="rounded border border-border-100 px-2 py-1 text-[10px] text-text-heading">
-          {viewAll}
+    <Card className="overflow-hidden rounded-2xl border border-border-100 bg-white shadow-2xs">
+      {/* Header section with bottom divider border */}
+      <div className="flex items-center justify-between border-b border-border-100 px-5 py-4">
+        <h2 className="text-base font-bold text-text-heading">
+          {title || "Best Seller"}
+        </h2>
+        <button className="rounded-lg border border-border-100 px-3 py-1 text-xs font-medium text-text-body transition-colors hover:bg-surface-100">
+          {viewAll || "View All"}
         </button>
       </div>
-      <div className="space-y-3">
-        {products.map((product) => (
-          <div key={product.id} className="flex items-center gap-2">
-            <Image
-              src={product.image}
-              alt={product.name}
-              width={32}
-              height={32}
-              className="rounded bg-surface-150 object-cover"
-            />
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-xs font-bold text-text-heading">
-                {product.name}
-              </p>
-              <p className="text-[10px] text-text-body">{product.price}</p>
+
+      {/* Product List */}
+      <div className="space-y-4.5 p-5">
+        {products.length === 0 ? (
+          <p className="py-4 text-center text-xs text-text-body">
+            No products available
+          </p>
+        ) : (
+          products.map((product) => (
+            <div key={product.id} className="flex items-center justify-between">
+              {/* Left: Thumbnail & Name/Price */}
+              <div className="flex items-center gap-3.5">
+                <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-surface-150 p-1">
+                  {product.image ? (
+                    <Image
+                      src={product.image}
+                      alt={product.name || "Product image"}
+                      fill
+                      className="object-contain"
+                    />
+                  ) : (
+                    <div className="h-full w-full rounded-lg bg-surface-250" />
+                  )}
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-text-heading">
+                    {product.name}
+                  </p>
+                  <p className="mt-0.5 text-xs text-text-subtitle">
+                    {typeof product.price === "number"
+                      ? `$${product.price}`
+                      : product.price}
+                  </p>
+                </div>
+              </div>
+
+              {/* Right: Sales Label & Count */}
+              <div className="text-right">
+                <p className="text-xs font-normal text-text-body">Sales</p>
+                <p className="mt-0.5 text-sm font-bold text-text-heading">
+                  {product.sales}
+                </p>
+              </div>
             </div>
-            <div className="text-right text-[10px] text-text-body">
-              <p>Sales</p>
-              <p className="font-bold text-text-heading">{product.sales}</p>
-            </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </Card>
   );

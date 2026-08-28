@@ -19,7 +19,7 @@ const COUNTRY_FILTERS = new Set([
 ]);
 
 function getValue(searchParams, key) {
-  const value = searchParams[key];
+  const value = searchParams?.[key];
   return Array.isArray(value) ? value[0] : value;
 }
 
@@ -48,13 +48,15 @@ function getDateRange(searchParams) {
 
 function getFilters(searchParams) {
   const countryFilter = getValue(searchParams, "countryFilter");
+  const currentYear = new Date().getFullYear().toString();
+
   return {
     startDate: getValue(searchParams, "startDate"),
     endDate: getValue(searchParams, "endDate"),
     dateMode: getValue(searchParams, "dateMode"),
     year: /^\d{4}$/.test(getValue(searchParams, "year") || "")
       ? getValue(searchParams, "year")
-      : "2025",
+      : currentYear,
     countryFilter: COUNTRY_FILTERS.has(countryFilter)
       ? countryFilter
       : "this_week",
@@ -62,22 +64,22 @@ function getFilters(searchParams) {
   };
 }
 
-export default async function DashboardPage({ searchParams }) {
-  const queryParams = await searchParams;
-  const filters = getFilters(queryParams);
-
+export default function DashboardPage({ searchParams }) {
   return (
     <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-5">
       <Suspense fallback={<DashboardSkeleton />}>
-        <DashboardData searchParams={queryParams} filters={filters} />
+        <DashboardData searchParamsPromise={searchParams} />
       </Suspense>
     </div>
   );
 }
 
-async function DashboardData({ searchParams, filters }) {
+async function DashboardData({ searchParamsPromise }) {
   try {
+    const searchParams = await searchParamsPromise;
+    const filters = getFilters(searchParams);
     const dateRange = getDateRange(searchParams);
+
     const [
       statsSales,
       purchasedGoods,
@@ -96,20 +98,29 @@ async function DashboardData({ searchParams, filters }) {
       getRecentTransactions(5),
       getSalesAnalytics(Number(filters.year)),
       getSalesByCountries(filters.countryFilter, filters.country),
-      getSalesByCountries(filters.countryFilter),
+
+      filters.country
+        ? getSalesByCountries(filters.countryFilter)
+        : Promise.resolve(null),
       getAvailableYears(),
     ]);
 
-    const analytics = analyticsData.map((item) => ({
+    const resolvedCountryOptions = countryOptionsData || countryData;
+
+    const analytics = (analyticsData || []).map((item) => ({
       month: item.month,
-      value: Number(item.totalAmount),
+      value: Number(item.totalAmount || 0),
     }));
-    const scaleMax = Math.max(1000, ...analytics.map((item) => item.value));
+
+    const rawValues = analytics.map((item) => item.value);
+    const scaleMax = rawValues.length > 0 ? Math.max(1000, ...rawValues) : 1000;
     const roundedScaleMax = Math.ceil(scaleMax / 1000) * 1000;
-    const weeklyEarning = weeklyCountries.reduce(
+
+    const weeklyEarning = (weeklyCountries || []).reduce(
       (total, country) => total + Number(country.totalRevenue || 0),
       0,
     );
+
     const countryCoordinates = {
       Africa: { cx: 50, cy: 55 },
       Asia: { cx: 72, cy: 32 },
@@ -128,14 +139,14 @@ async function DashboardData({ searchParams, filters }) {
         totalSales: { value: statsSales },
         purchasedGoods: { value: purchasedGoods },
       },
-      bestSellers: bestSellersData.map((vehicle) => ({
+      bestSellers: (bestSellersData || []).map((vehicle) => ({
         id: vehicle.id,
         name: vehicle.name,
         image: vehicle.imageUrl,
-        price: `$${Number(vehicle.dailyPrice).toFixed(2)}/day`,
+        price: `$${Number(vehicle.dailyPrice || 0).toFixed(2)}/day`,
         sales: vehicle.totalSalesCount,
       })),
-      transactions: transactionData.map((transaction) => ({
+      transactions: (transactionData || []).map((transaction) => ({
         id: transaction.transactionNumber,
         orderDetails: transaction.vehicle?.name || "Vehicle",
         image: transaction.vehicle?.imageUrl,
@@ -144,7 +155,7 @@ async function DashboardData({ searchParams, filters }) {
         paymentMethod: transaction.paymentMethod,
         status:
           transaction.status === "success" ? "completed" : transaction.status,
-        amount: `$${Number(transaction.amount).toFixed(2)}`,
+        amount: `$${Number(transaction.amount || 0).toFixed(2)}`,
       })),
       analytics,
       scale: {
@@ -153,19 +164,19 @@ async function DashboardData({ searchParams, filters }) {
           Math.round((roundedScaleMax * index) / 5),
         ),
       },
-      countries: countryData.map((country, index) => ({
+      countries: (countryData || []).map((country, index) => ({
         country: country.country,
         sales: country.salesCount,
         isHighlighted: index === 0,
         ...countryCoordinates[country.country],
       })),
-      countryOptions: countryOptionsData.map((country, index) => ({
+      countryOptions: (resolvedCountryOptions || []).map((country, index) => ({
         country: country.country,
         sales: country.salesCount,
         isHighlighted: index === 0,
         ...countryCoordinates[country.country],
       })),
-      years: availableYears.map(String),
+      years: (availableYears || []).map(String),
     };
 
     return (
@@ -175,7 +186,8 @@ async function DashboardData({ searchParams, filters }) {
         filters={filters}
       />
     );
-  } catch {
+  } catch (error) {
+    console.error("Dashboard error:", error);
     return <DashboardError />;
   }
 }

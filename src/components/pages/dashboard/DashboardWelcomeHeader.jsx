@@ -9,6 +9,7 @@ import {
 import DateRangePicker from "./DateRangePicker";
 import { ICONS } from "@/constants";
 import Image from "next/image";
+import Link from "next/link";
 export default function DashboardWelcomeHeader({
   userName = "Mike Witzel",
   welcomeText = "here's what's happening with your store today.",
@@ -50,6 +51,13 @@ export default function DashboardWelcomeHeader({
 
         {/* Right Actions */}
         <div className="flex items-center gap-2 self-end lg:self-auto">
+          <Link
+            href="/dashboard/leads"
+            className="rounded-[5px]  bg-primary px-5 py-2.5 text-xs font-semibold text-white "
+          >
+            View Leads
+          </Link>
+
           <DateRangePicker
             key={pickerKey}
             initialStartDate={pickerKey ? undefined : initialStartDate}

@@ -7,15 +7,11 @@ const GlobalContext = createContext(null);
 export const GlobalProvider = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const closeSidebar = () => {
-    if (window.innerWidth <= 1024) {
-      setIsOpen(false);
-    }
-  };
+  const closeSidebar = () => setIsOpen(false);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsOpen(window.innerWidth > 1024);
+      setIsOpen(window.innerWidth >= 1024);
     };
 
     handleResize();

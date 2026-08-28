@@ -25,7 +25,6 @@ export const transmissionEnum = pgEnum("transmission_type", [
   "Manual",
 ]);
 
-// --- NEW ENUMS ---
 export const fuelTypeEnum = pgEnum("fuel_type", [
   "Petrol",
   "Diesel",
@@ -33,15 +32,15 @@ export const fuelTypeEnum = pgEnum("fuel_type", [
   "Hybrid",
 ]);
 export const vehicleStatusEnum = pgEnum("vehicle_status", [
-  "available", // in the general fleet, bookable subject to date-range checks
-  "maintenance", // temporarily out of service, never bookable
-  "retired", // no longer in the fleet
+  "available",
+  "maintenance",
+  "retired",
 ]);
 export const bookingStatusEnum = pgEnum("booking_status", [
-  "reserved", // held, likely from a lead that hasn't paid/confirmed yet
-  "confirmed", // confirmed booking, blocks the date range
-  "completed", // rental period finished
-  "cancelled", // freed up the date range again
+  "reserved",
+  "confirmed",
+  "completed",
+  "cancelled",
 ]);
 export const leadStatusEnum = pgEnum("lead_status", [
   "new",
@@ -77,10 +76,9 @@ export const subCategories = pgTable("sub_categories", {
   slug: text("slug").notNull().unique(),
 });
 
-// --- NEW: locations (pickup/dropoff points) ---
 export const locations = pgTable("locations", {
   id: uuid("id").primaryKey().defaultRandom(),
-  name: text("name").notNull(), // e.g. "Downtown Branch"
+  name: text("name").notNull(),
   address: text("address"),
   city: text("city").notNull(),
   country: text("country").notNull(),
@@ -92,21 +90,21 @@ export const vehicles = pgTable("vehicles", {
   brandId: uuid("brand_id").references(() => brands.id),
   categoryId: uuid("category_id").references(() => categories.id),
   subCategoryId: uuid("sub_category_id").references(() => subCategories.id),
-  locationId: uuid("location_id").references(() => locations.id), // NEW: home branch
+  locationId: uuid("location_id").references(() => locations.id),
   dailyPrice: decimal("daily_price", { precision: 10, scale: 2 }).notNull(),
-  weeklyPrice: decimal("weekly_price", { precision: 10, scale: 2 }), // NEW
-  monthlyPrice: decimal("monthly_price", { precision: 10, scale: 2 }), // NEW
+  weeklyPrice: decimal("weekly_price", { precision: 10, scale: 2 }),
+  monthlyPrice: decimal("monthly_price", { precision: 10, scale: 2 }),
   rating: decimal("rating", { precision: 2, scale: 1 })
     .default("5.0")
     .notNull(),
   transmission: transmissionEnum("transmission").default("Automatic").notNull(),
-  fuelType: fuelTypeEnum("fuel_type").default("Petrol").notNull(), // NEW
-  seats: integer("seats").default(4).notNull(), // NEW
-  doors: integer("doors").default(4), // NEW
-  minRentalDays: integer("min_rental_days").default(1).notNull(), // NEW
-  features: jsonb("features").$type().default([]), // NEW e.g. ["AC","GPS","Bluetooth","Child Seat"]
-  description: text("description"), // NEW, for chatbot detail answers
-  status: vehicleStatusEnum("status").default("available").notNull(), // NEW, fleet-level status
+  fuelType: fuelTypeEnum("fuel_type").default("Petrol").notNull(),
+  seats: integer("seats").default(4).notNull(),
+  doors: integer("doors").default(4),
+  minRentalDays: integer("min_rental_days").default(1).notNull(),
+  features: jsonb("features").$type().default([]),
+  description: text("description"),
+  status: vehicleStatusEnum("status").default("available").notNull(),
   imageUrl: text("image_url"),
   imageAlt: text("image_alt"),
   isPopular: boolean("is_popular").default(false),
@@ -117,14 +115,13 @@ export const vehicles = pgTable("vehicles", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-// --- NEW: bookings (the actual availability calendar) ---
 export const bookings = pgTable("bookings", {
   id: uuid("id").primaryKey().defaultRandom(),
   vehicleId: uuid("vehicle_id")
     .references(() => vehicles.id)
     .notNull(),
   userId: uuid("user_id").references(() => users.id),
-  leadId: uuid("lead_id"), // set later once we define leads below; nullable link back
+  leadId: uuid("lead_id"),
   pickupLocationId: uuid("pickup_location_id").references(() => locations.id),
   dropoffLocationId: uuid("dropoff_location_id").references(() => locations.id),
   startDate: timestamp("start_date").notNull(),
@@ -134,7 +131,6 @@ export const bookings = pgTable("bookings", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-// --- NEW: leads (chatbot writes here) ---
 export const leads = pgTable("leads", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
@@ -146,7 +142,7 @@ export const leads = pgTable("leads", {
   budget: decimal("budget", { precision: 10, scale: 2 }),
   source: text("source").default("chatbot").notNull(),
   status: leadStatusEnum("status").default("new").notNull(),
-  notes: text("notes"), // free-text summary the AI extracted from the conversation
+  notes: text("notes"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -156,7 +152,7 @@ export const transactions = pgTable("transactions", {
   type: transactionTypeEnum("type").default("sale").notNull(),
   userId: uuid("user_id").references(() => users.id),
   vehicleId: uuid("vehicle_id").references(() => vehicles.id),
-  bookingId: uuid("booking_id").references(() => bookings.id), // NEW, links a completed sale back to its booking
+  bookingId: uuid("booking_id").references(() => bookings.id),
   paymentMethod: text("payment_method").notNull(),
   amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
   status: orderStatusEnum("status").default("pending").notNull(),
@@ -164,7 +160,6 @@ export const transactions = pgTable("transactions", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-// --- Relations ---
 export const categoriesRelations = relations(categories, ({ many }) => ({
   subCategories: many(subCategories),
   vehicles: many(vehicles),

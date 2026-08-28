@@ -25,7 +25,6 @@ export const checkAvailabilityConfig = {
         .from(vehicles)
         .where(eq(vehicles.id, vehicleId));
     } else if (vehicleName) {
-      // exact match first — avoids false "ambiguous" results
       const [exactMatch] = await db
         .select()
         .from(vehicles)

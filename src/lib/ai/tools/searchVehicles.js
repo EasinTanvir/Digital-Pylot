@@ -60,7 +60,7 @@ export const searchVehiclesConfig = {
     const conflicting = await overlappingBookingVehicleIds(startDate, endDate);
 
     const conditions = [eq(vehicles.status, "available")];
-    if (category) conditions.push(eq(categories.name, category)); // fixed: was categories.slug, never matched
+    if (category) conditions.push(eq(categories.name, category));
     if (transmission) conditions.push(eq(vehicles.transmission, transmission));
     if (fuelType) conditions.push(eq(vehicles.fuelType, fuelType));
     if (seats) conditions.push(gte(vehicles.seats, seats));

@@ -130,7 +130,10 @@ export default function DateRangePicker({
     }
     onRangeSelect?.(
       startDate && endDate
-        ? { startDate: selectedToIso(startDate), endDate: selectedToIso(endDate) }
+        ? {
+            startDate: selectedToIso(startDate),
+            endDate: selectedToIso(endDate),
+          }
         : { startDate: null, endDate: null },
     );
     setIsOpen(false);
@@ -150,8 +153,8 @@ export default function DateRangePicker({
         onClick={() => setIsOpen((prev) => !prev)}
         className="flex h-10 items-center gap-2.5 rounded-lg border border-slate-200 bg-white px-3.5 text-xs font-medium text-slate-700 shadow-2xs transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 active:scale-95"
       >
-        <HiOutlineCalendar className="h-4 w-4 text-slate-500" />
-        <span className="font-semibold text-slate-800">{getDisplayText()}</span>
+        <HiOutlineCalendar className="h-4 w-4 " />
+        <span className=" text-secondary">{getDisplayText()}</span>
       </button>
 
       {/* Date Picker Popover Panel */}
@@ -166,7 +169,7 @@ export default function DateRangePicker({
             >
               <HiOutlineChevronLeft className="h-4 w-4" />
             </button>
-            <span className="text-xs font-bold text-slate-800">
+            <span className="text-xs font-bold text-secondary">
               {currentMonth.toLocaleDateString("en-US", {
                 month: "long",
                 year: "numeric",

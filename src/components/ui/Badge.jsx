@@ -11,7 +11,7 @@ export default function Badge({ status }) {
   };
   return (
     <div
-      className={`rounded-[5px] max-w-24 flex items-center gap-1 px-1.5 py-2.5 text-[10px] font-medium leading-none text-white ${colors[status] ?? "bg-info"}`}
+      className={`rounded-[5px] max-w-max w-auto flex items-center gap-1.5 px-2 py-2.5 text-[10px] font-medium leading-none text-white ${colors[status] ?? "bg-info"}`}
     >
       <div className="w-2.5 h-2.5 rounded-full bg-white" />
       {labels[status] ?? status}

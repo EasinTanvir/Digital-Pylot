@@ -25,9 +25,9 @@ export default function RecentTransactions({
         <table className="w-full min-w-[620px] text-left border-collapse">
           <thead>
             {/* Header row with light blue-tint background */}
-            <tr className="bg-neutral-blue-50 text-xs font-semibold text-text-heading">
-              <th className="w-[8%] py-3.5 pl-6 pr-2">#</th>
-              <th className="w-[32%] px-4 py-3.5">Order Details</th>
+            <tr className="bg-neutral-blue-50 text-sm font-semibold text-table-header">
+              <th className="w-[5%] py-3.5 pl-6 pr-2">#</th>
+              <th className="w-[35%] px-4 py-3.5">Order Details</th>
               <th className="w-[24%] px-4 py-3.5">Payment</th>
               <th className="w-[18%] px-4 py-3.5">Status</th>
               <th className="w-[18%] py-3.5 pl-4 pr-6 text-right">Amount</th>
@@ -47,7 +47,7 @@ export default function RecentTransactions({
               transactions.map((item, idx) => (
                 <tr key={item.id || idx} className="transition-colors">
                   {/* # ID */}
-                  <td className="py-4 pl-6 pr-2 font-normal text-text-body">
+                  <td className="py-4 pl-6 pr-2 font-semibold text-text-body">
                     {idx + 1}
                   </td>
 

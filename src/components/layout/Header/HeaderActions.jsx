@@ -21,7 +21,6 @@ export default function HeaderActions({ content }) {
     }
   };
 
-  // Close dropdowns on outside click
   useEffect(() => {
     function handleClickOutside(event) {
       if (
@@ -51,7 +50,6 @@ export default function HeaderActions({ content }) {
   return (
     <div className="flex items-center gap-2.5">
       <div className="hidden items-center gap-2.5 lg:flex">
-        {/* Coming Soon Dropdown */}
         <div className="relative" ref={comingSoonRef}>
           <motion.button
             whileTap={{ scale: 0.97 }}
@@ -109,7 +107,7 @@ export default function HeaderActions({ content }) {
         <motion.button
           whileTap={{ scale: 0.97 }}
           type="button"
-          className="flex h-10 items-center gap-2 rounded-md bg-[#FF9F43] px-4 text-xs font-semibold text-white shadow-xs transition-opacity hover:opacity-90"
+          className="flex h-10 items-center gap-2 rounded-[5px] bg-primary px-4 text-xs font-medium text-white shadow-xs transition-opacity hover:opacity-90"
         >
           <Image
             src={ICONS?.CirclePlus || ICONS?.header?.addNew}
@@ -125,7 +123,7 @@ export default function HeaderActions({ content }) {
         <motion.button
           whileTap={{ scale: 0.97 }}
           type="button"
-          className="flex h-10 items-center gap-2 rounded-md bg-secondary px-4 text-xs font-semibold text-white shadow-xs transition-opacity hover:opacity-90"
+          className="flex h-10 items-center gap-2 rounded-[5px] bg-secondary px-4 text-xs font-medium text-white shadow-xs transition-opacity hover:opacity-90"
         >
           <Image
             src={ICONS?.DeviceLaptop || ICONS?.sales?.pos}
@@ -146,7 +144,7 @@ export default function HeaderActions({ content }) {
             whileTap={{ scale: 0.95 }}
             type="button"
             aria-label="Select Language"
-            className="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-200 transition-colors hover:bg-surface-250"
+            className="flex h-10 w-10 items-center justify-center rounded-[10px] bg-surface-100 transition-colors hover:bg-surface-250"
           >
             <Image
               src={ICONS?.flagImage || ICONS?.header?.flag}
@@ -168,7 +166,7 @@ export default function HeaderActions({ content }) {
             type="button"
             onClick={toggleFullscreen}
             aria-label="Toggle Fullscreen"
-            className="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-200 transition-colors hover:bg-surface-250"
+            className="flex h-10 w-10 items-center justify-center rounded-[10px] bg-surface-100 transition-colors hover:bg-surface-250"
           >
             <Image
               src={ICONS?.navMaximizeIcon || ICONS?.header?.maximize}
@@ -188,7 +186,7 @@ export default function HeaderActions({ content }) {
             whileTap={{ scale: 0.95 }}
             type="button"
             aria-label="Messages"
-            className="relative flex h-10 w-10 items-center justify-center rounded-lg bg-surface-200 transition-colors hover:bg-surface-250"
+            className="flex h-10 w-10 items-center justify-center rounded-[10px] bg-surface-100 transition-colors hover:bg-surface-250"
           >
             <Image
               src={ICONS?.navMailIcon || ICONS?.header?.mail}
@@ -197,7 +195,7 @@ export default function HeaderActions({ content }) {
               height={18}
             />
             {unreadCount && (
-              <span className="absolute -right-1 -top-1 flex h-4 min-w-[16px] items-center justify-center rounded-full border-2 border-white bg-[#FF0000] px-1 text-[9px] font-bold leading-none text-white shadow-xs">
+              <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-danger-bright px-1 text-[9px] font-bold leading-none text-white shadow-xs">
                 {unreadCount}
               </span>
             )}
@@ -213,7 +211,7 @@ export default function HeaderActions({ content }) {
             whileTap={{ scale: 0.95 }}
             type="button"
             aria-label="Notifications"
-            className="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-200 transition-colors hover:bg-surface-250"
+            className="flex h-10 w-10 items-center justify-center rounded-[10px] bg-surface-100 transition-colors hover:bg-surface-250"
           >
             <Image
               src={ICONS?.BellIcon || ICONS?.header?.notification}
@@ -233,7 +231,7 @@ export default function HeaderActions({ content }) {
             whileTap={{ scale: 0.95 }}
             type="button"
             aria-label="Settings"
-            className="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-200 transition-colors hover:bg-surface-250"
+            className="flex h-10 w-10 items-center justify-center rounded-[10px] bg-surface-100 transition-colors hover:bg-surface-250"
           >
             <Image
               src={ICONS?.navSettingIcon || ICONS?.header?.settings}

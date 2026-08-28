@@ -82,7 +82,10 @@ import navSearchIcon from "@/assets/icons/dashboardNav/Search Icon.svg";
 import navSettingIcon from "@/assets/icons/dashboardNav/Settings Icon.svg";
 import arrowDropdownIcon from "@/assets/icons/dashboardNav/Vector.svg";
 
+import handIcon from "@/assets/icons/hand.svg";
+
 export const ICONS = {
+  handIcon,
   BadgeGhostWithLeftIcons,
   BellIcon,
   CirclePlus,

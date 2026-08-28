@@ -21,6 +21,7 @@
   --color-surface-300: rgba(242, 242, 242, 1);
   --color-surface-350: rgba(236, 236, 236, 1);
   --color-surface-400: rgba(217, 217, 217, 1);
+  --color-welcomeText: rgba(27, 40, 80, 1);
 
   /* ---- Blue-tinted neutrals (backgrounds/borders) ---- */
   --color-neutral-blue-50: rgba(249, 250, 251, 1);
@@ -34,6 +35,7 @@
   --color-border-200: rgba(229, 231, 235, 1);
 
   /* ---- Shadows / overlays ---- */
+
   --color-shadow: rgba(231, 231, 231, 0.47);
   --color-shadow-xs: rgba(198, 198, 198, 0.2);
   --color-gray-overlay: rgba(98, 98, 98, 0.3);

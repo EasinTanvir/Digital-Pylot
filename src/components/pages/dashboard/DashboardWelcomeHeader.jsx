@@ -7,7 +7,8 @@ import {
   HiOutlineChevronDown,
 } from "react-icons/hi2";
 import DateRangePicker from "./DateRangePicker";
-
+import { ICONS } from "@/constants";
+import Image from "next/image";
 export default function DashboardWelcomeHeader({
   userName = "Mike Witzel",
   welcomeText = "here's what's happening with your store today.",
@@ -32,15 +33,17 @@ export default function DashboardWelcomeHeader({
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         {/* Left Greeting */}
         <div className="flex items-center gap-2.5">
-          <span
-            className="text-xl leading-none"
-            role="img"
-            aria-label="waving hand"
-          >
-            👋
-          </span>
-          <p className="text-sm font-normal text-slate-500">
-            <strong className="font-bold text-slate-900">Hi {userName},</strong>{" "}
+          <Image
+            className="object-cover"
+            src={ICONS.handIcon}
+            alt="hand_con"
+            height={30}
+            width={30}
+          />
+          <p className="font-bold  text-lg text-text-body">
+            <strong className=" text-welcomeText text-xl">
+              Hi {userName},
+            </strong>{" "}
             {welcomeText}
           </p>
         </div>

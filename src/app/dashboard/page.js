@@ -9,6 +9,7 @@ import SalesAnalyticsChart from "@/components/pages/dashboard/SalesAnalyticsChar
 import SalesByCountryMap from "@/components/pages/dashboard/SalesByCountryMap";
 import MissingIcon from "@/components/ui/MissingIcon";
 import DashboardWelcomeHeader from "@/components/pages/dashboard/DashboardWelcomeHeader";
+import Footer from "@/components/pages/dashboard/Footer";
 
 async function getData(baseUrl, path, fallback) {
   const response = await fetch(`${baseUrl}${path}`, { cache: "no-store" });
@@ -155,11 +156,6 @@ export default async function DashboardPage() {
           increaseLabel={content.mapIncrease}
         />
       </section>
-
-      <footer className="flex flex-col gap-1 border-t border-border-100 pt-3 text-[10px] text-text-body sm:flex-row sm:justify-between">
-        <span>{content.footer}</span>
-        <span>{content.credit}</span>
-      </footer>
     </div>
   );
 }

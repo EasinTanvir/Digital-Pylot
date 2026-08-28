@@ -59,7 +59,6 @@ export default function SalesAnalyticsChart({
     ticks: [10000, 20000, 30000, 40000, 50000, 60000],
   },
 }) {
-  const [selectedYear, setSelectedYear] = useState(year || "2023");
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -75,7 +74,6 @@ export default function SalesAnalyticsChart({
   }, []);
 
   const handleSelectYear = (y) => {
-    setSelectedYear(y);
     setIsOpen(false);
     if (onYearChange) onYearChange(y);
   };
@@ -93,7 +91,7 @@ export default function SalesAnalyticsChart({
             className="flex items-center gap-2 rounded-lg border border-border-100 bg-white px-3 py-1.5 text-xs font-medium text-text-body transition-colors hover:bg-neutral-blue-50"
           >
             <HiOutlineCalendar className="h-4 w-4 text-text-body" />
-            <span>{selectedYear}</span>
+            <span>{year || "2023"}</span>
             <HiChevronDown className="h-3.5 w-3.5 text-text-body" />
           </button>
 
@@ -106,7 +104,7 @@ export default function SalesAnalyticsChart({
                   type="button"
                   onClick={() => handleSelectYear(y)}
                   className={`w-full px-3 py-1.5 text-left text-xs transition-colors hover:bg-neutral-blue-50 ${
-                    y === selectedYear
+                    y === year
                       ? "font-bold text-primary"
                       : "text-text-body"
                   }`}

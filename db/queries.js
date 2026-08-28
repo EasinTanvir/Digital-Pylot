@@ -1,6 +1,6 @@
 import { db } from "./db.js";
 import { vehicles, transactions, categories } from "./schema.js";
-import { count, sum, eq, gte, and, sql, desc } from "drizzle-orm";
+import { count, sum, eq, gte, lt, and, sql, desc } from "drizzle-orm";
 
 export async function getPopularCars() {
   return await db.query.vehicles.findMany({
@@ -43,19 +43,36 @@ export async function getTotalEarnings() {
   return result[0]?.total || 0;
 }
 
-export async function getTotalSalesCount() {
+function getTransactionDateConditions(startDate, endDate) {
+  const conditions = [];
+  if (startDate) conditions.push(gte(transactions.createdAt, startDate));
+  if (endDate) conditions.push(lt(transactions.createdAt, endDate));
+  return conditions;
+}
+
+export async function getTotalSalesCount(startDate, endDate) {
   const result = await db
     .select({ totalSales: count() })
     .from(transactions)
-    .where(eq(transactions.type, "sale"));
+    .where(
+      and(
+        eq(transactions.type, "sale"),
+        ...getTransactionDateConditions(startDate, endDate),
+      ),
+    );
   return result[0]?.totalSales || 0;
 }
 
-export async function getPurchasedGoodsCount() {
+export async function getPurchasedGoodsCount(startDate, endDate) {
   const result = await db
     .select({ totalPurchased: count() })
     .from(transactions)
-    .where(eq(transactions.type, "purchase"));
+    .where(
+      and(
+        eq(transactions.type, "purchase"),
+        ...getTransactionDateConditions(startDate, endDate),
+      ),
+    );
   return result[0]?.totalPurchased || 0;
 }
 
@@ -82,7 +99,8 @@ export async function getAvailableYears() {
     .select({
       year: sql`distinct extract(year from ${transactions.createdAt})`,
     })
-    .from(transactions);
+    .from(transactions)
+    .orderBy(desc(sql`extract(year from ${transactions.createdAt})`));
   return result.map((r) => Number(r.year));
 }
 

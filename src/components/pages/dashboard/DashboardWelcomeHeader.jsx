@@ -11,6 +11,8 @@ import DateRangePicker from "./DateRangePicker";
 export default function DashboardWelcomeHeader({
   userName = "Mike Witzel",
   welcomeText = "here's what's happening with your store today.",
+  initialStartDate,
+  initialEndDate,
   onRangeChange,
   onRefresh,
 }) {
@@ -43,7 +45,11 @@ export default function DashboardWelcomeHeader({
 
         {/* Right Actions */}
         <div className="flex items-center gap-2 self-end lg:self-auto">
-          <DateRangePicker onRangeSelect={onRangeChange} />
+          <DateRangePicker
+            initialStartDate={initialStartDate}
+            initialEndDate={initialEndDate}
+            onRangeSelect={onRangeChange}
+          />
 
           <button
             type="button"

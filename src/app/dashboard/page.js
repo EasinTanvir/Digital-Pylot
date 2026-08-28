@@ -1,142 +1,148 @@
-import Image from "next/image";
-import { headers } from "next/headers";
+"use client";
+
+import { useCallback, useEffect, useState } from "react";
 import { ICONS } from "@/constants";
 import { getDashboardShell } from "@/data/dashboardShell";
+import { formatDashboardData, getDashboardData } from "@/utils/dashboardApi";
 import StatCard from "@/components/pages/dashboard/StatCard";
 import BestSellerList from "@/components/pages/dashboard/BestSellerList";
 import RecentTransactions from "@/components/pages/dashboard/RecentTransactions";
 import SalesAnalyticsChart from "@/components/pages/dashboard/SalesAnalyticsChart";
 import SalesByCountryMap from "@/components/pages/dashboard/SalesByCountryMap";
-import MissingIcon from "@/components/ui/MissingIcon";
 import DashboardWelcomeHeader from "@/components/pages/dashboard/DashboardWelcomeHeader";
-import Footer from "@/components/pages/dashboard/Footer";
 
-async function getData(baseUrl, path, fallback) {
-  const response = await fetch(`${baseUrl}${path}`, { cache: "no-store" });
-  return response.ok ? response.json() : fallback;
-}
+const content = getDashboardShell();
+const INITIAL_DATE_RANGE = { startDate: "2024-01-01", endDate: "2024-01-07" };
+const EMPTY_DASHBOARD = formatDashboardData({});
 
-export default async function DashboardPage() {
-  const content = getDashboardShell();
-  const requestHeaders = await headers();
-  const host = requestHeaders.get("host");
-  const protocol =
-    requestHeaders.get("x-forwarded-proto") ||
-    (host?.startsWith("localhost") ? "http" : "https");
-  const apiBaseUrl = process.env.NEXT_PUBLIC_APP_URL || `${protocol}://${host}`;
-  const years = await getData(
-    apiBaseUrl,
-    "/api/dashboard/sales-analytics/years",
-    [],
+export default function DashboardPage() {
+  const [dateRange, setDateRange] = useState(INITIAL_DATE_RANGE);
+  const [selectedYear, setSelectedYear] = useState(
+    String(new Date().getFullYear()),
   );
-  const selectedYear = years[0] || new Date().getFullYear();
-  const [
-    statsData,
-    bestSellersData,
-    transactionData,
-    analyticsData,
-    countryData,
-  ] = await Promise.all([
-    getData(apiBaseUrl, "/api/dashboard/stats", {
-      weeklyEarning: 0,
-      totalSales: 0,
-      purchasedGoods: 0,
-    }),
-    getData(apiBaseUrl, "/api/dashboard/best-sellers?limit=5", []),
-    getData(apiBaseUrl, "/api/dashboard/transactions?limit=5", []),
-    getData(
-      apiBaseUrl,
-      `/api/dashboard/sales-analytics?year=${selectedYear}`,
-      [],
-    ),
-    getData(apiBaseUrl, "/api/dashboard/sales-by-country?filter=this_week", []),
-  ]);
-  const stats = {
-    weeklyEarning: {
-      amount: statsData.weeklyEarning,
-      currency: "USD",
-      changePercent: 0,
-      label: "this week",
+  const [countryFilter, setCountryFilter] = useState("this_week");
+  const [dashboard, setDashboard] = useState(EMPTY_DASHBOARD);
+  const [years, setYears] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const applyDashboardResponse = useCallback(
+    ({ data, errors }) => {
+      setDashboard(formatDashboardData(data));
+      setError(errors.join(" • "));
+
+      if (Array.isArray(data.years)) {
+        const availableYears = data.years.map(String);
+        setYears(availableYears);
+        if (availableYears.length && !availableYears.includes(selectedYear)) {
+          setSelectedYear(availableYears[0]);
+        }
+      }
+      setIsLoading(false);
     },
-    totalSales: { value: statsData.totalSales, label: "all sale transactions" },
-    purchasedGoods: {
-      value: statsData.purchasedGoods,
-      label: "inventory purchases",
+    [selectedYear],
+  );
+
+  const loadDashboard = useCallback(
+    async (signal) => {
+      setIsLoading(true);
+      const { data, errors } = await getDashboardData({
+        ...dateRange,
+        year: selectedYear,
+        countryFilter,
+        signal,
+      });
+
+      if (signal.aborted) return;
+      applyDashboardResponse({ data, errors });
     },
+    [applyDashboardResponse, countryFilter, dateRange, selectedYear],
+  );
+
+  useEffect(() => {
+    const controller = new AbortController();
+    getDashboardData({
+      ...dateRange,
+      year: selectedYear,
+      countryFilter,
+      signal: controller.signal,
+    })
+      .then((result) => {
+        if (!controller.signal.aborted) applyDashboardResponse(result);
+      })
+      .catch((requestError) => {
+        if (!controller.signal.aborted) {
+          setError(requestError.message || "Unable to load dashboard data.");
+          setIsLoading(false);
+        }
+      });
+    return () => controller.abort();
+  }, [applyDashboardResponse, countryFilter, dateRange, selectedYear]);
+
+  const refreshDashboard = () => {
+    loadDashboard(new AbortController().signal).catch((requestError) => {
+      setError(requestError.message || "Unable to refresh dashboard data.");
+      setIsLoading(false);
+    });
   };
-  const bestSellers = bestSellersData.map((vehicle) => ({
-    id: vehicle.id,
-    name: vehicle.name,
-    image: vehicle.imageUrl,
-    price: `$${Number(vehicle.dailyPrice).toFixed(2)}/day`,
-    sales: vehicle.totalSalesCount,
-  }));
-  const transactions = transactionData.map((transaction) => ({
-    id: transaction.transactionNumber,
-    orderDetails: transaction.vehicle?.name || "Vehicle",
-    image: transaction.vehicle?.imageUrl,
-    time: new Date(transaction.createdAt).toLocaleDateString(),
-    payment: transaction.transactionNumber,
-    paymentMethod: transaction.paymentMethod,
-    status: transaction.status === "success" ? "completed" : transaction.status,
-    amount: `$${Number(transaction.amount).toFixed(2)}`,
-  }));
-  const analytics = analyticsData.map((item) => ({
-    month: item.month,
-    value: Number(item.totalAmount),
-  }));
-  const scaleMax = Math.max(1000, ...analytics.map((item) => item.value));
-  const scale = {
-    domain: [0, Math.ceil(scaleMax / 1000) * 1000],
-    ticks: Array.from({ length: 6 }, (_, index) =>
-      Math.round((Math.ceil(scaleMax / 1000) * 1000 * index) / 5),
-    ),
-  };
-  const countries = countryData.map((country, index) => ({
-    country: country.country,
-    sales: country.salesCount,
-    isHighlighted: index === 0,
-  }));
 
   return (
     <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-5">
       <DashboardWelcomeHeader
         userName={content.userName}
         welcomeText={content.welcomeText}
-        defaultDateRange={content.dateRange}
+        initialStartDate={INITIAL_DATE_RANGE.startDate}
+        initialEndDate={INITIAL_DATE_RANGE.endDate}
+        onRangeChange={setDateRange}
+        onRefresh={refreshDashboard}
       />
+
+      {error && (
+        <p
+          role="alert"
+          className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+        >
+          Some dashboard data could not be loaded: {error}
+        </p>
+      )}
+      {isLoading && (
+        <p className="text-sm text-text-body">Loading dashboard data…</p>
+      )}
+
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           type="earning"
-          stat={stats.weeklyEarning}
+          stat={dashboard.stats.weeklyEarning}
           title={content.weeklyEarning}
           icon={ICONS.stats.earning}
           arrowGreenIcon={ICONS.arrowUpGreenIcon}
         />
         <StatCard
           type="sales"
-          stat={stats.totalSales}
+          stat={dashboard.stats.totalSales}
           title={content.totalSales}
           icon={ICONS.stats.sales}
           resetIcon={ICONS.resetIconIcon}
+          onReset={refreshDashboard}
         />
         <StatCard
           type="purchased"
-          stat={stats.purchasedGoods}
+          stat={dashboard.stats.purchasedGoods}
           title={content.purchasedGoods}
           icon={ICONS.stats.purchased}
           resetIcon={ICONS.resetIconIcon}
+          onReset={refreshDashboard}
         />
       </section>
 
       <section className="grid gap-4 xl:grid-cols-[minmax(260px,.8fr)_minmax(500px,1.7fr)]">
         <BestSellerList
-          products={bestSellers}
+          products={dashboard.bestSellers}
           title={content.bestSeller}
           viewAll={content.viewAll}
         />
         <RecentTransactions
-          transactions={transactions}
+          transactions={dashboard.transactions}
           title={content.recentTransactions}
           viewAll={content.viewAll}
         />
@@ -144,16 +150,20 @@ export default async function DashboardPage() {
 
       <section className="grid gap-4 xl:grid-cols-[minmax(500px,2fr)_minmax(270px,.9fr)]">
         <SalesAnalyticsChart
-          data={analytics}
+          data={dashboard.analytics}
           title={content.salesAnalytics}
           year={selectedYear}
-          scale={scale}
+          yearsList={years}
+          scale={dashboard.scale}
+          onYearChange={setSelectedYear}
         />
         <SalesByCountryMap
-          countries={countries}
+          countries={dashboard.countries}
           title={content.salesByCountries}
           thisWeek={content.thisWeek}
           increaseLabel={content.mapIncrease}
+          filter={countryFilter}
+          onFilterChange={setCountryFilter}
         />
       </section>
     </div>

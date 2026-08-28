@@ -28,17 +28,19 @@ export default function SalesByCountryMap({
   thisWeek = "This Week",
   increaseLabel = "increase compare to last week",
   percentage = "48%",
+  filter = "this_week",
+  onFilterChange,
 }) {
-  const [selectedCountry, setSelectedCountry] = useState(() => {
-    return (
-      countries.find((c) => c.isHighlighted || c.defaultHighlighted) ||
-      countries[0]
-    );
-  });
+  const [selectedCountryName, setSelectedCountryName] = useState(null);
 
-  const [timeframe, setTimeframe] = useState(thisWeek);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const filterOptions = [
+    { label: "This Week", value: "this_week" },
+    { label: "This Month", value: "this_month" },
+    { label: "This Year", value: "this_year" },
+  ];
+  const timeframe = filterOptions.find((option) => option.value === filter)?.label || thisWeek;
 
   // Close timeframe menu on click outside
   useEffect(() => {
@@ -50,6 +52,11 @@ export default function SalesByCountryMap({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const selectedCountry =
+    countries.find((country) => country.country === selectedCountryName) ||
+    countries.find((country) => country.isHighlighted || country.defaultHighlighted) ||
+    countries[0];
 
   return (
     <Card className="flex flex-col justify-between overflow-hidden rounded-2xl border border-border-150 bg-white p-6 shadow-[0px_4px_60px_0px_rgba(231,231,231,0.47)]">
@@ -70,21 +77,21 @@ export default function SalesByCountryMap({
 
           {isDropdownOpen && (
             <div className="absolute right-0 top-full z-20 mt-1 w-28 rounded-xl border border-border-150 bg-white py-1 shadow-lg">
-              {["This Week", "This Month", "This Year"].map((item) => (
+              {filterOptions.map((item) => (
                 <button
-                  key={item}
+                  key={item.value}
                   type="button"
                   onClick={() => {
-                    setTimeframe(item);
+                    onFilterChange?.(item.value);
                     setIsDropdownOpen(false);
                   }}
                   className={`w-full px-3 py-1.5 text-left text-xs transition-colors hover:bg-neutral-blue-50 ${
-                    item === timeframe
+                    item.value === filter
                       ? "font-bold text-text-heading"
                       : "text-text-body"
                   }`}
                 >
-                  {item}
+                  {item.label}
                 </button>
               ))}
             </div>
@@ -132,7 +139,7 @@ export default function SalesByCountryMap({
               cy={`${c.cy}%`}
               r="7"
               fill="transparent"
-              onClick={() => setSelectedCountry(c)}
+              onClick={() => setSelectedCountryName(c.country || c.name)}
               className="hover:opacity-20 hover:fill-amber-400 transition-opacity"
             />
           ))}

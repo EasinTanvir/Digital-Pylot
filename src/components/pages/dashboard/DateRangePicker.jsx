@@ -9,8 +9,8 @@ import {
 } from "react-icons/hi2";
 
 export default function DateRangePicker({
-  initialStartDate = "2024-01-01",
-  initialEndDate = "2024-01-07",
+  initialStartDate,
+  initialEndDate,
   onRangeSelect,
 }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -81,12 +81,6 @@ export default function DateRangePicker({
         return;
       }
       setEndDate(selected);
-      if (onRangeSelect) {
-        onRangeSelect({
-          startDate: selectedToIso(startDate),
-          endDate: selectedToIso(selected),
-        });
-      }
     }
   };
 
@@ -134,6 +128,11 @@ export default function DateRangePicker({
       setError("Please select an end date");
       return;
     }
+    onRangeSelect?.(
+      startDate && endDate
+        ? { startDate: selectedToIso(startDate), endDate: selectedToIso(endDate) }
+        : { startDate: null, endDate: null },
+    );
     setIsOpen(false);
   };
 

@@ -24,7 +24,7 @@ The vehicle/deals section is database-driven rather than hardcoded. Vehicles are
 - Small Cars
 - Exclusive Cars
 
-Vehicle cards are populated from the database and include real seeded vehicle information such as pricing, seats, transmission, fuel type, and features.
+Vehicle cards are populated from the database and include seeded vehicle information such as pricing, seats, transmission, fuel type, and features.
 
 The customer website also includes a floating AI assistant available throughout the customer-facing experience.
 
@@ -55,7 +55,7 @@ The assistant uses database-backed tools rather than inventing vehicle informati
 
 The agent has three primary tools:
 
-- `search_vehicles` — searches the real vehicle inventory based on requirements.
+- `search_vehicles` — searches the real vehicle inventory based on customer requirements.
 - `check_availability` — checks booking conflicts for a specific vehicle and date range.
 - `qualify_lead` — saves a qualified lead to the database.
 
@@ -71,20 +71,26 @@ The Slack notification is handled independently from the database write, so a Sl
 
 ## Tech Stack
 
-| Area           | Technology              |
-| -------------- | ----------------------- |
-| Framework      | Next.js, App Router     |
-| UI             | React, Tailwind CSS     |
-| Database       | Neon PostgreSQL         |
-| ORM            | Drizzle ORM             |
-| AI / Agent     | LangChain               |
-| LLM            | Groq                    |
-| LLM Monitoring | LangSmith               |
-| Validation     | Zod                     |
-| Charts         | Recharts                |
-| Animation      | Framer Motion           |
-| HTTP Client    | Axios                   |
-| Automation     | Slack Incoming Webhooks |
+| Area           | Technology                            |
+| -------------- | ------------------------------------- |
+| Framework      | Next.js, App Router                   |
+| UI             | React, Tailwind CSS                   |
+| Database       | [Neon PostgreSQL](https://neon.com/)  |
+| ORM            | Drizzle ORM                           |
+| AI / Agent     | LangChain                             |
+| LLM Provider   | [Groq](https://console.groq.com/home) |
+| LLM Model      | `openai/gpt-oss-120b`                 |
+| LLM Monitoring | LangSmith                             |
+| Validation     | Zod                                   |
+| Charts         | Recharts                              |
+| Animation      | Framer Motion                         |
+| HTTP Client    | Axios                                 |
+| Automation     | Slack Incoming Webhooks               |
+
+### External Services
+
+- **Neon PostgreSQL** — serverless PostgreSQL database used for vehicles, bookings, leads, transactions, and other application data.
+- **Groq** — LLM inference provider used by the LangChain AI assistant.
 
 ## Architecture
 
@@ -134,7 +140,7 @@ Main data areas include:
 - Transactions
 - Users
 
-The project uses seeded data because the assessment scope does not require a production authentication or payment system.
+The project uses seeded data because the assessment scope does not require production authentication or payment systems.
 
 ## Local Setup
 
@@ -152,7 +158,9 @@ Create a `.env` file based on `.env.example`.
 
 ```env
 DATABASE_URL=
+
 GROQ_API_KEY=
+
 SLACK_WEBHOOK_URL=
 
 LANGSMITH_TRACING=
@@ -194,7 +202,6 @@ npm run dev
 npm run build
 npm run start
 
-
 npm run db:generate
 npm run db:migrate
 npm run db:seed
@@ -207,7 +214,7 @@ This project follows the scope of the technical assessment and therefore uses se
 - No production user authentication.
 - No real payment processing.
 - The customer-side booking action does not create a real reservation.
-- The AI assistant uses Groq's API and is subject to API rate limits.
+- The AI assistant uses the **Groq free API tier**, which is subject to rate limits. If the free-tier usage limit is reached, the AI chatbot may temporarily stop responding or return an API rate-limit error. This is an external API limitation rather than an application error.
 - FAQ/policy responses use a small keyword-based dataset rather than a full RAG pipeline.
 
 The AI lead qualification flow is a genuinely live write operation: qualified leads are saved to PostgreSQL and can trigger the Slack automation.

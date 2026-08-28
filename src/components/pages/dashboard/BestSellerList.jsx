@@ -3,13 +3,12 @@ import Card from "@/components/ui/Card";
 
 export default function BestSellerList({ products = [], title, viewAll }) {
   return (
-    <Card className="overflow-hidden rounded-2xl border border-border-100 bg-white shadow-2xs">
-      {/* Header section with bottom divider border */}
+    <Card className="overflow-hidden rounded-xl border border-border-150 bg-white ">
       <div className="flex items-center justify-between border-b border-border-100 px-5 py-4">
-        <h2 className="text-base font-bold text-text-heading">
+        <h2 className="text-base font-bold text-table-header">
           {title || "Best Seller"}
         </h2>
-        <button className="rounded-lg border border-border-100 px-3 py-1 text-xs font-medium text-text-body transition-colors hover:bg-surface-100">
+        <button className="rounded-[5px] border border-border-150 px-5 py-2.5 text-xs font-semibold text-table-header transition-colors hover:bg-surface-100">
           {viewAll || "View All"}
         </button>
       </div>

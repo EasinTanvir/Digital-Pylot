@@ -24,7 +24,9 @@ export default function DashboardClientView({ content, data, filters }) {
       else params.set(key, value);
     });
     const query = params.toString();
-    router.replace(query ? `${pathname}?${query}` : pathname);
+    router.replace(query ? `${pathname}?${query}` : pathname, {
+      scroll: false,
+    });
   };
 
   const handleDateRangeChange = ({ startDate, endDate }) =>

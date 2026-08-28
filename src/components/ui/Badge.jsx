@@ -10,10 +10,11 @@ export default function Badge({ status }) {
     cancelled: "bg-danger-bright",
   };
   return (
-    <span
-      className={`rounded px-1.5 py-0.5 text-[10px] font-bold leading-none text-white ${colors[status] ?? "bg-info"}`}
+    <div
+      className={`rounded-[5px] max-w-24 flex items-center gap-1 px-1.5 py-2.5 text-[10px] font-medium leading-none text-white ${colors[status] ?? "bg-info"}`}
     >
+      <div className="w-2.5 h-2.5 rounded-full bg-white" />
       {labels[status] ?? status}
-    </span>
+    </div>
   );
 }

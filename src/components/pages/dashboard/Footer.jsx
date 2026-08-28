@@ -3,12 +3,14 @@ export default function Footer() {
 
   return (
     <footer className="w-full border-t border-border-150 bg-white">
-      <div className="flex items-center justify-between px-6 pt-3 pb-10 text-xs text-text-body">
+      <div className="flex items-center justify-between px-6 pt-3 pb-10 text-gray-700 ">
         {/* Left Side */}
-        <p>{currentYear} © All Right Reserved</p>
+        <p className="text-table-header text-[13px]">
+          {currentYear} © All Right Reserved
+        </p>
 
         {/* Right Side */}
-        <p>Designed & Developed</p>
+        <p className="text-sm">Designed & Developed</p>
       </div>
     </footer>
   );

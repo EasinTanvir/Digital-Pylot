@@ -88,7 +88,7 @@ export default function SalesAnalyticsChart({
             className="flex items-center gap-1 rounded-[5px] border border-stroke-alt px-3 py-3 text-xs font-semibold text-table-header transition-colors hover:bg-surface-100"
           >
             <HiOutlineCalendar className="h-4 w-4 text-text-body" />
-            <span>{year || "2023"}</span>
+            <span>{year || "2025"}</span>
           </button>
 
           {/* Year Options Dropdown */}

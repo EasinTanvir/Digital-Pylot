@@ -51,7 +51,7 @@ export default function StatCard({
                   height={14}
                   className="h-3.5 w-3.5 object-contain"
                 />
-                <span>{changePercent}%</span>
+                <span className=" font-bold">{changePercent}%</span>
                 <span className="font-normal text-text-body">{label}</span>
               </div>
             </div>

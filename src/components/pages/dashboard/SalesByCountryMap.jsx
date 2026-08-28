@@ -217,12 +217,17 @@ export default function SalesByCountryMap({
       </div>
 
       {/* Footer Comparison Label */}
-      <div className="flex items-center justify-center gap-1.5 text-xs text-text-body">
-        <span className="flex items-center gap-0.5 font-bold text-teal">
-          <HiOutlineArrowUp className="h-3.5 w-3.5 stroke-[2.5]" />
-          {percentage}
-        </span>
-        <span>{increaseLabel}</span>
+
+      <div className="mt-2 flex justify-center items-center gap-1.5 text-xs font-semibold text-success">
+        <Image
+          src={ICONS.arrowUpGreenIcon}
+          alt=""
+          width={14}
+          height={14}
+          className="h-3.5 w-3.5 object-contain"
+        />
+        <span className="font-bold">{percentage}</span>
+        <span className="font-normal text-text-body">{increaseLabel}</span>
       </div>
     </Card>
   );

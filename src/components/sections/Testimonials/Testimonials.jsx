@@ -80,6 +80,7 @@ export default function Testimonials() {
 
         {/* Scroll Track */}
         <div
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           ref={trackRef}
           className=" font-rubik mt-14 flex gap-6 overflow-x-auto scroll-smooth py-2 scrollbar:none [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         >

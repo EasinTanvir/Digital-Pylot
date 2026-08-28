@@ -10,7 +10,7 @@ export default function HeaderSearch({ placeholder }) {
   return (
     <div
       onClick={() => inputRef.current?.focus()}
-      className="flex h-10 w-[240px] cursor-text items-center justify-between rounded-lg border border-border-150 bg-white px-3 transition-all focus-within:border-primary"
+      className="flex h-10 xl:w-60 w-48 cursor-text items-center justify-between rounded-lg border border-border-150 bg-white px-3 transition-all focus-within:border-primary"
     >
       <div className="flex items-center gap-2 overflow-hidden">
         <Image

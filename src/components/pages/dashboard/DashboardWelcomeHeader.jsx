@@ -53,11 +53,18 @@ export default function DashboardWelcomeHeader({
           </p>
         </div>
 
+        <Link
+          href="/dashboard/leads"
+          className="rounded-[5px] sm:hidden  block  bg-primary px-5 py-2.5 text-xs font-semibold text-white "
+        >
+          View Leads
+        </Link>
+
         {/* Right Actions */}
         <div className="flex items-center gap-2 self-end lg:self-auto">
           <Link
             href="/dashboard/leads"
-            className="rounded-[5px]  bg-primary px-5 py-2.5 text-xs font-semibold text-white "
+            className="sm:block hidden rounded-[5px]  bg-primary px-5 py-2.5 text-xs font-semibold text-white "
           >
             View Leads
           </Link>
